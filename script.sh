@@ -76,26 +76,26 @@ install_necessary() {
 
 	## specific programs
 	echo "Downloading Lunarvim..."
-	#bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/fc6873809934917b470bff1b072171879899a36b/utils/installer/install.sh)
+	bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/fc6873809934917b470bff1b072171879899a36b/utils/installer/install.sh)
 	echo "done"
 
 	# customize dunst
 	echo "Configuring Dunst..."
-	#mkdir -p ~/.config/dunst
-	#cp /etc/dunst/dunstrc ~/.config/dunst/dunstrc
+	mkdir -p ~/.config/dunst
+	cp /etc/dunst/dunstrc ~/.config/dunst/dunstrc
 	echo "done"
 
 	# customize alacritty
 	echo "Configuring Alacritty..."
-	#mkdir -p ~/.config/alacritty
-	#cp /usr/share/doc/alacritty/example/alacritty.yml ~/.config/alacritty/alacritty.yml
+	mkdir -p ~/.config/alacritty
+	cp /usr/share/doc/alacritty/example/alacritty.yml ~/.config/alacritty/alacritty.yml
 	echo "done"
 
 	# customize rofi
 	echo "Configuring Rofi..."
-	#mkdir -p ~/.config/rofi
-	#rofi -dump-config > ~/.config/rofi/config.rasi
-	#cp $dir/rofi/simple-tokyonight.rasi ~/.config/rofi/simple-tokyonight.rasi
+	mkdir -p ~/.config/rofi
+	rofi -dump-config > ~/.config/rofi/config.rasi
+	cp $dir/rofi/simple-tokyonight.rasi ~/.config/rofi/simple-tokyonight.rasi
 	echo "done"
 
 	clear
@@ -110,9 +110,9 @@ install_gui() {
 
 	# set up xorg and qtile for GUI in homedir
 	echo "Configuring Xorg server and adding Qtile as default window manager..."
-	#cp /etc/X11/xinit/xinitrc ~/.xinitrc
-	#head -n -5 > .xinitrc-new && mv .xinitrc-new ~/.xinitrc
-	#echo exec qtile start >> ~/.xinitrc
+	cp /etc/X11/xinit/xinitrc ~/.xinitrc
+	head -n -5 > .xinitrc-new && mv .xinitrc-new ~/.xinitrc
+	echo exec qtile start >> ~/.xinitrc
 	echo "done"
 
 	echo "Proceeding to download programs by pip..."
