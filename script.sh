@@ -42,7 +42,7 @@ pip_packages=(dbus-next pyxdg)
 ### INSTALLING PROGRAMS
 # basic programs
 # alsa - audio, playerctl - keyboard volume, ripgrep - lvim dependency,
-# noto-fonts - for unicode and other characters
+# noto-fonts - for unicode and other characters, lxappearance - GTK theme changer
 install_necessary() {
 	echo "Updating machine..."
 	mkdir -p ~/.config
@@ -50,7 +50,7 @@ install_necessary() {
 	echo "done"
 
 	echo "Proceeding to download necessary programs..."
-	sudo pacman -S nvidia alacritty rofi dunst nitrogen redshift htop flameshot alsa wget curl ripgrep noto-fonts noto-fonts-cjk python-pip pulseaudio pavucontrol gimp papirus-icon-theme
+	sudo pacman -S nvidia alacritty rofi dunst nitrogen redshift htop flameshot alsa wget curl ripgrep noto-fonts noto-fonts-cjk python-pip pulseaudio pavucontrol gimp papirus-icon-theme lxappearance
 	echo "done"
 
 	# check if there is Paru on machine and install it if not
@@ -110,10 +110,8 @@ install_gui() {
 
 	# set up xorg and qtile for GUI in homedir
 	echo "Configuring Xorg server and adding Qtile as default window manager..."
-	touch ~/.xinitrc-new && echo "(1/5)"
-	touch ~/.xinitrc && echo "(2/5)"
-	cp /etc/X11/xinit/xinitrc ~/.xinitrc-new && echo "(3/5)"
-	head -n -5 > .xinitrc-new && mv .xinitrc-new ~/.xinitrc && echo "(4/5)"
+	cp /etc/X11/xinit/xinitrc ~/.xinitrc && echo "(3/5)"
+	head -n -5 .xinitrc && echo "(4/5)"
 	echo exec qtile start >> ~/.xinitrc && echo "(5/5)"
 	rm ~/.xinitrc-new && echo "(6/5)"
 	echo "done"
