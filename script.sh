@@ -26,8 +26,8 @@ files=(.*)
 exclude=(. ..)
 exclude_files=(firefox script.sh README.md LICENSE .git)
 # alsa - volume, qtile-extras - for more customization in qtile, gsimplecal - calendar
-# tbsm - login/session manager
-paru_packages=(alsa-utils discord-canary spotify)
+# gtk-engine-murrine and gnome-themes-extra for GTK theme
+paru_packages=(alsa-utils discord-canary spotify gtk-engine-murrine gnome-themes-extra)
 # for Mpris widgets in qtile
 pip_packages=(dbus-next pyxdg)
 
@@ -41,7 +41,7 @@ pip_packages=(dbus-next pyxdg)
 
 ### INSTALLING PROGRAMS
 # basic programs
-# alsa - audio, playerctl - keyboard volume, ripgrep - lvim dependency,
+# alsa - audio, playerctl - keyboard volume, ripgrep - lvim dependency, qt5ct - qt theme changer
 # noto-fonts - for unicode and other characters, lxappearance - GTK theme changer
 install_necessary() {
 	echo "Updating machine..."
@@ -50,7 +50,7 @@ install_necessary() {
 	echo "done"
 
 	echo "Proceeding to download necessary programs..."
-	sudo pacman -S nvidia alacritty rofi dunst nitrogen redshift htop flameshot alsa wget curl ripgrep noto-fonts noto-fonts-cjk python-pip pulseaudio pavucontrol gimp papirus-icon-theme lxappearance
+	sudo pacman -S nvidia alacritty rofi dunst nitrogen redshift htop flameshot alsa wget curl ripgrep python-pip pulseaudio pavucontrol gimp firefox
 	echo "done"
 
 	# check if there is Paru on machine and install it if not
@@ -174,31 +174,31 @@ make_dotfiles() {
 	echo "Hidden files in $dir: ${files[@]}"
 
 	# create dotfolders_old in homedir
-	#echo "Creating $olddir for backup of any existing dotfolders in ~..."
-	#mkdir -p $olddir
-	#echo "done"
+	echo "Creating $olddir for backup of any existing dotfolders in ~..."
+	mkdir -p $olddir
+	echo "done"
 
-	## enter dotfolder in order to process only files in it and not files in homedir
-	#echo "Entering $dir..."
-	#cd $dir
-	#echo "done"
+	# enter dotfolder in order to process only files in it and not files in homedir
+	echo "Entering $dir..."
+	cd $dir
+	echo "done"
 
-	## Move any dotfile "listed" (present) in dir to olddir and create a symlink from
-	## "listed" file to this file in homedir
-	#echo "Moving any existing dotfolders from ~ to $olddir..."
-	#echo "DON'T PANIC IF THERE ARE ERRORS!"
-	## folders/normal files
-	#for file in ${folders[@]}; do
-	#	mv ~/$file $olddir
-	#	echo "Creating symlink to $file in home directory..."
-	#	ln -s $dir/$file ~/$file
-	#done
-	## hidden files
-	#for file in ${files[@]}; do
-	#	mv ~/$file $olddir
-	#	echo "Creating symlink to $file in home directory..."
-	#	ln -s $dir/$file ~/$file
-	#done
+	# Move any dotfile "listed" (present) in dir to olddir and create a symlink from
+	# "listed" file to this file in homedir
+	echo "Moving any existing dotfolders from ~ to $olddir..."
+	echo "DON'T PANIC IF THERE ARE ERRORS!"
+	# folders/normal files
+	for file in ${folders[@]}; do
+		mv ~/$file $olddir
+		echo "Creating symlink to $file in home directory..."
+		ln -s $dir/$file ~/$file
+	done
+	# hidden files
+	for file in ${files[@]}; do
+		mv ~/$file $olddir
+		echo "Creating symlink to $file in home directory..."
+		ln -s $dir/$file ~/$file
+	done
 
 	echo "done"
 	echo "exiting..."
@@ -208,8 +208,20 @@ make_dotfiles() {
 # Set git user
 set_git() {
 	echo "Setting up Git..."
-	[ -z `git config --global user.name` ] && git config --global user.name "name"
-	[ -z `git config --global user.email` ] && git config --global user.email "mail@mail.com"
+	#[ -z `git config --global user.name` ] && git config --global user.name "name"
+	#[ -z `git config --global user.email` ] && git config --global user.email "mail@mail.com"
+	echo "done"
+	clear
+}
+
+# customize GTK and QT themes
+look_and_feel() {
+	echo "Installing necessary packages..."
+	sudo pacman -S noto-fonts noto-fonts-cjk papirus-icon-theme lxappearance qt5ct gtk4 gtk3 gtk2
+	echo "done"
+
+	echo "Customizing theme..."
+	
 	echo "done"
 	clear
 }
@@ -232,25 +244,29 @@ menu() {
 	figlet Dotfiles script
 	echo "Remember that this script requires Arch-based machine with SystemD!"
 	printf "Requirements: git and this repo as .dotfiles
-	$(ColorGreen '1)') Install necessary packages and programs
-	$(ColorGreen '2)') Install GUI - xorg, qtile, ly
-	$(ColorGreen '3)') Make dotfiles
-	$(ColorGreen '4)') Configure Firefox
-	$(ColorGreen '5)') Full installation - all at once
+	$(ColorGreen '1)') Full installation - all at once
+	$(ColorGreen '2)') Install necessary packages and programs
+	$(ColorGreen '3)') Install GUI - xorg, qtile, ly
+	$(ColorGreen '4)') Make dotfiles
+	$(ColorGreen '5)') Configure Firefox
+	$(ColorGreen '6)') Set up Git
+	$(ColorGreen '7)') Customize look and feel
 	$(ColorGreen 'q)') Quit
 	$(ColorBlue 'Choose an option:') "
 		read -r option
         case $option in
-	        1) install_necessary ; menu ;;
-	        2) install_gui ; menu ;;
-			3) make_dotfiles ; menu ;;
-			4) firefox_profile ; menu ;;
-			5) set_git ; menu ;;
-			6) install_necessary
+			1) install_necessary
 			   install_gui
 			   make_dotfiles
 			   set_git
-			   firefox_profile ; menu ;;
+			   firefox_profile
+			   look_and_feel ; menu ;;
+	        2) install_necessary ; menu ;;
+	        3) install_gui ; menu ;;
+			4) make_dotfiles ; menu ;;
+			5) firefox_profile ; menu ;;
+			6) set_git ; menu ;;
+			7) look_and_feel ; menu ;;
 			q) exit 0 ;;
 			*) echo -e $"Wrong option"$clear; exit 0;;
         esac
