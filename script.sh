@@ -110,12 +110,12 @@ install_gui() {
 
 	# set up xorg and qtile for GUI in homedir
 	echo "Configuring Xorg server and adding Qtile as default window manager..."
-	touch ~/.xinitrc-new
-	touch ~/.xinitrc
-	cp /etc/X11/xinit/xinitrc ~/.xinitrc-new
-	head -n -5 > .xinitrc-new && mv .xinitrc-new ~/.xinitrc
-	echo exec qtile start >> ~/.xinitrc
-	rm ~/.xinitrc-new
+	touch ~/.xinitrc-new && echo "(1/5)"
+	touch ~/.xinitrc && echo "(2/5)"
+	cp /etc/X11/xinit/xinitrc ~/.xinitrc-new && echo "(3/5)"
+	head -n -5 > .xinitrc-new && mv .xinitrc-new ~/.xinitrc && echo "(4/5)"
+	echo exec qtile start >> ~/.xinitrc && echo "(5/5)"
+	rm ~/.xinitrc-new && echo "(6/5)"
 	echo "done"
 
 	echo "Proceeding to download programs by pip..."
