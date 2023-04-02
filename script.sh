@@ -110,9 +110,10 @@ install_gui() {
 
 	# set up xorg and qtile for GUI in homedir
 	echo "Configuring Xorg server and adding Qtile as default window manager..."
-	cp /etc/X11/xinit/xinitrc ~/.xinitrc
+	cp /etc/X11/xinit/xinitrc ~/.xinitrc-new
 	head -n -5 > .xinitrc-new && mv .xinitrc-new ~/.xinitrc
 	echo exec qtile start >> ~/.xinitrc
+	rm ~/.xinitrc-new
 	echo "done"
 
 	echo "Proceeding to download programs by pip..."
@@ -201,7 +202,7 @@ make_dotfiles() {
 
 	echo "done"
 	echo "exiting..."
-	clear
+	exit
 }
 
 # Set git user
