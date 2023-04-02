@@ -17,9 +17,9 @@ ColorBlue(){
 
 ### VARIABLES
 # dotfolders directory
-dir=~/.test
+dir=~/.dotfiles
 # old dotfolders backup directory
-olddir=~/.test_old 
+olddir=~/.dotfiles_old 
 # create arrays for: folders/normal files, hidden files, and excluded characters/files
 folders=(*)
 files=(.*)
@@ -45,6 +45,7 @@ pip_packages=(dbus-next pyxdg)
 # noto-fonts - for unicode and other characters
 install_necessary() {
 	echo "Updating machine..."
+	mkdir -p ~/.config
 	sudo pacman -Syu
 	echo "done"
 
