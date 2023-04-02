@@ -24,7 +24,7 @@ olddir=~/.test_old
 folders=(*)
 files=(.*)
 exclude=(. ..)
-exclude_files=(firefox script.sh)
+exclude_files=(firefox script.sh README.md LICENSE .git)
 # alsa - volume, qtile-extras - for more customization in qtile, gsimplecal - calendar
 # tbsm - login/session manager
 paru_packages=(alsa-utils discord-canary spotify)
