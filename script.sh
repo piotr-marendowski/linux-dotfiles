@@ -173,34 +173,43 @@ make_dotfiles() {
 	echo "Hidden files in $dir: ${files[@]}"
 
 	# create dotfolders_old in homedir
-	echo "Creating $olddir for backup of any existing dotfolders in ~..."
-	mkdir -p $olddir
-	echo "done"
+	#echo "Creating $olddir for backup of any existing dotfolders in ~..."
+	#mkdir -p $olddir
+	#echo "done"
 
-	# enter dotfolder in order to process only files in it and not files in homedir
-	echo "Entering $dir..."
-	cd $dir
-	echo "done"
+	## enter dotfolder in order to process only files in it and not files in homedir
+	#echo "Entering $dir..."
+	#cd $dir
+	#echo "done"
 
-	# Move any dotfile "listed" (present) in dir to olddir and create a symlink from
-	# "listed" file to this file in homedir
-	echo "Moving any existing dotfolders from ~ to $olddir..."
-	echo "DON'T PANIC IF THERE ARE ERRORS!"
-	# folders/normal files
-	for file in ${folders[@]}; do
-		mv ~/$file $olddir
-		echo "Creating symlink to $file in home directory..."
-		ln -s $dir/$file ~/$file
-	done
-	# hidden files
-	for file in ${files[@]}; do
-		mv ~/$file $olddir
-		echo "Creating symlink to $file in home directory..."
-		ln -s $dir/$file ~/$file
-	done
+	## Move any dotfile "listed" (present) in dir to olddir and create a symlink from
+	## "listed" file to this file in homedir
+	#echo "Moving any existing dotfolders from ~ to $olddir..."
+	#echo "DON'T PANIC IF THERE ARE ERRORS!"
+	## folders/normal files
+	#for file in ${folders[@]}; do
+	#	mv ~/$file $olddir
+	#	echo "Creating symlink to $file in home directory..."
+	#	ln -s $dir/$file ~/$file
+	#done
+	## hidden files
+	#for file in ${files[@]}; do
+	#	mv ~/$file $olddir
+	#	echo "Creating symlink to $file in home directory..."
+	#	ln -s $dir/$file ~/$file
+	#done
 
 	echo "done"
 	echo "exiting..."
+	clear
+}
+
+# Set git user
+set_git() {
+	echo "Setting up Git..."
+	[ -z `git config --global user.name` ] && git config --global user.name "name"
+	[ -z `git config --global user.email` ] && git config --global user.email "mail@mail.com"
+	echo "done"
 	clear
 }
 
@@ -220,7 +229,8 @@ menu() {
 	check_figlet
 	clear
 	figlet Dotfiles script
-	printf "Remember that this script requires Arch-based machine with SystemD!
+	echo "Remember that this script requires Arch-based machine with SystemD!"
+	printf "Requirements: git and this repo as .dotfiles
 	$(ColorGreen '1)') Install necessary packages and programs
 	$(ColorGreen '2)') Install GUI - xorg, qtile, ly
 	$(ColorGreen '3)') Make dotfiles
@@ -234,9 +244,11 @@ menu() {
 	        2) install_gui ; menu ;;
 			3) make_dotfiles ; menu ;;
 			4) firefox_profile ; menu ;;
-			5) install_necessary
+			5) set_git ; menu ;;
+			6) install_necessary
 			   install_gui
 			   make_dotfiles
+			   set_git
 			   firefox_profile ; menu ;;
 			q) exit 0 ;;
 			*) echo -e $"Wrong option"$clear; exit 0;;
