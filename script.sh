@@ -50,7 +50,7 @@ install_necessary() {
 	echo "done"
 
 	echo "Proceeding to download necessary programs..."
-	sudo pacman -S nvidia alacritty rofi dunst nitrogen redshift htop flameshot alsa wget curl ripgrep python-pip pulseaudio pavucontrol gimp firefox
+	sudo pacman -S nvidia alacritty rofi dunst nitrogen redshift htop flameshot alsa wget curl ripgrep python-pip pulseaudio pavucontrol gimp firefox neovim
 	echo "done"
 
 	# check if there is Paru on machine and install it if not
@@ -75,10 +75,6 @@ install_necessary() {
 	echo "done"
 
 	## specific programs
-	echo "Downloading Lunarvim..."
-	bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/fc6873809934917b470bff1b072171879899a36b/utils/installer/install.sh)
-	echo "done"
-
 	# customize dunst
 	echo "Configuring Dunst..."
 	mkdir -p ~/.config/dunst
@@ -96,6 +92,11 @@ install_necessary() {
 	mkdir -p ~/.config/rofi
 	rofi -dump-config > ~/.config/rofi/config.rasi
 	cp $dir/rofi/simple-tokyonight.rasi ~/.config/rofi/simple-tokyonight.rasi
+	echo "done"
+
+	# install LunarVim
+	echo "Downloading Lunarvim..."
+	bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/fc6873809934917b470bff1b072171879899a36b/utils/installer/install.sh)
 	echo "done"
 
 	clear
