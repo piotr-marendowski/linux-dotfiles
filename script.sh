@@ -50,7 +50,7 @@ install_necessary() {
 	echo "done"
 
 	echo "Proceeding to download necessary programs..."
-	sudo pacman -S nvidia alacritty rofi dunst nitrogen redshift htop flameshot alsa wget curl ripgrep python-pip pulseaudio pavucontrol gimp firefox neovim tree
+	sudo pacman -S nvidia alacritty rofi dunst htop flameshot alsa wget curl ripgrep python-pip pulseaudio pavucontrol gimp firefox neovim tree
 	echo "done"
 
 	# check if there is Paru on machine and install it if not
@@ -96,7 +96,8 @@ install_necessary() {
 
 	# install LunarVim
 	echo "Downloading Lunarvim..."
-	bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/fc6873809934917b470bff1b072171879899a36b/utils/installer/install.sh)
+	#bash <(curl -s https://raw.githubusercontent.com/lunarvim/lunarvim/fc6873809934917b470bff1b072171879899a36b/utils/installer/install.sh)
+	# LunarVim seems to give some errors
 	echo "done"
 
 	clear
@@ -132,14 +133,14 @@ install_gui() {
 
 # configure firefox - copy prefs.js to .mozilla
 firefox_profile() {
-	profile_name=profile1
-	echo "Configuring Firefox..."
-	firefox -CreateProfile "$profile_name" && firefox -P "$profile_name" -no-remote
-	cd ~/.mozilla/firefox/*$profile_name*/
-	cp $dir/firefox/prefs.js /prefs.js
-	echo "done"
-	clear
-	echo "Remember to change default profile to $profile_name in Firefox"
+#	profile_name=profile1
+#	echo "Configuring Firefox..."
+#	firefox -CreateProfile "$profile_name" && firefox -P "$profile_name" -no-remote
+#	cd ~/.mozilla/firefox/*$profile_name*/
+#	cp $dir/firefox/prefs.js /prefs.js
+#	echo "done"
+#	clear
+#	echo "Remember to change default profile to $profile_name in Firefox"
 }
 
 ### DOTFILES
@@ -219,13 +220,13 @@ set_git() {
 # customize GTK and QT themes
 look_and_feel() {
 	echo "Installing necessary packages..."
-	sudo pacman -S papirus-icon-theme lxappearance qt5ct gtk4 gtk3 gtk2
+	sudo pacman -S papirus-icon-theme lxappearance qt5ct gtk4 gtk3 gtk2 feh redshift
 	# noto-fonts noto-fonts-cjk 
 	echo "done"
 
 	# configure fonts
 	echo "Configuring fonts..."
-	echo "Do you want to install:
+	printf "Do you want to install:
 	$(ColorGreen '1)') All of Nerd Fonts (about 3.5 GB)
 	$(ColorGreen '2)') Only JetBrains Mono (about 30 MB)
 	$(ColorBlue 'Choose an option:') "

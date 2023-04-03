@@ -1,5 +1,8 @@
 # dotfiles
 
+## Screenshots
+of the final product
+
 ## History
 After accidentally breaking my machine, I decided to move to Arch Linux full time. Then it converted into a hassle with configuring it all
 over again, so now I created an install script to do everything for me.
@@ -12,3 +15,18 @@ mv dotfiles .dotfiles
 cd .dotfiles
 ./script.sh
 ```
+
+## Used programs/packages
+- [Nvidia drivers](https://www.nvidia.com/en-us/drivers/unix/)
+- [Paru (AUR helper)](https://github.com/Morganamilo/paru)
+- [Xorg Window System](https://wiki.archlinux.org/title/Xorg)
+- [Xorg-Xinit](https://wiki.archlinux.org/title/Xinit)
+- [Qtile (window Manager)](http://www.qtile.org/)
+- [Ly (session manager)](https://github.com/fairyglade/ly)
+- [Alacritty (terminal emulator)](https://alacritty.org/)
+- [Rofi (program launcher)](https://github.com/davatorium/rofi)
+- [Dunst (notifications)](https://dunst-project.org/)
+- [Htop (system monitor)](https://htop.dev/)
+- [Flameshot (screenshots)](https://flameshot.org/)
+- [Pulseaudio (sound)](https://www.freedesktop.org/wiki/Software/PulseAudio/)
+- [Neovim (IDE)](https://neovim.io/)
