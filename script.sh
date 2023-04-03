@@ -139,6 +139,7 @@ firefox_profile() {
 	cp $dir/firefox/prefs.js /prefs.js
 	echo "done"
 	clear
+	echo "Remember to change default profile to $profile_name in Firefox"
 }
 
 ### DOTFILES
