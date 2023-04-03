@@ -50,7 +50,7 @@ install_necessary() {
 	echo "done"
 
 	echo "Proceeding to download necessary programs..."
-	sudo pacman -S nvidia alacritty rofi dunst nitrogen redshift htop flameshot alsa wget curl ripgrep python-pip pulseaudio pavucontrol gimp firefox neovim
+	sudo pacman -S nvidia alacritty rofi dunst nitrogen redshift htop flameshot alsa wget curl ripgrep python-pip pulseaudio pavucontrol gimp firefox neovim tree
 	echo "done"
 
 	# check if there is Paru on machine and install it if not
@@ -210,8 +210,8 @@ make_dotfiles() {
 # Set git user
 set_git() {
 	echo "Setting up Git..."
-	#[ -z `git config --global user.name` ] && git config --global user.name "name"
-	#[ -z `git config --global user.email` ] && git config --global user.email "mail@mail.com"
+	[ -z `git config --global user.name` ] && git config --global user.name "name"
+	[ -z `git config --global user.email` ] && git config --global user.email "mail@mail.com"
 	echo "done"
 	clear
 }
@@ -223,7 +223,7 @@ look_and_feel() {
 	echo "done"
 
 	echo "Customizing theme..."
-	
+	sudo cp 
 	echo "done"
 	clear
 }
