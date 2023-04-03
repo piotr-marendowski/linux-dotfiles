@@ -219,11 +219,27 @@ set_git() {
 # customize GTK and QT themes
 look_and_feel() {
 	echo "Installing necessary packages..."
-	sudo pacman -S noto-fonts noto-fonts-cjk papirus-icon-theme lxappearance qt5ct gtk4 gtk3 gtk2
+	sudo pacman -S papirus-icon-theme lxappearance qt5ct gtk4 gtk3 gtk2
+	# noto-fonts noto-fonts-cjk 
+	echo "done"
+
+	# configure fonts
+	echo "Configuring fonts..."
+	echo "Do you want to install:
+	$(ColorGreen '1)') All of Nerd Fonts (about 3.5 GB)
+	$(ColorGreen '2)') Only JetBrains Mono (about 30 MB)
+	$(ColorBlue 'Choose an option:') "
+		read -r option
+        case $option in
+			1) paru -S nerd-fonts-meta ; menu ;;
+	        2) mkdir -p ~/.local/share/fonts/JetBrainsMono
+			   cp $dir/assets/JetBrainsMono ~/.local/share/fonts/JetBrainsMono ; menu ;;
+			*) echo "Wrong option" ;;
+        esac
 	echo "done"
 
 	echo "Customizing theme..."
-	sudo cp 
+	sudo cp $dir/assets/TokyoNight /usr/share/themes/
 	echo "done"
 	clear
 }
