@@ -15,6 +15,16 @@ ColorBlue(){
 	echo -ne $blue$1$clear
 }
 
+# Color variables
+red='\033[0;31m'
+green='\033[0;32m'
+yellow='\033[0;33m'
+blue='\033[0;34m'
+magenta='\033[0;35m'
+cyan='\033[0;36m'
+# Clear the color after that
+clear='\033[0m'
+
 ### VARIABLES
 # dotfolders directory
 dir=~/.dotfiles
@@ -133,6 +143,7 @@ install_gui() {
 
 # configure firefox - copy prefs.js to .mozilla
 firefox_profile() {
+	:
 #	profile_name=profile1
 #	echo "Configuring Firefox..."
 #	firefox -CreateProfile "$profile_name" && firefox -P "$profile_name" -no-remote
@@ -287,7 +298,7 @@ menu() {
 			6) set_git ; menu ;;
 			7) look_and_feel ; menu ;;
 			q) exit 0 ;;
-			*) echo -e $"Wrong option"$clear; exit 0;;
+			*) echo -e $red"Wrong option"$clear; exit 0;;
         esac
 }
 
