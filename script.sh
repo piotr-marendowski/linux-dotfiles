@@ -41,7 +41,6 @@ paru_packages=(alsa-utils discord-canary spotify gtk-engine-murrine gnome-themes
 # for Mpris widgets in qtile
 pip_packages=(dbus-next pyxdg)
 
-
 # virtualization:
 # sudo pacman -S qemu virt-manager virt-viewer dnsmasq vde2 bridge-utils openbsd-netcat libguestfs dmidecode
 # sudo systemctl start libvirtd
@@ -111,6 +110,7 @@ install_necessary() {
 	echo "done"
 
 	clear
+	echo "Packages installed."
 }
 install_gui() {
 	echo "Proceeding to download necessary programs..."
@@ -138,20 +138,22 @@ install_gui() {
 	echo "Proceeding to set up Ly..."
 	sudo systemctl enable ly.service
 	echo "done"
+
 	clear
+	echo "Packages installed."
 }
 
 # configure firefox - copy prefs.js to .mozilla
 firefox_profile() {
-	:
-#	profile_name=profile1
-#	echo "Configuring Firefox..."
-#	firefox -CreateProfile "$profile_name" && firefox -P "$profile_name" -no-remote
-#	cd ~/.mozilla/firefox/*$profile_name*/
-#	cp $dir/firefox/prefs.js /prefs.js
-#	echo "done"
-#	clear
-#	echo "Remember to change default profile to $profile_name in Firefox"
+	profile_name=profile1
+	echo "Configuring Firefox..."
+	firefox -CreateProfile "$profile_name" && firefox -P "$profile_name" -no-remote
+	cd ~/.mozilla/firefox/*$profile_name*/
+	cp $dir/firefox/prefs.js /prefs.js
+	echo "done"
+
+	clear
+	echo "Remember to change default profile to $profile_name in Firefox."
 }
 
 ### DOTFILES
@@ -213,10 +215,10 @@ make_dotfiles() {
 		echo "Creating symlink to $file in home directory..."
 		ln -s $dir/$file ~/$file
 	done
-
 	echo "done"
-	echo "exiting..."
-	exit
+
+	clear
+	echo "Dotfiles made."
 }
 
 # Set git user
@@ -226,6 +228,7 @@ set_git() {
 	[ -z `git config --global user.email` ] && git config --global user.email "mail@mail.com"
 	echo "done"
 	clear
+	echo "Git configured."
 }
 
 # customize GTK and QT themes
@@ -253,7 +256,9 @@ look_and_feel() {
 	echo "Customizing theme..."
 	sudo cp $dir/assets/TokyoNight /usr/share/themes/
 	echo "done"
+
 	clear
+	echo "Look configured."
 }
 
 # check if filget is install if not install it (to display ascii art)
@@ -278,9 +283,9 @@ menu() {
 	$(ColorGreen '2)') Install necessary packages and programs
 	$(ColorGreen '3)') Install GUI - xorg, qtile, ly
 	$(ColorGreen '4)') Make dotfiles
-	$(ColorGreen '5)') Configure Firefox
-	$(ColorGreen '6)') Set up Git
-	$(ColorGreen '7)') Customize look and feel
+	$(ColorGreen '5)') Set up Git
+	$(ColorGreen '6)') Customize look and feel
+	$(ColorGreen '7)') GUI ONLY! Configure Firefox
 	$(ColorGreen 'q)') Quit
 	$(ColorBlue 'Choose an option:') "
 		read -r option
@@ -289,14 +294,13 @@ menu() {
 			   install_gui
 			   make_dotfiles
 			   set_git
-			   firefox_profile
 			   look_and_feel ; menu ;;
 	        2) install_necessary ; menu ;;
 	        3) install_gui ; menu ;;
 			4) make_dotfiles ; menu ;;
-			5) firefox_profile ; menu ;;
-			6) set_git ; menu ;;
-			7) look_and_feel ; menu ;;
+			5) set_git ; menu ;;
+			6) look_and_feel ; menu ;;
+			7) firefox_profile ; menu ;;
 			q) exit 0 ;;
 			*) echo -e $red"Wrong option"$clear; exit 0;;
         esac
