@@ -143,7 +143,7 @@ install_gui() {
 	echo "Packages installed."
 }
 
-# configure firefox - copy prefs.js to .mozilla
+# GUI ONLY! configure firefox - copy prefs.js to .mozilla
 firefox_profile() {
 	profile_name=profile1
 	echo "Configuring Firefox..."
