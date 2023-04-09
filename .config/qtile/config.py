@@ -165,13 +165,14 @@ layouts = [
 ## Screens - Two different bars for two monitors (screen = monitor),
 # get multihead (multimonitor) support working yourself (autostart.sh)
 
-# default for widget
+# default for widgets
 widget_defaults = dict(
     font = "JetBrainsMono Nerd Font Mono Medium",
     fontsize = 14,
     padding = 0,
     margin = 0,
-    background = colors["background"],
+    # background = colors["background"],
+    background = colors["transparent"],
     foreground = colors["background"],
 )
 
@@ -189,16 +190,16 @@ screens = [
     Screen(
         top = bar.Bar([
             widget.Systray(
-                background = colors["systray"],
+                # background = colors["systray"],
                 icon_size = 20,
                 padding = 2,
             ),
-            widget.Sep(
-                linewidth = 4,
-                background = colors["systray"],
-                foreground = colors["systray"],
-            ),
-            widget.Spacer(length = 10),
+            #widget.Sep(
+            #   linewidth = 4,
+            #   background = colors["systray"],
+            #   foreground = colors["systray"],
+            #),
+            widget.Spacer(length = 5),
             widget.GroupBox(
                 hide_unused = True,
                 disable_drag = True,
@@ -380,7 +381,9 @@ screens = [
             ),
             ],
             35, # WIDTH
-            margin = 4,
+            # margin = 4,
+            margin = 2,
+            background = colors["transparent"],
         ),
     ),
 ]
