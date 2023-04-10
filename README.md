@@ -1,11 +1,13 @@
 # dotfiles
 
 ## Screenshots
-of the final product
+![desktop](/assets/screen1.png)
+![script](/assets/script.png)
 
 ## History
-After accidentally breaking my machine, I decided to move to Arch Linux full time. Then it converted into a hassle with configuring it all
-over again, so now I created an install script to do everything for me.
+After accidentally breaking my machine, I decided to move to Arch Linux full time.
+Then it converted into a hassle with configuring it all over again, so now I created
+an install script to do everything for me.
 
 ## Installation
 Installation only requires git to clone this repository and rename it do `.dotfiles`.

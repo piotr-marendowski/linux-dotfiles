@@ -134,31 +134,30 @@ groups = [
 
 # Magic behind groups
 for i in groups:
-
     keys.extend([
-            # mod1 + letter of group = switch to group
-            Key([mod], i.name, lazy.group[i.name].toscreen()),
-            # mod1 + shift + letter of group = switch to & move focused window to group
-            Key([mod, "shift"], i.name, lazy.window.togroup(i.name, switch_group=True))
+        # mod1 + letter of group = switch to group
+        Key([mod], i.name, lazy.group[i.name].toscreen()),
+        # mod1 + shift + letter of group = switch to & move focused window to group
+        Key([mod, "shift"], i.name, lazy.window.togroup(i.name, switch_group=True))
         ]
     )
 
 ## Layouts - Max as main, floating as layout not floating rules to windows
 layouts = [
-            layout.Max(),
-            layout.Columns(
-                border_focus = colors["red"],
-                border_normal = colors["base"],
-                border_on_single =False,
-                fair = True,
-                margin = 3,     # GAPS
-            ),
-            # In order to change aspects of floating windows in other layouts,
-            # see floating_layout at the Advanced section at the bottom
-            layout.floating.Floating(
-                border_focus = colors["red"],
-                border_normal = colors["base"],
-            ),
+    layout.Max(),
+    layout.Columns(
+        border_focus = colors["red"],
+        border_normal = colors["base"],
+        border_on_single =False,
+        fair = True,
+        margin = 3,     # GAPS
+    ),
+    # In order to change aspects of floating windows in other layouts,
+    # see floating_layout at the Advanced section at the bottom
+    layout.floating.Floating(
+        border_focus = colors["red"],
+        border_normal = colors["base"],
+    ),
 ]
 
 
@@ -226,7 +225,18 @@ screens = [
                     )
                 ],
             ),  
-            widget.Spacer(length = 10),
+            widget.CurrentLayoutIcon(
+                scale = 0.6,
+                custom_icon_paths = [
+                    os.path.expanduser("~/.config/qtile/assets/layout/"),
+                ],
+                decorations = [
+                    RectDecoration(
+                        colour = colors["white"],
+                        **decoration_defaults,
+                    )
+                ],
+            ),
             widget.TaskList(
                 theme_path = "/usr/share/icons/Papirus/index.theme",
                 theme_mode = "preferred",
@@ -237,11 +247,11 @@ screens = [
                 padding = 6.5,                  # size of a block
                 fontsize = 13,
                 font = "JetBrainsMono",
-                border = colors["surface2"],        # fill current window
-                foreground = colors["text"],
+                border = colors["background"],  # fill current window
+                foreground = "#ffffff",         # text colors
                 borderwidth = 3,                # icon position
                 urgent_border = colors["red"],
-                txt_floating = '🗗 ',
+                txt_floating = ' ',
                 txt_minimized = '_ ',
             ),
             # RIGHT SIDE
@@ -273,7 +283,6 @@ screens = [
                     )
                 ],
             ),
-            widget.Spacer(length = 10),
             widget.Image(
                 filename = '~/.config/qtile/assets/update.png',
                 margin = 7,
@@ -299,7 +308,6 @@ screens = [
                     )
                 ],
             ),
-            widget.Spacer(length = 10),
             widget.Volume(
                 theme_path = '~/.config/qtile/assets/volume/',
                 scroll_interval = 1.5,
@@ -322,7 +330,6 @@ screens = [
                     )
                 ],
             ),
-            widget.Spacer(length = 10),
             widget.Image(
                 filename = '~/.config/qtile/assets/clock.png',
                 margin = 7,
@@ -341,19 +348,6 @@ screens = [
                 decorations = [
                     RectDecoration(
                         colour = colors["orange"],
-                        **decoration_defaults,
-                    )
-                ],
-            ),
-            widget.Spacer(length = 10),
-            widget.CurrentLayoutIcon(
-                scale = 0.6,
-                custom_icon_paths = [
-                    os.path.expanduser("~/.config/qtile/assets/layout/"),
-                ],
-                decorations = [
-                    RectDecoration(
-                        colour = colors["white"],
                         **decoration_defaults,
                     )
                 ],
