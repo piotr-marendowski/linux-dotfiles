@@ -59,7 +59,7 @@ install_necessary() {
 	echo "done"
 
 	echo "Proceeding to download necessary programs..."
-	sudo pacman -S nvidia alacritty rofi dunst htop flameshot alsa wget curl ripgrep python-pip pulseaudio pavucontrol gimp firefox neovim tree
+	sudo pacman -S nvidia alacritty rofi dunst htop flameshot wget curl ripgrep python-pip pulseaudio pavucontrol gimp firefox neovim tree
 	echo "done"
 
 	# check if there is Paru on machine and install it if not
