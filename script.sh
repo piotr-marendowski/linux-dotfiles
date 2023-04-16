@@ -114,8 +114,9 @@ install_necessary() {
 }
 install_gui() {
 	echo "Proceeding to download necessary programs..."
-	sudo pacman -S xorg-xinit playerctl qtile
-	paru -S qtile-extras
+	sudo pacman -S xorg-xinit playerctl
+	paru -s qtile-git
+	paru -s qtile-extras-git
 	paru -S gsimplecal
 	paru -S ly
 	echo "done"
@@ -248,13 +249,21 @@ look_and_feel() {
         case $option in
 			1) paru -S nerd-fonts-meta ; menu ;;
 	        2) mkdir -p ~/.local/share/fonts
-			   cp -r $dir/assets/JetBrainsMono ~/.local/share/fonts ; menu ;;
+			   cp -r $dir/assets/JetBrainsMono ~/.local/share/fonts ;;
 			*) echo "Wrong option" ;;
         esac
 	echo "done"
 
 	echo "Customizing theme..."
 	sudo cp $dir/assets/TokyoNight /usr/share/themes/
+	echo "done"
+
+	echo "Installing custom Picom compositor..."
+	paru -S picom-jonaburg-git
+	echo "done"
+
+	echo "Setting wallpaper..."
+	nitrogen --set-zoom-fill $dir/assets/wallpaper.jpg
 	echo "done"
 
 	clear
