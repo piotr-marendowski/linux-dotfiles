@@ -14,8 +14,7 @@ Installation only requires git to clone this repository and rename it do `.dotfi
 ```
 git clone https://github.com/piotr-marendowski/dotfiles.git
 mv dotfiles .dotfiles
-cd .dotfiles
-./script.sh
+./.dotfiles/script.sh
 ```
 
 ## Used programs/packages

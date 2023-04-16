@@ -234,7 +234,7 @@ set_git() {
 # customize GTK and QT themes
 look_and_feel() {
 	echo "Installing necessary packages..."
-	sudo pacman -S papirus-icon-theme lxappearance qt5ct gtk4 gtk3 gtk2 feh redshift
+	sudo pacman -S papirus-icon-theme lxappearance nitrogen qt5ct gtk4 gtk3 gtk2 redshift
 	# noto-fonts noto-fonts-cjk 
 	echo "done"
 
@@ -247,8 +247,8 @@ look_and_feel() {
 		read -r option
         case $option in
 			1) paru -S nerd-fonts-meta ; menu ;;
-	        2) mkdir -p ~/.local/share/fonts/JetBrainsMono
-			   cp $dir/assets/JetBrainsMono ~/.local/share/fonts/JetBrainsMono ; menu ;;
+	        2) mkdir -p ~/.local/share/fonts
+			   cp -r $dir/assets/JetBrainsMono ~/.local/share/fonts ; menu ;;
 			*) echo "Wrong option" ;;
         esac
 	echo "done"
@@ -270,12 +270,12 @@ check_figlet() {
 		sudo pacman -S figlet
 		echo "done"
 	fi
+	
+	clear
 }
 
 ### MENU
 menu() {
-	check_figlet
-	clear
 	figlet Dotfiles script
 	echo "Remember that this script requires Arch-based machine with SystemD!"
 	printf "Requirements: git and this repo as .dotfiles
