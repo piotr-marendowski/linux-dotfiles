@@ -35,11 +35,6 @@ folders=(*)
 files=(.*)
 exclude=(. ..)
 exclude_files=(firefox script.sh README.md LICENSE .git)
-# alsa - volume, qtile-extras - for more customization in qtile, gsimplecal - calendar
-# gtk-engine-murrine and gnome-themes-extra for GTK theme
-paru_packages=(alsa-utils discord-canary spotify gtk-engine-murrine gnome-themes-extra network-manager-applet)
-# for Mpris widgets in qtile
-pip_packages=(dbus-next pyxdg)
 
 # virtualization:
 # sudo pacman -S qemu virt-manager virt-viewer dnsmasq vde2 bridge-utils openbsd-netcat libguestfs dmidecode
@@ -59,7 +54,7 @@ install_necessary() {
 	echo "done"
 
 	echo "Proceeding to download necessary programs..."
-	sudo pacman -S nvidia alacritty rofi dunst htop flameshot wget curl ripgrep python-pip pulseaudio pavucontrol gimp firefox neovim tree
+	sudo pacman -S alacritty rofi dunst htop flameshot wget curl ripgrep python-pip pulseaudio pavucontrol gimp firefox neovim tree
 	echo "done"
 
 	# check if there is Paru on machine and install it if not
@@ -76,6 +71,10 @@ install_necessary() {
 	else
 		echo "Paru is already installed"
 	fi
+
+	# alsa - volume, qtile-extras - for more customization in qtile, gsimplecal - calendar
+	# gtk-engine-murrine and gnome-themes-extra for GTK theme
+	paru_packages=(alsa-utils discord-canary spotify gtk-engine-murrine gnome-themes-extra network-manager-applet)
 
 	echo "Proceeding to download programs by Paru..."
 	for package_name in ${paru_packages[@]}; do
@@ -128,6 +127,9 @@ install_gui() {
 	echo exec qtile start >> ~/.xinitrc && echo "(3/4)"
 	rm ~/.xinitrc-new && echo "(4/4)"
 	echo "done"
+
+	# for Mpris widgets in qtile
+	pip_packages=(dbus-next pyxdg)
 
 	echo "Proceeding to download programs by pip..."
 	for package_name in ${pip_packages[@]}; do
@@ -270,6 +272,44 @@ look_and_feel() {
 	echo "Look configured."
 }
 
+# optimize system for gaming, install needed software for it
+gaming() {
+	echo "Optimizing system for gaming..."
+
+	echo "ENABLE MULTILIB IN ORDER TO INSTALL DRIVERS!"
+	printf "Ok?: "
+	read -r input
+
+	sudo nvim /etc/pacman.conf
+	echo "done"
+
+	echo "Installing drivers..."
+	sudo pacman -S --needed nvidia nvidia-dkms nvidia-utils lib32-nvidia-utils nvidia-settings vulkan-icd-loader lib32-vulkan-icd-loader
+	echo "done"
+
+	echo "Installing necessary software..."
+	sudo pacman -S steam lutris wine-staging
+	paru -S proton-ge-custom
+	paru -S mangohud
+	paru -S goverlay	# gui to edit mangohud
+	#paru -S gwe			# greenwithenvy for fans and temp control
+	echo "Installing GreenWithEnvy"
+	sudo pacman -S meson ninja
+
+	cd ~/Downloads
+	git clone --recurse-submodules -j4 https://gitlab.com/leinardi/gwe.git
+	cd gwe
+	git checkout release
+	sudo -H pip3 install -r requirements.txt
+	meson . build --prefix /usr
+	ninja -v -C build
+	sudo ninja -v -C build install
+	echo "done"
+
+	clear
+	echo "System optimized for gaming, good luck on the battlefield!"
+}
+
 # check if filget is install if not install it (to display ascii art)
 check_figlet() {
 	if ! command -v figlet -h &> /dev/null
@@ -287,7 +327,8 @@ check_figlet() {
 menu() {
 	figlet Dotfiles script
 	echo "Remember that this script requires Arch-based machine with SystemD!"
-	printf "Requirements: git and this repo as .dotfiles
+	echo "For your own good configure sudo (with visudo) before."
+	printf "Requires this repo as .dotfiles
 	$(ColorGreen '1)') Full installation - all at once
 	$(ColorGreen '2)') Install necessary packages and programs
 	$(ColorGreen '3)') Install GUI - xorg, qtile, ly
@@ -295,6 +336,7 @@ menu() {
 	$(ColorGreen '5)') Set up Git
 	$(ColorGreen '6)') Customize look and feel
 	$(ColorGreen '7)') GUI ONLY! Configure Firefox
+	$(ColorGreen '8)') Optimize system for gaming (will need to edit /etc/pacman.conf)
 	$(ColorGreen 'q)') Quit
 	$(ColorBlue 'Choose an option:') "
 		read -r option
@@ -303,13 +345,15 @@ menu() {
 			   install_gui
 			   make_dotfiles
 			   set_git
-			   look_and_feel ; menu ;;
+			   look_and_feel
+			   gaming ; menu ;;
 	        2) install_necessary ; menu ;;
 	        3) install_gui ; menu ;;
 			4) make_dotfiles ; menu ;;
 			5) set_git ; menu ;;
 			6) look_and_feel ; menu ;;
 			7) firefox_profile ; menu ;;
+			8) gaming ; menu ;;
 			q) exit 0 ;;
 			*) echo -e $red"Wrong option"$clear; exit 0;;
         esac
