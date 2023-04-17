@@ -14,4 +14,4 @@ configuration{
     sidebar-mode: true;
 }
 
-@theme "simple-tokyonight"
+@theme "tokyonight"
