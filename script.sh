@@ -37,7 +37,7 @@ exclude=(. ..)
 exclude_files=(firefox script.sh README.md LICENSE .git)
 # alsa - volume, qtile-extras - for more customization in qtile, gsimplecal - calendar
 # gtk-engine-murrine and gnome-themes-extra for GTK theme
-paru_packages=(alsa-utils discord-canary spotify gtk-engine-murrine gnome-themes-extra)
+paru_packages=(alsa-utils discord-canary spotify gtk-engine-murrine gnome-themes-extra network-manager-applet)
 # for Mpris widgets in qtile
 pip_packages=(dbus-next pyxdg)
 
