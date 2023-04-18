@@ -14,8 +14,10 @@ Installation only requires git to clone this repository and rename it do `.dotfi
 ```
 git clone https://github.com/piotr-marendowski/dotfiles.git
 mv dotfiles .dotfiles
-./.dotfiles/script.sh
+./.dotfiles/whiptail-script.sh
 ```
+Note that the bash script (script.sh) is discontinued in favor of the whiptail version, for now it will stay in repo
+as a reference.
 
 ## Used programs/packages
 - [Nvidia drivers](https://www.nvidia.com/en-us/drivers/unix/)
