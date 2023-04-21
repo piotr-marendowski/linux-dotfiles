@@ -27,107 +27,20 @@ checkbox=black,white
 compactbutton=black,white
 button=black,red"
 
-max() {
-	echo -e "$1\n$2" | sort -n | tail -1
-}
-
-getbiggestword() {
-	echo "$@" | sed "s/ /\n/g" | wc -L
-}
-
-replicate() {
-	local n="$1"
-	local x="$2"
-	local str
-
-	for _ in $(seq 1 "$n"); do
-		str="$str$x"
-	done
-	echo "$str"
-}
-
-programchoices() {
-	choices=()
-	local maxlen
-	maxlen="$(getbiggestword "${!checkboxes[@]}")"
-	linesize="$(max "$maxlen" 50)"
-	local spacer
-	spacer="$(replicate "$((linesize - maxlen))" " ")"
-
-	for key in "${!checkboxes[@]}"; do
-		# A portable way to check if a command exists in $PATH and is executable.
-		# If it doesn't exist, we set the tick box to OFF.
-		# If it exists, then we set the tick box to ON.
-		if ! command -v "${checkboxes[$key]}" >/dev/null; then
-			# $spacer length is defined in the individual window functions based
-			# on the needed length to make the checkbox wide enough to fit window.
-			choices+=("${key}" "${spacer}" "OFF")
-		else
-			choices+=("${key}" "${spacer}" "ON")
-		fi
-	done
-}
-
-selectedprograms() {
-	result=$(
-		# Creates the whiptail checklist. Also, we use a nifty
-		# trick to swap stdout and stderr.
-		whiptail --title "$title" \
-			--checklist "$text" 22 "$((linesize + 12))" 15 \
-			"${choices[@]}" \
-			3>&2 2>&1 1>&3
-	)
-}
-
-exitorinstall() {
-	local exitstatus="$?"
-	# Check the exit status, if 0 we will install the selected
-	# packages. A command which exits with zero (0) has succeeded.
-	# A non-zero (1-255) exit status indicates failure.
-	if [ "$exitstatus" = 0 ]; then
-		# Take the results and remove the "'s and add new lines.
-		# Otherwise, pacman is not going to like how we feed it.
-		programs=$(echo "$result" | sed 's/" /\n/g' | sed 's/"//g')
-		echo "$programs"
-		paru --needed --ask 4 -Syu "$programs" ||
-			echo "Failed to install required packages."
-	else
-		echo "User selected Cancel."
-	fi
-}
-
-install() {
-	local title="${1}"
-	local text="${2}"
-	declare -A checkboxes
-
-	# Loop through all the remaining arguments passed to the install function
-	for ((i = 3; i <= $#; i += 2)); do
-		key="${!i}"
-		value=""
-		eval "value=\${$((i + 1))}"
-		if [ -z "$value" ]; then
-			value="$key"
-		fi
-		checkboxes["$key"]="$value"
-	done
-
-	programchoices && selectedprograms && exitorinstall
-}
-
 # Array of programs to install
 programs=()
 
 gui() {
 	# tag and descriptions --notags is used to only show descriptions
-	CHOICES=$(whiptail --separate-output --checklist --notags "Choose one or more options:" 20 60 10 \
-		"xorg" "xorg" OFF \
-		"xorg-xinit" "xorg-xinit" OFF \
-		"playerctl" "playerctl" OFF \
-		"qtile-git" "qtile-git" OFF \
-		"qtile-extras-git" "qtile-extras-git" OFF \
-		"ly" "ly" OFF \
-		"gsimplecal" "gsimplecal" OFF 3>&1 1>&2 2>&3
+	CHOICES=$(
+		whiptail --title "GUI" --separate-output --checklist --notags "Choose one or more options:" 15 60 7 \
+		"xorg"      		"xorg						  " OFF \
+		"xorg-xinit" 		"xorg-xinit					  " OFF \
+		"playerctl" 		"playerctl					  " OFF \
+		"qtile-git" 		"qtile-git					  " OFF \
+		"qtile-extras-git" 	"qtile-extras-git				  " OFF \
+		"ly" 				"ly						  " OFF \
+		"gsimplecal" 		"gsimplecal			          	  " OFF 3>&1 1>&2 2>&3
 	)
 
 	# add selected programs to the array
@@ -218,7 +131,7 @@ Better know what you are doing, because some options NOT selected will conclude 
 
 # Menu
 #menu
-#gui
+gui
 
 # Necessary
 install "Web Browsers" "Select one or more options.\n" \
