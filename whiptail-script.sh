@@ -30,32 +30,6 @@ button=black,red"
 # Array of programs to install
 programs=()
 
-gui() {
-	# tag and descriptions --notags is used to only show descriptions
-	CHOICES=$(
-		whiptail --title "GUI" --separate-output --checklist --notags "Choose one or more options:" 15 60 7 \
-		"xorg"      		"xorg						  " OFF \
-		"xorg-xinit" 		"xorg-xinit					  " OFF \
-		"playerctl" 		"playerctl					  " OFF \
-		"qtile-git" 		"qtile-git					  " OFF \
-		"qtile-extras-git" 	"qtile-extras-git				  " OFF \
-		"ly" 				"ly						  " OFF \
-		"gsimplecal" 		"gsimplecal			          	  " OFF 3>&1 1>&2 2>&3
-	)
-
-	# add selected programs to the array
-	for CHOICE in $CHOICES; do
-		programs+=($CHOICE)
-	done
-
-	# print if nothing was selected
-	if [ -z $CHOICE ]; then
-	  	echo "No option was selected (user hit Cancel or unselected all options)"
-	fi
-
-	echo "${programs[@]}"
-}
-
 ## Configure installed packages
 configure_installed() {
 	# Alacritty
@@ -90,74 +64,96 @@ configure_installed() {
 	fi
 }
 
+gui() {
+	# tag and descriptions --notags is used to only show descriptions
+	# newline character (\n) for better placement
+	# don't know if it will be different on other monitors, but in mine it displays all equally
+ 	CHOICES=$(
+		whiptail --title "GUI" --separate-output --checklist --notags "\nChoose one or more options:" 15 60 7 \
+		"xorg"      		"xorg						  " OFF \
+		"xorg-xinit" 		"xorg-xinit					  " OFF \
+		"playerctl" 		"playerctl					  " OFF \
+		"qtile-git" 		"qtile-git					  " OFF \
+		"qtile-extras-git" 	"qtile-extras-git				  " OFF \
+		"ly" 				"ly						  " OFF \
+		"gsimplecal" 		"gsimplecal			          	  " OFF 3>&1 1>&2 2>&3
+	)
+
+	# add selected programs to the array
+	for CHOICE in $CHOICES; do
+		programs+=($CHOICE)
+	done
+
+	# print if nothing was selected
+	if [ -z $CHOICE ]; then
+	  	echo "No option was selected (user hit Cancel or unselected all options)"
+	fi
+
+	echo "${programs[@]}"
+}
+
 # Menu window
 menu() {
-	# Only for "debugging" purposes
-	while [ 1 ]
-	do
+	# "3" "Install GUI"  \
+	# "4" "Make dotfiles"  \
+	# "5" "Customize look and feel"  \
+	# "6" "Install hardened Firefox profile"  \ 	# REMEMBER TO INCLUDE NOTE SECTION!
+	# "7" "Optimize system for gaming"  \
+	# "8" "Necessary packages"  \
+	
+	# newline character (\n) for better placement
+	# we don't need to "set" shadow for every object as in radiolist
 	CHOICE=$(
-	whiptail --title "Install script" --menu "Choose one:" 16 90 9 \
-		"1)" "Full installation (all of them)"   \
-		"2)" "Install necessary packages"  \
-		"2)" "Install GUI"  \
-		"2)" "Make dotfiles"  \
-		"2)" "Customize look and feel"  \
-		"2)" "Install hardened Firefox profile"  \ 	# REMEMBER TO INCLUDE NOTE SECTION!
-		"2)" "Optimize system for gaming"  \
-		"2)" "Necessary packages"  \
-		"2)" "Necessary packages"  \
-		"9)" "End script"  3>&2 2>&1 1>&3	
+		whiptail --title "Install script" --menu "\nChoose one:" 15 60 3 \
+		"1" " Full installation (all of them)                    "   \
+		"2" " Install necessary packages"  \
+		"9" " End script" 3>&2 2>&1 1>&3	
 	)
 
 	case $CHOICE in
-		"1)")   
-			break
-		;;
-		"2)")   
-			result="This system has been up $OP minutes"
-		;;
-		"9)") exit
+		"1")   
+			exit
+			;;
+		"2")   
+			gui
+			;;
+		"9")
+			exit
 			;;
 	esac
-	done
 }
 
 ### PROGRAM EXECUTION
-# Hello window
-whiptail --title "Install script" --msgbox "This install script requires an Arch-based machine with SystemD. \
-For your own good configure sudo (with visudo) before. Use TAB for navigation in <Ok> and <Cancel> options. \
-After this window will you will be prompted to install Paru - AUR helper which is used to download every program. \
-Better know what you are doing, because some options NOT selected will conclude in not fully working system!" 11 100
+# Description
+whiptail --title "Description" --msgbox "This install script requires an Arch-based machine with SystemD. \
+For your own good configure sudo (with visudo) before. Better know what you are doing, because \
+some options NOT selected will conclude in not fully working system!" 10 80
+
+# Navigation
+whiptail --title "Navigation" --msgbox "Navigate in lists by using arrows. Select options with space.  \
+Use Tab key to navigate between the <Ok> and <Cancel> buttons." 8 80
+
+# Install Paru
+# sudo pacman -S --needed base-devel
+# git clone https://aur.archlinux.org/paru.git
+# cd paru
+# makepkg -si
 
 # Menu
-#menu
-gui
+menu
 
 # Necessary
-install "Web Browsers" "Select one or more options.\n" \
-"firefox" "chromium" "brave" "librewolf" "qutebrowser"
 
-# # GUI
-# install "GUI" "Select one or more options.\n" \
-# "xorg" "xorg-xinit" "playerctl" "qtile-git" "qtile-extras-git" "ly" "gsimplecal"
+# GUI
 
-# # Eye candy
-# install "Eye candy" "Select one or more options.\n" \
-# "papirus-icon-theme" "lxappearance" "nitrogen" "gtk4" "gtk3" "redshift"
+# Eye candy
 
 # Sound
-#install "Sound" "Select one or more options.\n" \
-#"" ""
 
 # Useful
-#install "More useful" "Select one or more options.\n" \
-#"alacritty" "dunst" "rofi" "htop" "flameshot" ""
 
 # Other 
-# install "Other" "Select one or more options.\n" \
-# "discord-canary" "spotify" "libreoffice-fresh"
 
 # Games
-#install "Gaming" "steam" "lutris" "mangohud" ""
 
 exit
