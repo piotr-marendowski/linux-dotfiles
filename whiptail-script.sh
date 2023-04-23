@@ -9,6 +9,7 @@
 # See this thread for more info:
 # https://askubuntu.com/questions/776831/whiptail-change-background-color-dynamically-from-magenta/781062
 
+# colors
 export NEWT_COLORS="
 root=,black
 window=,black
@@ -21,6 +22,16 @@ label=black,white
 checkbox=black,white
 compactbutton=black,white
 button=black,red"
+
+# dotfolders directory
+dir=~/.dotfiles
+# old dotfolders backup directory
+olddir=~/.dotfiles_old 
+# create arrays for: folders/normal files, hidden files, and excluded characters/files
+folders=(*)
+files=(.*)
+exclude=(. ..)
+exclude_files=(firefox script.sh README.md LICENSE .git)
 
 # Array of programs to install
 programs=()
@@ -57,11 +68,37 @@ configure_installed() {
 		cd ~/.mozilla/firefox/*$profile_name*/
 		cp $dir/firefox/prefs.js /prefs.js
 	fi
+
+	# Xorg
+	if command -v X -version &> /dev/null
+	then
+		echo "Configuring Xorg server and adding Qtile as default window manager..."
+		cp /etc/X11/xinit/xinitrc ~/.xinitrc && echo "(1/4)"
+		head -n -5 .xinitrc > .xinitrc-temp && mv .xinitrc-temp .xinitrc && echo "(2/4)"
+		echo exec qtile start >> ~/.xinitrc && echo "(3/4)"
+		rm ~/.xinitrc-new && echo "(4/4)"
+		echo "done"
+	fi
+	
+	pip install dbus-next
+	pip install pyxdg
+
+	echo "Customizing theme..."
+	sudo cp $dir/assets/TokyoNight /usr/share/themes/
+	echo "done"
+
+	echo "Installing custom Picom compositor..."
+	paru -S picom-jonaburg-git
+	echo "done"
+
+	echo "Setting wallpaper..."
+	nitrogen --set-zoom-fill $dir/assets/wallpaper.jpg
+	echo "done"
 }
 
 ## Function with dependencies to all of the programs
 dependencies() {
-	dependencies_list=(wget curl ripgrep python-pip)
+	dependencies_list=(wget curl ripgrep python-pip meson ninja)
 	
 	# check if there is Paru on machine and install it if not
 	# echo "Checking if there is Paru installed..."
@@ -94,13 +131,14 @@ dependencies() {
 necessary() {
  	CHOICES=$(
 		whiptail --title "System programs" --separate-output --checklist --notags \
-		"\nPrograms used to achieve fully working modern system." 15 60 7 \
+		"\nPrograms used to achieve fully working modern system." 16 60 8 \
 		"alacritty"      	"alacritty					  " OFF \
 		"rofi" 				"rofi 						  " OFF \
 		"dunst" 			"dunst	   				   	  " OFF \
 		"flamshot" 			"flameshot					  " OFF \
 		"gimp" 				"gimp   						  " OFF \
 		"firefox" 			"firefox				                  " OFF \
+		"neovim" 			"neovim				                  " OFF \
 		"htop" 				"htop  						  " OFF 3>&1 1>&2 2>&3
 	)
 
@@ -123,8 +161,8 @@ sound() {
  	CHOICES=$(
 		whiptail --title "Sound" --separate-output --checklist --notags \
 		"\nMusic makes sense when everything else is crazy." 15 60 7 \
-		"alacritty"      	"alacritty					  " OFF \
-		"rofi" 				"rofi 						  " OFF \
+		"pulseaudio"      	"pulseaudio					  " OFF \
+		"pavucontrol" 		"pavucontrol 				  	  " OFF \
 		"dunst" 			"dunst	   				   	  " OFF \
 		"flamshot" 			"flameshot					  " OFF \
 		"qtile-extras-git" 	"qtile-extras-git				  " OFF \
@@ -148,7 +186,7 @@ sound() {
 gui() {
  	CHOICES=$(
 		whiptail --title "GUI" --separate-output --checklist --notags \
-		'\n"Life is too short for ugly design." - Stefan Sagmeister' 15 60 7 \
+		$'\n"The best GUI is the one you don\'t notice." - Unknown' 15 60 7 \
 		"xorg"      		"xorg						  " OFF \
 		"xorg-xinit" 		"xorg-xinit					  " OFF \
 		"playerctl" 		"playerctl					  " OFF \
@@ -171,22 +209,178 @@ gui() {
 	echo "${programs[@]}"
 }
 
+# customize GTK and QT themes
+look_and_feel() {
+	CHOICES=$(
+		whiptail --title "Look and feel" --separate-output --checklist --notags \
+		'\n"Life is too short for ugly design." - Stefan Sagmeister' 15 60 7 \
+		"lxappearance"     		"lxappearance				  " OFF \
+		"papirus-icon-theme"	"papirus-icon-theme			  " OFF \
+		"gsimplecal" 			"gsimplecal			          	  " OFF 3>&1 1>&2 2>&3
+	)
+
+	# add selected programs to the array
+	for CHOICE in $CHOICES; do
+		programs+=($CHOICE)
+	done
+
+	# print if nothing was selected
+	if [ -z $CHOICE ]; then
+	  	echo "No option was selected (user hit Cancel or unselected all options)"
+	fi
+
+	# configure fonts
+	CHOICE=$(
+		whiptail --title "Fonts" --notags --menu "\nChoose one:" 15 60 8 \
+			"1" " Full Nerd Fonts (~3.5 GB)                   "   \
+			"2" " JetBrainsMono font only (~30 MB)" 3>&2 2>&1 1>&3	
+	)
+
+	case $CHOICE in
+		"1")   
+			#paru -S nerd-fonts-meta
+			;;
+		"2")   
+			#mkdir -p ~/.local/share/fonts
+			#cp -r $dir/assets/JetBrainsMono ~/.local/share/fonts
+			;;
+	esac
+
+	echo "${programs[@]}"
+
+}
+
+gaming() {
+	whiptail --title "Caution" --yesno "Before installing and configuring system for \
+	gaming, first you need to enable Multilib in pacman.conf in order to install 32 bit drivers. \
+	Do you want to do it now?" 9 80
+	
+	if [ $? -eq 0 ]; then
+		sudo nvim /etc/pacman.conf
+	fi
+
+	CHOICES=$(
+		whiptail --title "Gaming" --separate-output --checklist --notags \
+		"\nThe game is never over, unless you stop playing." 19 60 13 \
+		"steam"      				"steam						  " OFF \
+		"lutris"      				"lutris						  " OFF \
+		"wine-staging"      		"wine-staging		     		  	  " OFF \
+		"nvidia"      				"nvidia						  " OFF \
+		"nvidia-dkms" 				"nvidia-dmks 				  	  " OFF \
+		"nvidia-utils" 				"nvidia-utils			   	  	  " OFF \
+		"lib32-nvidia-utils" 		"lib32-nvidia-utils			  	  " OFF \
+		"nvidia-settings" 			"nvidia-settings			  	          " OFF \
+		"vulkan-icd-loader" 		"vulkan-icd-loader	 		 	  " OFF \
+		"lib32-vulkan-icd-loader" 	"lib32-vulkan-icd-loader	  	                  " OFF \
+		"proton-ge-custom" 			"proton-ge-custom			  	  " OFF \
+		"mangohud" 					"mangohud			  		  " OFF \
+		"goverlay" 					"goverlay			  		  " OFF 3>&1 1>&2 2>&3
+	)
+
+	# echo "Installing GreenWithEnvy"
+	# cd ~/Downloads
+	# git clone --recurse-submodules -j4 https://gitlab.com/leinardi/gwe.git
+	# cd gwe
+	# git checkout release
+	# sudo -H pip3 install -r requirements.txt
+	# meson . build --prefix /usr
+	# ninja -v -C build
+	# sudo ninja -v -C build install
+	# echo "done"
+
+	# add selected programs to the array
+	for CHOICE in $CHOICES; do
+		programs+=($CHOICE)
+	done
+
+	# print if nothing was selected
+	if [ -z $CHOICE ]; then
+	  	echo "No option was selected (user hit Cancel or unselected all options)"
+	fi
+
+	echo "${programs[@]}"
+
+}
+
+## DOTFILES
+make_dotfiles() {
+	echo "Searching $dir directory..."
+	# search for folders (and not hidden files)
+	for i in ${folders[@]}; do
+		:
+	done
+	# search for all hidden files (even something like '.' and '..')
+	for i in ${files[@]}; do
+		:
+	done
+	# exclude weird characters from files array
+	for char in "${exclude[@]}"; do
+		for i in "${!files[@]}"; do
+			if [[ ${files[i]} = $char ]]; then
+				unset 'files[i]'
+			fi
+		done
+	done
+	# exclude not-dotfolders/not-dotfiles
+	for del in ${exclude_files[@]}
+	do
+		folders=("${folders[@]/$del}") 	#Quotes when working with strings
+	done
+	for del in ${exclude_files[@]}
+	do
+		files=("${files[@]/$del}") 	#Quotes when working with strings
+	done
+	echo "done"
+
+	echo "Folders/files in $dir: ${folders[@]}"
+	echo "Hidden files in $dir: ${files[@]}"
+
+	# create dotfolders_old in homedir
+	echo "Creating $olddir for backup of any existing dotfolders in ~..."
+	mkdir -p $olddir
+	echo "done"
+
+	# enter dotfolder in order to process only files in it and not files in homedir
+	echo "Entering $dir..."
+	cd $dir
+	echo "done"
+
+	# Move any dotfile "listed" (present) in dir to olddir and create a symlink from
+	# "listed" file to this file in homedir
+	echo "Moving any existing dotfolders from ~ to $olddir..."
+	echo "DON'T PANIC IF THERE ARE ERRORS!"
+	# folders/normal files
+	for file in ${folders[@]}; do
+		mv ~/$file $olddir
+		echo "Creating symlink to $file in home directory..."
+		ln -s $dir/$file ~/$file
+	done
+	# hidden files
+	for file in ${files[@]}; do
+		mv ~/$file $olddir
+		echo "Creating symlink to $file in home directory..."
+		ln -s $dir/$file ~/$file
+	done
+	echo "done"
+
+	clear
+	echo "Dotfiles made."
+}
+
 # Menu window
 menu() {
-	# "4" "Make dotfiles"  \
-	# "5" "Customize look and feel"  \
-	# "6" "Install hardened Firefox profile"  \ 	# REMEMBER TO INCLUDE NOTE SECTION!
 	# "7" "Optimize system for gaming"  \
-	# "8" "Necessary packages"  \
 	
 	# newline character (\n) for better placement
 	# we don't need to "set" shadow for every object as in radiolist
 	CHOICE=$(
-		whiptail --title "Install script" --menu "\nChoose one:" 15 60 8 \
-		"1" " Full installation (all of them)                    "   \
+		whiptail --title "Menu" --notags --menu "\nChoose one:" 15 60 8 \
+		"1" " Full installation (all of them)                     "   \
 		"2" " System programs"  \
 		"3" " GUI"  \
 		"4" " Sound"  \
+		"5" " Look and feel"  \
+		"6" " Gaming"  \
 		"9" " End script" 3>&2 2>&1 1>&3	
 	)
 
@@ -195,21 +389,46 @@ menu() {
 			dependencies
 			necessary
 			gui
+			look_and_feel
 			sound
+			install
+			# make_dotfiles
+			gaming
+			# configure_installed
+			exit
 			;;
 		"2")   
 			necessary
+			install
 			;;
 		"3")   
 			gui
+			install
 			;;
 		"4")   
 			sound
+			install
+			;;
+		"5")   
+			look_and_feel
+			install
+			;;
+		"6")   
+			gaming
+			install
 			;;
 		"9")
 			exit
 			;;
 	esac
+}
+
+install() {
+	echo "Installing selected programs..."
+	
+	echo "done"
+	
+	menu
 }
 
 ### PROGRAM EXECUTION
@@ -224,19 +443,5 @@ Use Tab key to navigate between the <Ok> and <Cancel> buttons." 8 80
 
 # Menu
 menu
-
-# Necessary
-
-# GUI
-
-# Eye candy
-
-# Sound
-
-# Useful
-
-# Other 
-
-# Games
 
 exit
