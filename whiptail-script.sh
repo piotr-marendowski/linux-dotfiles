@@ -12,8 +12,8 @@
 # colors
 export NEWT_COLORS="
 root=,black
-window=,black
-shadow=,black
+window=black,black
+shadow=black,black
 border=white,black
 title=white,black
 textbox=white,black
@@ -160,14 +160,15 @@ necessary() {
 sound() {
  	CHOICES=$(
 		whiptail --title "Sound" --separate-output --checklist --notags \
-		"\nMusic makes sense when everything else is crazy." 15 60 7 \
+		"\nMusic makes sense when everything else is crazy." 16 60 8 \
 		"pulseaudio"      	"pulseaudio					  " OFF \
-		"pavucontrol" 		"pavucontrol 				  	  " OFF \
-		"dunst" 			"dunst	   				   	  " OFF \
-		"flamshot" 			"flameshot					  " OFF \
-		"qtile-extras-git" 	"qtile-extras-git				  " OFF \
-		"ly" 				"ly						  " OFF \
-		"gsimplecal" 		"gsimplecal			          	  " OFF 3>&1 1>&2 2>&3
+		"pavucontrol" 		"pavucontrol 				          " OFF \
+		"alsa-utils" 		"alsa-utils	   				  " OFF \
+		"pipewire" 			"pipewire	   				  " OFF \
+		"pipewire-audio" 	"pipewire-audio		     		          " OFF \
+		"pipewire-alsa" 	"pipewire-alsa                  		          " OFF \
+		"pipewire-pulse" 	"pipewire-pulse           		       	  " OFF \
+		"pipewire-jack" 	"pipewire-jack                       		  " OFF 3>&1 1>&2 2>&3
 	)
 
 	# add selected programs to the array
@@ -186,7 +187,7 @@ sound() {
 gui() {
  	CHOICES=$(
 		whiptail --title "GUI" --separate-output --checklist --notags \
-		$'\n"The best GUI is the one you don\'t notice." - Unknown' 15 60 7 \
+		$'\nThe best GUI is the one you don\'t notice.' 15 60 7 \
 		"xorg"      		"xorg						  " OFF \
 		"xorg-xinit" 		"xorg-xinit					  " OFF \
 		"playerctl" 		"playerctl					  " OFF \
@@ -213,10 +214,10 @@ gui() {
 look_and_feel() {
 	CHOICES=$(
 		whiptail --title "Look and feel" --separate-output --checklist --notags \
-		'\n"Life is too short for ugly design." - Stefan Sagmeister' 15 60 7 \
-		"lxappearance"     		"lxappearance				  " OFF \
-		"papirus-icon-theme"	"papirus-icon-theme			  " OFF \
-		"gsimplecal" 			"gsimplecal			          	  " OFF 3>&1 1>&2 2>&3
+		'\n"Life is too short for ugly design." - Stefan Sagmeister' 11 60 3 \
+		"lxappearance"     		"lxappearance				          " OFF \
+		"papirus-icon-theme"	"papirus-icon-theme			          " OFF \
+		"picom-jonaburg-git" 	"picom-jonaburg-git			          " OFF 3>&1 1>&2 2>&3
 	)
 
 	# add selected programs to the array
@@ -231,8 +232,8 @@ look_and_feel() {
 
 	# configure fonts
 	CHOICE=$(
-		whiptail --title "Fonts" --notags --menu "\nChoose one:" 15 60 8 \
-			"1" " Full Nerd Fonts (~3.5 GB)                   "   \
+		whiptail --title "Fonts" --notags --menu "\nA font is a tool, not a decoration." 11 60 2 \
+			"1" " Full Nerd Fonts (~3.5 GB)                           "   \
 			"2" " JetBrainsMono font only (~30 MB)" 3>&2 2>&1 1>&3	
 	)
 
@@ -251,7 +252,7 @@ look_and_feel() {
 }
 
 gaming() {
-	whiptail --title "Caution" --yesno "Before installing and configuring system for \
+	whiptail --title "Warming" --yesno "Before installing and configuring system for \
 	gaming, first you need to enable Multilib in pacman.conf in order to install 32 bit drivers. \
 	Do you want to do it now?" 9 80
 	
@@ -261,7 +262,7 @@ gaming() {
 
 	CHOICES=$(
 		whiptail --title "Gaming" --separate-output --checklist --notags \
-		"\nThe game is never over, unless you stop playing." 19 60 13 \
+		"\nThe game is never over, unless you stop playing." 21 60 13 \
 		"steam"      				"steam						  " OFF \
 		"lutris"      				"lutris						  " OFF \
 		"wine-staging"      		"wine-staging		     		  	  " OFF \
@@ -273,8 +274,8 @@ gaming() {
 		"vulkan-icd-loader" 		"vulkan-icd-loader	 		 	  " OFF \
 		"lib32-vulkan-icd-loader" 	"lib32-vulkan-icd-loader	  	                  " OFF \
 		"proton-ge-custom" 			"proton-ge-custom			  	  " OFF \
-		"mangohud" 					"mangohud			  		  " OFF \
-		"goverlay" 					"goverlay			  		  " OFF 3>&1 1>&2 2>&3
+		"mangohud-git" 				"mangohud-git			  		  " OFF \
+		"goverlay-bin" 				"goverlay-bin			  	          " OFF 3>&1 1>&2 2>&3
 	)
 
 	# echo "Installing GreenWithEnvy"
@@ -299,7 +300,6 @@ gaming() {
 	fi
 
 	echo "${programs[@]}"
-
 }
 
 ## DOTFILES
@@ -367,6 +367,34 @@ make_dotfiles() {
 	echo "Dotfiles made."
 }
 
+install() {
+	whiptail --title "Warming" --yesno "Do you want to install selected programs?" 7 45
+	
+	if [ $? -eq 0 ]; then
+		echo "Installing selected programs..."
+		# Check if paru is installed
+		if ! command -v paru &> /dev/null; then
+			echo "Paru is not installed. Installing it..."
+			sudo pacman -S --needed base-devel
+			git clone https://aur.archlinux.org/paru.git
+			cd paru
+			makepkg -si
+			echo "done"
+		fi
+
+		# Loop through the program names array and install each program using paru
+		# --noconfirm to automatically say yes to every installation
+		for program in "${@}"; do
+			paru -S --noconfirm "$program"
+		done
+		  
+		whiptail --title "Info" --infobox "Installation successful.\
+		Do you want to do it now?" 9 80
+	fi
+
+	menu
+}
+
 # Menu window
 menu() {
 	# "7" "Optimize system for gaming"  \
@@ -374,14 +402,15 @@ menu() {
 	# newline character (\n) for better placement
 	# we don't need to "set" shadow for every object as in radiolist
 	CHOICE=$(
-		whiptail --title "Menu" --notags --menu "\nChoose one:" 15 60 8 \
+		whiptail --title "Menu" --cancel-button "Exit" --notags --menu "" 15 60 8 \
 		"1" " Full installation (all of them)                     "   \
 		"2" " System programs"  \
 		"3" " GUI"  \
 		"4" " Sound"  \
 		"5" " Look and feel"  \
 		"6" " Gaming"  \
-		"9" " End script" 3>&2 2>&1 1>&3	
+		"7" " Install selected programs"  \
+		"8" " End script" 3>&2 2>&1 1>&3
 	)
 
 	case $CHOICE in
@@ -391,44 +420,39 @@ menu() {
 			gui
 			look_and_feel
 			sound
-			install
-			# make_dotfiles
 			gaming
+			# make_dotfiles
+			install "${programs[@]}"
 			# configure_installed
 			exit
 			;;
 		"2")   
 			necessary
-			install
+			menu
 			;;
 		"3")   
 			gui
-			install
+			menu
 			;;
 		"4")   
 			sound
-			install
+			menu
 			;;
 		"5")   
 			look_and_feel
-			install
+			menu
 			;;
 		"6")   
 			gaming
-			install
+			menu
 			;;
-		"9")
+		"7")   
+			install "${programs[@]}"
+			;;
+		"8")
 			exit
 			;;
 	esac
-}
-
-install() {
-	echo "Installing selected programs..."
-	
-	echo "done"
-	
-	menu
 }
 
 ### PROGRAM EXECUTION
@@ -438,8 +462,8 @@ For your own good configure sudo (with visudo) before. Better know what you are 
 some options NOT selected will conclude in not fully working system!" 10 80
 
 # Navigation
-whiptail --title "Navigation" --msgbox "Navigate in lists by using arrows. Select options with space.  \
-Use Tab key to navigate between the <Ok> and <Cancel> buttons." 8 80
+whiptail --title "Navigation" --msgbox "Navigate in lists by using arrow keys. \
+Select options with space. Use Tab key to navigate between the <Ok> and <Cancel> buttons." 8 80
 
 # Menu
 menu
