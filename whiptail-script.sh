@@ -17,10 +17,11 @@ shadow=black,black
 border=white,black
 title=white,black
 textbox=white,black
-radiolist=black,black
+radiolist=white,black
 label=black,white
-checkbox=black,white
+checkbox=white,black
 compactbutton=black,white
+listbox=white,black
 button=black,red"
 
 # dotfolders directory
@@ -129,17 +130,18 @@ dependencies() {
 # don't know if it will be different on other monitors, but in mine it displays all equally
 # third argument in dimensions = number of options
 necessary() {
+	#--notags
  	CHOICES=$(
-		whiptail --title "System programs" --separate-output --checklist --notags \
+		whiptail --title "System programs" --checklist --notags --separate-output\
 		"\nPrograms used to achieve fully working modern system." 16 60 8 \
-		"alacritty"      	"alacritty					  " OFF \
-		"rofi" 				"rofi 						  " OFF \
-		"dunst" 			"dunst	   				   	  " OFF \
-		"flamshot" 			"flameshot					  " OFF \
-		"gimp" 				"gimp   						  " OFF \
-		"firefox" 			"firefox				                  " OFF \
-		"neovim" 			"neovim				                  " OFF \
-		"htop" 				"htop  						  " OFF 3>&1 1>&2 2>&3
+		"alacritty"      	"alacritty" OFF \
+		"rofi" 				"rofi"  OFF \
+		"dunst" 			"dunst" OFF \
+		"flamshot" 			"flameshot" OFF \
+		"gimp" 				"gimp" OFF \
+		"firefox" 			"firefox" OFF \
+		"neovim" 			"neovim" OFF \
+		"htop" 				"htop" OFF 3>&1 1>&2 2>&3
 	)
 
 	# add selected programs to the array
@@ -233,8 +235,8 @@ look_and_feel() {
 	# configure fonts
 	CHOICE=$(
 		whiptail --title "Fonts" --notags --menu "\nA font is a tool, not a decoration." 11 60 2 \
-			"1" " Full Nerd Fonts (~3.5 GB)                           "   \
-			"2" " JetBrainsMono font only (~30 MB)" 3>&2 2>&1 1>&3	
+			"1" "Full Nerd Fonts (~3.5 GB)"   \
+			"2" "JetBrainsMono font only (~30 MB)" 3>&2 2>&1 1>&3	
 	)
 
 	case $CHOICE in
@@ -403,14 +405,14 @@ menu() {
 	# we don't need to "set" shadow for every object as in radiolist
 	CHOICE=$(
 		whiptail --title "Menu" --cancel-button "Exit" --notags --menu "" 15 60 8 \
-		"1" " Full installation (all of them)                     "   \
-		"2" " System programs"  \
-		"3" " GUI"  \
-		"4" " Sound"  \
-		"5" " Look and feel"  \
-		"6" " Gaming"  \
-		"7" " Install selected programs"  \
-		"8" " End script" 3>&2 2>&1 1>&3
+		"1" "Full installation (all of them)"  \
+		"2" "System programs"  \
+		"3" "GUI"  \
+		"4" "Sound"  \
+		"5" "Look and feel"  \
+		"6" "Gaming"  \
+		"7" "Install selected programs"  \
+		"8" "End script" 3>&2 2>&1 1>&3
 	)
 
 	case $CHOICE in
