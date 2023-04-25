@@ -95,6 +95,10 @@ configure_installed() {
 	echo "Setting wallpaper..."
 	nitrogen --set-zoom-fill $dir/assets/wallpaper.jpg
 	echo "done"
+
+	# virtualization
+	sudo systemctl enable libvirt
+	sudo systemctl restart libvirt
 }
 
 ## Function with dependencies to all of the programs
@@ -119,10 +123,73 @@ dependencies() {
 	do
 	  	programs+=("$element")
 	done
-
-	#echo "${dependencies_list[@]}"
-	#echo "${programs[@]}"
 }
+
+## DOTFILES
+make_dotfiles() {
+	echo "Searching $dir directory..."
+	# search for folders (and not hidden files)
+	for i in ${folders[@]}; do
+		:
+	done
+	# search for all hidden files (even something like '.' and '..')
+	for i in ${files[@]}; do
+		:
+	done
+	# exclude weird characters from files array
+	for char in "${exclude[@]}"; do
+		for i in "${!files[@]}"; do
+			if [[ ${files[i]} = $char ]]; then
+				unset 'files[i]'
+			fi
+		done
+	done
+	# exclude not-dotfolders/not-dotfiles
+	for del in ${exclude_files[@]}
+	do
+		folders=("${folders[@]/$del}") 	#Quotes when working with strings
+	done
+	for del in ${exclude_files[@]}
+	do
+		files=("${files[@]/$del}") 	#Quotes when working with strings
+	done
+	echo "done"
+
+	echo "Folders/files in $dir: ${folders[@]}"
+	echo "Hidden files in $dir: ${files[@]}"
+
+	# create dotfolders_old in homedir
+	echo "Creating $olddir for backup of any existing dotfolders in ~..."
+	mkdir -p $olddir
+	echo "done"
+
+	# enter dotfolder in order to process only files in it and not files in homedir
+	echo "Entering $dir..."
+	cd $dir
+	echo "done"
+
+	# Move any dotfile "listed" (present) in dir to olddir and create a symlink from
+	# "listed" file to this file in homedir
+	echo "Moving any existing dotfolders from ~ to $olddir..."
+	echo "DON'T PANIC IF THERE ARE ERRORS!"
+	# folders/normal files
+	for file in ${folders[@]}; do
+		mv ~/$file $olddir
+		echo "Creating symlink to $file in home directory..."
+		ln -s $dir/$file ~/$file
+	done
+	# hidden files
+	for file in ${files[@]}; do
+		mv ~/$file $olddir
+		echo "Creating symlink to $file in home directory..."
+		ln -s $dir/$file ~/$file
+	done
+	echo "done"
+
+	clear
+	echo "Dotfiles made."
+}
+
 
 ## FOR EVERY FUNCTION BELOW:
 # tag and descriptions --notags is used to only show descriptions
@@ -235,13 +302,13 @@ look_and_feel() {
 	# configure fonts
 	CHOICE=$(
 		whiptail --title "Fonts" --notags --menu "\nA font is a tool, not a decoration." 11 60 2 \
-			"1" "Full Nerd Fonts (~3.5 GB)"   \
+			"1" "Full Nerd Fonts (~3.5 GB)"  \
 			"2" "JetBrainsMono font only (~30 MB)" 3>&2 2>&1 1>&3	
 	)
 
 	case $CHOICE in
 		"1")   
-			#paru -S nerd-fonts-meta
+			programs+=(nerd-fonts-meta)
 			;;
 		"2")   
 			#mkdir -p ~/.local/share/fonts
@@ -304,69 +371,41 @@ gaming() {
 	echo "${programs[@]}"
 }
 
-## DOTFILES
-make_dotfiles() {
-	echo "Searching $dir directory..."
-	# search for folders (and not hidden files)
-	for i in ${folders[@]}; do
-		:
-	done
-	# search for all hidden files (even something like '.' and '..')
-	for i in ${files[@]}; do
-		:
-	done
-	# exclude weird characters from files array
-	for char in "${exclude[@]}"; do
-		for i in "${!files[@]}"; do
-			if [[ ${files[i]} = $char ]]; then
-				unset 'files[i]'
-			fi
-		done
-	done
-	# exclude not-dotfolders/not-dotfiles
-	for del in ${exclude_files[@]}
-	do
-		folders=("${folders[@]/$del}") 	#Quotes when working with strings
-	done
-	for del in ${exclude_files[@]}
-	do
-		files=("${files[@]/$del}") 	#Quotes when working with strings
-	done
-	echo "done"
+virtualization() {
+	whiptail --title "Warming" --yesno "Before installing and configuring virtualization, first you need \
+to ensure that these are set to: unix_sock_group = \"libvirt\", unix_sock_ro_perms = \"0777\", \
+and unix_sock_rw_perms = \"0770\". Do you want to do it now?" 10 80
+	
+	if [ $? -eq 0 ]; then
+		sudo nvim /etc/libvirt/libvirtd.conf
+	fi
 
-	echo "Folders/files in $dir: ${folders[@]}"
-	echo "Hidden files in $dir: ${files[@]}"
+	local user_name=$(whoami)
+	#sudo usermod -aG libvirt $user_name
 
-	# create dotfolders_old in homedir
-	echo "Creating $olddir for backup of any existing dotfolders in ~..."
-	mkdir -p $olddir
-	echo "done"
+	CHOICES=$(
+		whiptail --title "Virtualization" --separate-output --checklist --notags  \
+		'\nVirtualization allows you to do more with less.' 17 60 9  \
+		"qemu"      		"qemu                       " OFF  \
+		"libvirt"      		"libvirt" OFF  \
+		"virt-manager" 		"virt-manager" OFF  \
+		"virt-viewer" 		"virt-viewer" OFF  \
+		"dnsmasq" 			"dnsmasq" OFF  \
+		"vde2" 				"vde2" OFF  \
+		"bridge-utils" 		"bridge-utils" OFF  \
+		"openbsd-netcat" 	"openbsd-netcat" OFF  \
+		"libguestfs" 		"libguestfs" OFF 3>&1 1>&2 2>&3
+	)
 
-	# enter dotfolder in order to process only files in it and not files in homedir
-	echo "Entering $dir..."
-	cd $dir
-	echo "done"
-
-	# Move any dotfile "listed" (present) in dir to olddir and create a symlink from
-	# "listed" file to this file in homedir
-	echo "Moving any existing dotfolders from ~ to $olddir..."
-	echo "DON'T PANIC IF THERE ARE ERRORS!"
-	# folders/normal files
-	for file in ${folders[@]}; do
-		mv ~/$file $olddir
-		echo "Creating symlink to $file in home directory..."
-		ln -s $dir/$file ~/$file
+	for CHOICE in $CHOICES; do
+		programs+=($CHOICE)
 	done
-	# hidden files
-	for file in ${files[@]}; do
-		mv ~/$file $olddir
-		echo "Creating symlink to $file in home directory..."
-		ln -s $dir/$file ~/$file
-	done
-	echo "done"
 
-	clear
-	echo "Dotfiles made."
+	if [ -z $CHOICE ]; then
+	  	echo "No option was selected (user hit Cancel or unselected all options)"
+	fi
+	
+	echo "${programs[@]}"
 }
 
 install() {
@@ -411,8 +450,8 @@ menu() {
 		"4" "Sound"  \
 		"5" "Look and feel"  \
 		"6" "Gaming"  \
-		"7" "Install selected programs"  \
-		"8" "End script" 3>&2 2>&1 1>&3
+		"7" "Virtualization"  \
+		"8" "Install selected programs" 3>&2 2>&1 1>&3
 	)
 
 	case $CHOICE in
@@ -423,6 +462,7 @@ menu() {
 			look_and_feel
 			sound
 			gaming
+			virtualization
 			# make_dotfiles
 			install "${programs[@]}"
 			# configure_installed
@@ -449,10 +489,11 @@ menu() {
 			menu
 			;;
 		"7")   
-			install "${programs[@]}"
+			virtualization
+			menu
 			;;
-		"8")
-			exit
+		"8")   
+			install "${programs[@]}"
 			;;
 	esac
 }
@@ -461,13 +502,13 @@ menu() {
 # Description
 whiptail --title "Description" --msgbox "This install script requires an Arch-based machine with SystemD. \
 For your own good configure sudo (with visudo) before. Better know what you are doing, because \
-some options NOT selected will conclude in not fully working system!" 10 80
+some options NOT selected will conclude in not fully working system! You can choose full installation \
+or go to different sections and check programs to install, them use install option from the main menu." 11 80
 
 # Navigation
 whiptail --title "Navigation" --msgbox "Navigate in lists by using arrow keys. \
 Select options with space. Use Tab key to navigate between the <Ok> and <Cancel> buttons." 8 80
 
-# Menu
 menu
 
 exit
