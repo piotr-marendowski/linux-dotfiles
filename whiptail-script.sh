@@ -91,9 +91,12 @@ configure_installed() {
 	sudo cp $dir/assets/TokyoNight /usr/share/themes/
 	echo "done"
 
-	echo "Setting wallpaper..."
-	nitrogen --set-zoom-fill $dir/assets/wallpaper.jpg
-	echo "done"
+	if command -v nitrogen -h &> /dev/null
+	then
+		echo "Setting wallpaper..."
+		nitrogen --set-auto $dir/assets/wallpaper.jpg
+		echo "done"
+	fi
 
 	# make dotfiles
 	echo "Searching $dir directory..."
@@ -288,8 +291,9 @@ gui() {
 look_and_feel() {
 	CHOICES=$(
 		whiptail --title "Look and feel" --separate-output --checklist --notags \
-		'\n"Life is too short for ugly design." - Stefan Sagmeister' 11 60 3 \
+		'\n"Life is too short for ugly design." - Stefan Sagmeister' 12 60 4 \
 		"lxappearance"     		"lxappearance" OFF \
+		"nitrogen"     			"nitrogen" OFF \
 		"papirus-icon-theme"	"papirus-icon-theme" OFF \
 		"picom-jonaburg-git" 	"picom-jonaburg-git" OFF 3>&1 1>&2 2>&3
 	)
