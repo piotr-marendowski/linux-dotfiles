@@ -2,8 +2,8 @@
 
 ## Screenshots
 ![desktop](/assets/screen1.png)
-![whiptail1](/assets/whiptail1.png)
-![whiptail2](/assets/whiptail2.png)
+<img src="/assets/whiptail1.png"  width="60%">
+<img src="/assets/whiptail2.png"  width="60%">
 
 ## History
 After accidentally breaking my machine, I decided to move to Arch Linux full time.
