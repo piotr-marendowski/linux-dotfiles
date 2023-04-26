@@ -349,23 +349,25 @@ gaming() {
 		"lib32-vulkan-icd-loader" 	"lib32-vulkan-icd-loader" OFF \
 		"proton-ge-custom" 			"proton-ge-custom" OFF \
 		"mangohud-git" 				"mangohud-git" OFF \
-		"goverlay-bin" 				"goverlay-bin" OFF 3>&1 1>&2 2>&3
+		"goverlay-bin" 				"goverlay-bin" OFF \
+		"gwe" 						"GreenWithEnvy" OFF 3>&1 1>&2 2>&3
 	)
-
-	# echo "Installing GreenWithEnvy"
-	cd ~/Downloads
-	git clone --recurse-submodules -j4 https://gitlab.com/leinardi/gwe.git
-	cd gwe
-	git checkout release
-	sudo -H pip3 install -r requirements.txt
-	meson . build --prefix /usr
-	ninja -v -C build
-	sudo ninja -v -C build install
-	echo "done"
 
 	# add selected programs to the array
 	for CHOICE in $CHOICES; do
 		programs+=($CHOICE)
+		if [ "$CHOICE" == "gwe" ] ; then
+			echo "Installing GreenWithEnvy"
+			cd ~/Downloads
+			git clone --recurse-submodules -j4 https://gitlab.com/leinardi/gwe.git
+			cd gwe
+			git checkout release
+			sudo -H pip3 install -r requirements.txt
+			meson . build --prefix /usr
+			ninja -v -C build
+			sudo ninja -v -C build install
+			echo "done"
+    	fi
 	done
 
 	# print if nothing was selected
