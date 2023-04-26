@@ -39,6 +39,10 @@ programs=()
 
 ## Configure installed packages
 configure_installed() {
+
+	# create config directory
+	mkdir -p ~/.config
+
 	# Alacritty
 	if command -v alacritty -h &> /dev/null
 	then
@@ -106,17 +110,17 @@ dependencies() {
 	dependencies_list=(wget curl ripgrep python-pip meson ninja)
 	
 	# check if there is Paru on machine and install it if not
-	# echo "Checking if there is Paru installed..."
-	# if ! command -v paru -h &> /dev/null
-	# then
-	# 	echo "Paru could not be found"
-	# 	echo "Proceeding to install Paru AUR helper..."
-	# 	sudo pacman -S --needed base-devel
-	# 	git clone https://aur.archlinux.org/paru.git
-	# 	cd paru
-	# 	makepkg -si
-	# 	echo "done"
-	# fi
+	echo "Checking if there is Paru installed..."
+	if ! command -v paru -h &> /dev/null
+	then
+		echo "Paru could not be found"
+		echo "Proceeding to install Paru AUR helper..."
+		sudo pacman -S --needed base-devel
+		git clone https://aur.archlinux.org/paru.git
+		cd paru
+		makepkg -si
+		echo "done"
+	fi
 
 	# add them to the programs array
 	for element in "${dependencies_list[@]}"
@@ -197,7 +201,6 @@ make_dotfiles() {
 # don't know if it will be different on other monitors, but in mine it displays all equally
 # third argument in dimensions = number of options
 necessary() {
-	#--notags
  	CHOICES=$(
 		whiptail --title "System programs" --checklist --notags --separate-output\
 		"\nPrograms used to achieve fully working modern system." 16 60 8 \
@@ -221,8 +224,6 @@ necessary() {
 	  	echo "No option was selected (user hit Cancel or unselected all options)"
 	fi
 
-	# mkdir -p ~/.config
-
 	echo "${programs[@]}"
 }
 
@@ -230,14 +231,14 @@ sound() {
  	CHOICES=$(
 		whiptail --title "Sound" --separate-output --checklist --notags \
 		"\nMusic makes sense when everything else is crazy." 16 60 8 \
-		"pulseaudio"      	"pulseaudio					  " OFF \
-		"pavucontrol" 		"pavucontrol 				          " OFF \
-		"alsa-utils" 		"alsa-utils	   				  " OFF \
-		"pipewire" 			"pipewire	   				  " OFF \
-		"pipewire-audio" 	"pipewire-audio		     		          " OFF \
-		"pipewire-alsa" 	"pipewire-alsa                  		          " OFF \
-		"pipewire-pulse" 	"pipewire-pulse           		       	  " OFF \
-		"pipewire-jack" 	"pipewire-jack                       		  " OFF 3>&1 1>&2 2>&3
+		"pulseaudio"      	"pulseaudio" OFF \
+		"pavucontrol" 		"pavucontrol" OFF \
+		"alsa-utils" 		"alsa-utils" OFF \
+		"pipewire" 			"pipewire" OFF \
+		"pipewire-audio" 	"pipewire-audio" OFF \
+		"pipewire-alsa" 	"pipewire-alsa" OFF \
+		"pipewire-pulse" 	"pipewire-pulse" OFF \
+		"pipewire-jack" 	"pipewire-jack" OFF 3>&1 1>&2 2>&3
 	)
 
 	# add selected programs to the array
@@ -257,13 +258,13 @@ gui() {
  	CHOICES=$(
 		whiptail --title "GUI" --separate-output --checklist --notags \
 		$'\nThe best GUI is the one you don\'t notice.' 15 60 7 \
-		"xorg"      		"xorg						  " OFF \
-		"xorg-xinit" 		"xorg-xinit					  " OFF \
-		"playerctl" 		"playerctl					  " OFF \
-		"qtile-git" 		"qtile-git					  " OFF \
-		"qtile-extras-git" 	"qtile-extras-git				  " OFF \
-		"ly" 				"ly						  " OFF \
-		"gsimplecal" 		"gsimplecal			          	  " OFF 3>&1 1>&2 2>&3
+		"xorg"      		"xorg" OFF \
+		"xorg-xinit" 		"xorg-xinit" OFF \
+		"playerctl" 		"playerctl" OFF \
+		"qtile-git" 		"qtile-git" OFF \
+		"qtile-extras-git" 	"qtile-extras-git" OFF \
+		"ly" 				"ly" OFF \
+		"gsimplecal" 		"gsimplecal" OFF 3>&1 1>&2 2>&3
 	)
 
 	# add selected programs to the array
@@ -284,9 +285,9 @@ look_and_feel() {
 	CHOICES=$(
 		whiptail --title "Look and feel" --separate-output --checklist --notags \
 		'\n"Life is too short for ugly design." - Stefan Sagmeister' 11 60 3 \
-		"lxappearance"     		"lxappearance				          " OFF \
-		"papirus-icon-theme"	"papirus-icon-theme			          " OFF \
-		"picom-jonaburg-git" 	"picom-jonaburg-git			          " OFF 3>&1 1>&2 2>&3
+		"lxappearance"     		"lxappearance" OFF \
+		"papirus-icon-theme"	"papirus-icon-theme" OFF \
+		"picom-jonaburg-git" 	"picom-jonaburg-git" OFF 3>&1 1>&2 2>&3
 	)
 
 	# add selected programs to the array
@@ -311,8 +312,8 @@ look_and_feel() {
 			programs+=(nerd-fonts-meta)
 			;;
 		"2")   
-			#mkdir -p ~/.local/share/fonts
-			#cp -r $dir/assets/JetBrainsMono ~/.local/share/fonts
+			mkdir -p ~/.local/share/fonts
+			cp -r $dir/assets/JetBrainsMono ~/.local/share/fonts
 			;;
 	esac
 
@@ -332,31 +333,31 @@ gaming() {
 	CHOICES=$(
 		whiptail --title "Gaming" --separate-output --checklist --notags \
 		"\nThe game is never over, unless you stop playing." 21 60 13 \
-		"steam"      				"steam						  " OFF \
-		"lutris"      				"lutris						  " OFF \
-		"wine-staging"      		"wine-staging		     		  	  " OFF \
-		"nvidia"      				"nvidia						  " OFF \
-		"nvidia-dkms" 				"nvidia-dmks 				  	  " OFF \
-		"nvidia-utils" 				"nvidia-utils			   	  	  " OFF \
-		"lib32-nvidia-utils" 		"lib32-nvidia-utils			  	  " OFF \
-		"nvidia-settings" 			"nvidia-settings			  	          " OFF \
-		"vulkan-icd-loader" 		"vulkan-icd-loader	 		 	  " OFF \
-		"lib32-vulkan-icd-loader" 	"lib32-vulkan-icd-loader	  	                  " OFF \
-		"proton-ge-custom" 			"proton-ge-custom			  	  " OFF \
-		"mangohud-git" 				"mangohud-git			  		  " OFF \
-		"goverlay-bin" 				"goverlay-bin			  	          " OFF 3>&1 1>&2 2>&3
+		"steam"      				"steam" OFF \
+		"lutris"      				"lutris" OFF \
+		"wine-staging"      		"wine-staging" OFF \
+		"nvidia"      				"nvidia" OFF \
+		"nvidia-dkms" 				"nvidia-dmks" OFF \
+		"nvidia-utils" 				"nvidia-utils" OFF \
+		"lib32-nvidia-utils" 		"lib32-nvidia-utils" OFF \
+		"nvidia-settings" 			"nvidia-settings" OFF \
+		"vulkan-icd-loader" 		"vulkan-icd-loader" OFF \
+		"lib32-vulkan-icd-loader" 	"lib32-vulkan-icd-loader" OFF \
+		"proton-ge-custom" 			"proton-ge-custom" OFF \
+		"mangohud-git" 				"mangohud-git" OFF \
+		"goverlay-bin" 				"goverlay-bin" OFF 3>&1 1>&2 2>&3
 	)
 
 	# echo "Installing GreenWithEnvy"
-	# cd ~/Downloads
-	# git clone --recurse-submodules -j4 https://gitlab.com/leinardi/gwe.git
-	# cd gwe
-	# git checkout release
-	# sudo -H pip3 install -r requirements.txt
-	# meson . build --prefix /usr
-	# ninja -v -C build
-	# sudo ninja -v -C build install
-	# echo "done"
+	cd ~/Downloads
+	git clone --recurse-submodules -j4 https://gitlab.com/leinardi/gwe.git
+	cd gwe
+	git checkout release
+	sudo -H pip3 install -r requirements.txt
+	meson . build --prefix /usr
+	ninja -v -C build
+	sudo ninja -v -C build install
+	echo "done"
 
 	# add selected programs to the array
 	for CHOICE in $CHOICES; do
@@ -386,7 +387,7 @@ and unix_sock_rw_perms = \"0770\". Do you want to do it now?" 10 80
 	CHOICES=$(
 		whiptail --title "Virtualization" --separate-output --checklist --notags  \
 		'\nVirtualization allows you to do more with less.' 17 60 9  \
-		"qemu"      		"qemu                       " OFF  \
+		"qemu"      		"qemu" OFF  \
 		"libvirt"      		"libvirt" OFF  \
 		"virt-manager" 		"virt-manager" OFF  \
 		"virt-viewer" 		"virt-viewer" OFF  \
@@ -463,9 +464,9 @@ menu() {
 			sound
 			gaming
 			virtualization
-			# make_dotfiles
+			make_dotfiles
 			install "${programs[@]}"
-			# configure_installed
+			configure_installed
 			exit
 			;;
 		"2")   
