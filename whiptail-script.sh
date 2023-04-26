@@ -440,7 +440,7 @@ menu() {
 	CHOICE=$(
 		whiptail --title "Menu" --cancel-button "Exit" --notags --menu \
 		"\nOnly the Full installation option edits configurations of programs. \
-In order to install selected programs choose the Install option after selecting them\
+In order to install selected programs choose the Install option after selecting them \
 (the Full installation option asks this automatically at the end)." 20 60 8 \
 		"1" "Full installation"  \
 		"2" "System programs"  \

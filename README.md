@@ -2,7 +2,8 @@
 
 ## Screenshots
 ![desktop](/assets/screen1.png)
-![script](/assets/script.png)
+![whiptail1](/assets/whiptail1.png)
+![whiptail2](/assets/whiptail2.png)
 
 ## History
 After accidentally breaking my machine, I decided to move to Arch Linux full time.
