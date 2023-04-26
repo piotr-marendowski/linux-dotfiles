@@ -39,10 +39,6 @@ programs=()
 
 ## Configure installed packages
 configure_installed() {
-
-	# create config directory
-	mkdir -p ~/.config
-
 	# Alacritty
 	if command -v alacritty -h &> /dev/null
 	then
@@ -92,15 +88,83 @@ configure_installed() {
 	sudo cp $dir/assets/TokyoNight /usr/share/themes/
 	echo "done"
 
-	echo "Installing custom Picom compositor..."
-	paru -S picom-jonaburg-git
-	echo "done"
-
 	echo "Setting wallpaper..."
 	nitrogen --set-zoom-fill $dir/assets/wallpaper.jpg
 	echo "done"
 
+	# make dotfiles
+	echo "Searching $dir directory..."
+	# search for folders (and not hidden files)
+	for i in ${folders[@]}; do
+		:
+	done
+	# search for all hidden files (even something like '.' and '..')
+	for i in ${files[@]}; do
+		:
+	done
+	# exclude weird characters from files array
+	for char in "${exclude[@]}"; do
+		for i in "${!files[@]}"; do
+			if [[ ${files[i]} = $char ]]; then
+				unset 'files[i]'
+			fi
+		done
+	done
+
+	# exclude not-dotfolders/not-dotfiles
+	for del in ${exclude_files[@]}
+	do
+		folders=("${folders[@]/$del}") 	#Quotes when working with strings
+	done
+	for del in ${exclude_files[@]}
+	do
+		files=("${files[@]/$del}") 	#Quotes when working with strings
+	done
+	echo "done"
+
+	echo "Folders/files in $dir: ${folders[@]}"
+	echo "Hidden files in $dir: ${files[@]}"
+
+	# create dotfolders_old in homedir
+	echo "Creating $olddir for backup of any existing dotfolders in ~..."
+	mkdir -p $olddir
+	echo "done"
+
+	# enter dotfolder in order to process only files in it and not files in homedir
+	echo "Entering $dir..."
+	cd $dir
+	echo "done"
+
+	# Move any dotfile "listed" (present) in dir to olddir and move a file from this
+	# repo to program's directory e.g. ~/.config
+	echo "Moving any existing dotfolders from ~ to $olddir..."
+	echo "DON'T PANIC IF THERE ARE ERRORS!"
+	# folders/normal files
+	for file in ${folders[@]}; do
+		mv ~/$file $olddir
+		echo "Moving $file to homedir..."
+		cp $dir/$file ~/$file
+	done
+	# hidden files
+	for file in ${files[@]}; do
+		mv ~/$file $olddir
+		echo "Moving $file to homedir..."
+		cp $dir/$file ~/$file
+	done
+	echo "done"
+
 	# virtualization
+	whiptail --title "Warming" --yesno "You need to ensure that these are set to: \
+unix_sock_group = \"libvirt\", unix_sock_ro_perms = \"0777\", and unix_sock_rw_perms = \"0770\". \
+Do you want to do it now?" 10 80
+	
+	if [ $? -eq 0 ]; then
+		sudo nvim /etc/libvirt/libvirtd.conf
+	fi
+
+	local user_name=$(whoami)
+	sudo usermod -aG libvirt $user_name
+
 	sudo systemctl enable libvirt
 	sudo systemctl restart libvirt
 }
@@ -128,72 +192,6 @@ dependencies() {
 	  	programs+=("$element")
 	done
 }
-
-## DOTFILES
-make_dotfiles() {
-	echo "Searching $dir directory..."
-	# search for folders (and not hidden files)
-	for i in ${folders[@]}; do
-		:
-	done
-	# search for all hidden files (even something like '.' and '..')
-	for i in ${files[@]}; do
-		:
-	done
-	# exclude weird characters from files array
-	for char in "${exclude[@]}"; do
-		for i in "${!files[@]}"; do
-			if [[ ${files[i]} = $char ]]; then
-				unset 'files[i]'
-			fi
-		done
-	done
-	# exclude not-dotfolders/not-dotfiles
-	for del in ${exclude_files[@]}
-	do
-		folders=("${folders[@]/$del}") 	#Quotes when working with strings
-	done
-	for del in ${exclude_files[@]}
-	do
-		files=("${files[@]/$del}") 	#Quotes when working with strings
-	done
-	echo "done"
-
-	echo "Folders/files in $dir: ${folders[@]}"
-	echo "Hidden files in $dir: ${files[@]}"
-
-	# create dotfolders_old in homedir
-	echo "Creating $olddir for backup of any existing dotfolders in ~..."
-	mkdir -p $olddir
-	echo "done"
-
-	# enter dotfolder in order to process only files in it and not files in homedir
-	echo "Entering $dir..."
-	cd $dir
-	echo "done"
-
-	# Move any dotfile "listed" (present) in dir to olddir and create a symlink from
-	# "listed" file to this file in homedir
-	echo "Moving any existing dotfolders from ~ to $olddir..."
-	echo "DON'T PANIC IF THERE ARE ERRORS!"
-	# folders/normal files
-	for file in ${folders[@]}; do
-		mv ~/$file $olddir
-		echo "Creating symlink to $file in home directory..."
-		ln -s $dir/$file ~/$file
-	done
-	# hidden files
-	for file in ${files[@]}; do
-		mv ~/$file $olddir
-		echo "Creating symlink to $file in home directory..."
-		ln -s $dir/$file ~/$file
-	done
-	echo "done"
-
-	clear
-	echo "Dotfiles made."
-}
-
 
 ## FOR EVERY FUNCTION BELOW:
 # tag and descriptions --notags is used to only show descriptions
@@ -373,16 +371,6 @@ gaming() {
 }
 
 virtualization() {
-	whiptail --title "Warming" --yesno "Before installing and configuring virtualization, first you need \
-to ensure that these are set to: unix_sock_group = \"libvirt\", unix_sock_ro_perms = \"0777\", \
-and unix_sock_rw_perms = \"0770\". Do you want to do it now?" 10 80
-	
-	if [ $? -eq 0 ]; then
-		sudo nvim /etc/libvirt/libvirtd.conf
-	fi
-
-	local user_name=$(whoami)
-	#sudo usermod -aG libvirt $user_name
 
 	CHOICES=$(
 		whiptail --title "Virtualization" --separate-output --checklist --notags  \
@@ -464,7 +452,6 @@ menu() {
 			sound
 			gaming
 			virtualization
-			make_dotfiles
 			install "${programs[@]}"
 			configure_installed
 			exit
@@ -500,6 +487,10 @@ menu() {
 }
 
 ### PROGRAM EXECUTION
+
+# create config directory
+mkdir -p ~/.config
+
 # Description
 whiptail --title "Description" --msgbox "This install script requires an Arch-based machine with SystemD. \
 For your own good configure sudo (with visudo) before. Better know what you are doing, because \
