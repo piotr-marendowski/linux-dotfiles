@@ -162,11 +162,15 @@ Do you want to do it now?" 10 80
 		sudo nvim /etc/libvirt/libvirtd.conf
 	fi
 
-	local user_name=$(whoami)
-	sudo usermod -aG libvirt $user_name
-
-	sudo systemctl enable libvirt
-	sudo systemctl restart libvirt
+	if systemctl status libvirtd; then
+		local user_name=$(whoami)
+		sudo usermod -aG libvirt $user_name
+		sudo systemctl enable libvirtd
+		sudo systemctl restart libvirtd
+	else
+		echo "libvirt is not installed"
+	fi
+	
 }
 
 ## Function with dependencies to all of the programs
@@ -427,13 +431,14 @@ install() {
 
 # Menu window
 menu() {
-	# "7" "Optimize system for gaming"  \
-	
 	# newline character (\n) for better placement
 	# we don't need to "set" shadow for every object as in radiolist
 	CHOICE=$(
-		whiptail --title "Menu" --cancel-button "Exit" --notags --menu "" 15 60 8 \
-		"1" "Full installation (all of them)"  \
+		whiptail --title "Menu" --cancel-button "Exit" --notags --menu \
+		"\nOnly the Full installation option edits configurations of programs. \
+		In order to install selected programs choose the Install option after selecting them\
+		(the Full installation option asks this automatically at the end)." 20 60 8 \
+		"1" "Full installation"  \
 		"2" "System programs"  \
 		"3" "GUI"  \
 		"4" "Sound"  \
@@ -494,8 +499,7 @@ mkdir -p ~/.config
 # Description
 whiptail --title "Description" --msgbox "This install script requires an Arch-based machine with SystemD. \
 For your own good configure sudo (with visudo) before. Better know what you are doing, because \
-some options NOT selected will conclude in not fully working system! You can choose full installation \
-or go to different sections and check programs to install, them use install option from the main menu." 11 80
+some options NOT selected will conclude in not fully working system!" 10 80
 
 # Navigation
 whiptail --title "Navigation" --msgbox "Navigate in lists by using arrow keys. \
