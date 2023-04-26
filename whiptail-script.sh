@@ -39,6 +39,9 @@ programs=()
 
 ## Configure installed packages
 configure_installed() {
+
+	mkdir -p ~/.config
+
 	# Alacritty
 	if command -v alacritty -h &> /dev/null
 	then
@@ -170,7 +173,6 @@ Do you want to do it now?" 10 80
 	else
 		echo "libvirt is not installed"
 	fi
-	
 }
 
 ## Function with dependencies to all of the programs
@@ -436,8 +438,8 @@ menu() {
 	CHOICE=$(
 		whiptail --title "Menu" --cancel-button "Exit" --notags --menu \
 		"\nOnly the Full installation option edits configurations of programs. \
-		In order to install selected programs choose the Install option after selecting them\
-		(the Full installation option asks this automatically at the end)." 20 60 8 \
+In order to install selected programs choose the Install option after selecting them\
+(the Full installation option asks this automatically at the end)." 20 60 8 \
 		"1" "Full installation"  \
 		"2" "System programs"  \
 		"3" "GUI"  \
@@ -493,13 +495,12 @@ menu() {
 
 ### PROGRAM EXECUTION
 
-# create config directory
 mkdir -p ~/.config
+sudo pacman -Syu
 
 # Description
-whiptail --title "Description" --msgbox "This install script requires an Arch-based machine with SystemD. \
-For your own good configure sudo (with visudo) before. Better know what you are doing, because \
-some options NOT selected will conclude in not fully working system!" 10 80
+whiptail --title "Information" --msgbox "This install script requires an Arch-based machine with SystemD. \
+Better know what you are doing, because some options NOT selected will conclude in not fully working system!" 10 80
 
 # Navigation
 whiptail --title "Navigation" --msgbox "Navigate in lists by using arrow keys. \
