@@ -160,7 +160,7 @@ configure_installed() {
 	echo "done"
 
 	# virtualization
-	whiptail --title "Warming" --yesno "You need to ensure that these are set to: \
+	whiptail --title "VIRTUALIZATION: Warming" --yesno "You need to ensure that these are set to: \
 unix_sock_group = \"libvirt\", unix_sock_ro_perms = \"0777\", and unix_sock_rw_perms = \"0770\". \
 Do you want to do it now?" 10 80
 	
@@ -176,6 +176,12 @@ Do you want to do it now?" 10 80
 	else
 		echo "libvirt is not installed"
 	fi
+
+	# login managers - check if pacman -Q name begins with name of the login manager
+	# and enable its service if it is
+	echo "Proceeding to check if login manager is installed..."
+	pacman -Q ly | grep -q "^ly" && sudo systemctl enable ly && echo "Ly installed."
+	pacman -Q sddm | grep -q "^sddm" && sudo systemctl enable sddm && echo "Sddm installed."
 }
 
 ## Function with dependencies to all of the programs
@@ -264,12 +270,13 @@ sound() {
 gui() {
  	CHOICES=$(
 		whiptail --title "GUI" --separate-output --checklist --notags \
-		$'\nThe best GUI is the one you don\'t notice.' 15 60 7 \
+		$'\nThe best GUI is the one you don\'t notice.' 16 60 8 \
 		"xorg"      		"xorg" OFF \
 		"xorg-xinit" 		"xorg-xinit" OFF \
 		"playerctl" 		"playerctl" OFF \
 		"qtile-git" 		"qtile-git" OFF \
 		"qtile-extras-git" 	"qtile-extras-git" OFF \
+		"sddm" 				"sddm" OFF \
 		"ly" 				"ly" OFF \
 		"gsimplecal" 		"gsimplecal" OFF 3>&1 1>&2 2>&3
 	)
