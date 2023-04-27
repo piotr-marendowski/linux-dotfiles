@@ -180,8 +180,27 @@ Do you want to do it now?" 10 80
 	# login managers - check if pacman -Q name begins with name of the login manager
 	# and enable its service if it is
 	echo "Proceeding to check if login manager is installed..."
+	# if ly is installed
 	pacman -Q ly | grep -q "^ly" && sudo systemctl enable ly && echo "Ly installed."
-	pacman -Q sddm | grep -q "^sddm" && sudo systemctl enable sddm && echo "Sddm installed."
+	# if sddm is installed - customize it
+	if pacman -Q sddm | grep -q "^sddm"; then
+		sudo systemctl enable sddm
+		echo "Sddm installed."
+		sudo cp /usr/lib/sddm/sddm.conf.d/default.conf /etc/sddm.conf
+
+		# install theme
+		git clone https://github.com/rototrash/tokyo-night-sddm.git ~/tokyo-night-sddm
+		sudo mv ~/tokyo-night-sddm /usr/share/sddm/themes/
+
+		# edit /etc/sddm.conf
+		# read the contents of line 31 into a variable
+		line31=$(sed -n '31p' /etc/sddm.conf)
+		# check if the contents of line 31 match
+		if [[ "$line31" == *"[Theme]"* ]]; then
+			# if the pattern is matched, replace the line 33 with a theme name
+			sed -i '33s/.*/Current=tokyo-night-sddm/' /etc/sddm.conf
+		fi
+	fi
 }
 
 ## Function with dependencies to all of the programs
@@ -202,10 +221,7 @@ dependencies() {
 	fi
 
 	# add them to the programs array
-	for element in "${dependencies_list[@]}"
-	do
-	  	programs+=("$element")
-	done
+	programs+=( "${dependencies_list[@]}" )
 }
 
 ## FOR EVERY FUNCTION BELOW:
@@ -278,6 +294,7 @@ gui() {
 		"qtile-extras-git" 	"qtile-extras-git" OFF \
 		"sddm" 				"sddm" OFF \
 		"ly" 				"ly" OFF \
+		"qt" 				"qt (group)" OFF \
 		"gsimplecal" 		"gsimplecal" OFF 3>&1 1>&2 2>&3
 	)
 
