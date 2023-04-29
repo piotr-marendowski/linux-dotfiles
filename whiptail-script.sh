@@ -87,9 +87,8 @@ configure_installed() {
 	pip install dbus-next
 	pip install pyxdg
 
-	echo "Customizing theme..."
+	# theme
 	sudo cp $dir/assets/TokyoNight /usr/share/themes/
-	echo "done"
 
 	if command -v nitrogen -h &> /dev/null
 	then
@@ -149,13 +148,13 @@ configure_installed() {
 	for file in ${folders[@]}; do
 		mv ~/$file $olddir
 		echo "Moving $file to homedir..."
-		cp $dir/$file ~/$file
+		cp -f $dir/$file ~/$file
 	done
 	# hidden files
 	for file in ${files[@]}; do
 		mv ~/$file $olddir
 		echo "Moving $file to homedir..."
-		cp $dir/$file ~/$file
+		cp -f $dir/$file ~/$file
 	done
 	echo "done"
 
