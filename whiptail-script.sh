@@ -460,6 +460,15 @@ install() {
 	menu
 }
 
+reboot() {
+	whiptail --title "Warming" --yesno "It is recommended to reboot system after configuring it for \
+everything to work. Do you want to do it now?" 8 80
+	
+	if [ $? -eq 0 ]; then
+		reboot
+	fi
+}
+
 # Menu window
 menu() {
 	# newline character (\n) for better placement
@@ -490,7 +499,8 @@ In order to install selected programs choose the Install option after selecting 
 			virtualization
 			install "${programs[@]}"
 			configure_installed
-			exit
+			reboot
+			menu
 			;;
 		"2")   
 			necessary
