@@ -285,7 +285,7 @@ sound() {
 gui() {
  	CHOICES=$(
 		whiptail --title "GUI" --separate-output --checklist --notags \
-		$'\nThe best GUI is the one you don\'t notice.' 16 60 8 \
+		$'\nThe best GUI is the one you don\'t notice.' 17 60 9 \
 		"xorg"      		"xorg" OFF \
 		"xorg-xinit" 		"xorg-xinit" OFF \
 		"playerctl" 		"playerctl" OFF \
@@ -500,7 +500,6 @@ In order to install selected programs choose the Install option after selecting 
 			install "${programs[@]}"
 			configure_installed
 			reboot
-			menu
 			;;
 		"2")   
 			necessary
