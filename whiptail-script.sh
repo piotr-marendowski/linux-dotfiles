@@ -148,13 +148,13 @@ configure_installed() {
 	for file in ${folders[@]}; do
 		mv ~/$file $olddir
 		echo "Moving $file to homedir..."
-		cp -f $dir/$file ~/$file
+		cp -rf $dir/$file ~/$file
 	done
 	# hidden files
 	for file in ${files[@]}; do
 		mv ~/$file $olddir
 		echo "Moving $file to homedir..."
-		cp -f $dir/$file ~/$file
+		cp -rf $dir/$file ~/$file
 	done
 	echo "done"
 
