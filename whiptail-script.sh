@@ -205,6 +205,8 @@ Do you want to do it now?" 10 80
 ## Function with dependencies to all of the programs
 dependencies() {
 	dependencies_list=(wget curl ripgrep python-pip meson ninja)
+
+	mkdir -p ~/Downloads
 	
 	# check if there is Paru on machine and install it if not
 	echo "Checking if there is Paru installed..."
@@ -213,6 +215,7 @@ dependencies() {
 		echo "Paru could not be found"
 		echo "Proceeding to install Paru AUR helper..."
 		sudo pacman -S --needed base-devel
+		cd ~/Downloads
 		git clone https://aur.archlinux.org/paru.git
 		cd paru
 		makepkg -si
