@@ -32,7 +32,7 @@ olddir=~/.dotfiles_old
 folders=(*)
 files=(.*)
 exclude=(. ..)
-exclude_files=(firefox script.sh README.md LICENSE .git)
+exclude_files=(assets firefox script.sh whiptail-script.sh README.md LICENSE .git)
 
 # Array of programs to install
 programs=()
@@ -107,7 +107,7 @@ configure_installed() {
 	for i in ${files[@]}; do
 		:
 	done
-	# exclude weird characters from files array
+	# exclude some files and directories from files array
 	for char in "${exclude[@]}"; do
 		for i in "${!files[@]}"; do
 			if [[ ${files[i]} = $char ]]; then
@@ -119,11 +119,11 @@ configure_installed() {
 	# exclude not-dotfolders/not-dotfiles
 	for del in ${exclude_files[@]}
 	do
-		folders=("${folders[@]/$del}") 	#Quotes when working with strings
+		folders=("${folders[@]/$del}") 		# Quotes when working with strings
 	done
 	for del in ${exclude_files[@]}
 	do
-		files=("${files[@]/$del}") 	#Quotes when working with strings
+		files=("${files[@]/$del}") 			# Quotes when working with strings
 	done
 	echo "done"
 
@@ -317,9 +317,10 @@ gui() {
 look_and_feel() {
 	CHOICES=$(
 		whiptail --title "Look and feel" --separate-output --checklist --notags \
-		'\n"Life is too short for ugly design." - Stefan Sagmeister' 12 60 4 \
+		'\n"Life is too short for ugly design." - Stefan Sagmeister' 13 60 5 \
 		"lxappearance"     		"lxappearance" OFF \
 		"nitrogen"     			"nitrogen" OFF \
+		"nerd-fonts-meta"     	"nerd-fonts-meta" OFF \
 		"papirus-icon-theme"	"papirus-icon-theme" OFF \
 		"picom-jonaburg-git" 	"picom-jonaburg-git" OFF 3>&1 1>&2 2>&3
 	)
@@ -333,23 +334,6 @@ look_and_feel() {
 	if [ -z $CHOICE ]; then
 	  	echo "No option was selected (user hit Cancel or unselected all options)"
 	fi
-
-	# configure fonts
-	CHOICE=$(
-		whiptail --title "Fonts" --notags --menu "\nA font is a tool, not a decoration." 11 60 2 \
-			"1" "Full Nerd Fonts (~3.5 GB)"  \
-			"2" "JetBrainsMono font only (~30 MB)" 3>&2 2>&1 1>&3	
-	)
-
-	case $CHOICE in
-		"1")   
-			programs+=(nerd-fonts-meta)
-			;;
-		"2")   
-			mkdir -p ~/.local/share/fonts
-			cp -r $dir/assets/JetBrainsMono ~/.local/share/fonts
-			;;
-	esac
 
 	echo "${programs[@]}"
 
@@ -478,17 +462,17 @@ menu() {
 	# we don't need to "set" shadow for every object as in radiolist
 	CHOICE=$(
 		whiptail --title "Menu" --cancel-button "Exit" --notags --menu \
-		"\nOnly the Full installation option edits configurations of programs. \
-In order to install selected programs choose the Install option after selecting them \
-(the Full installation option asks this automatically at the end)." 20 60 8 \
-		"1" "Full installation"  \
-		"2" "System programs"  \
+		"\nIn order to install selected programs choose the Install option after selecting them \
+(the Full Installation option does this automatically at the end of the process)." 21 60 9 \
+		"1" "Full Installation (recommended)"  \
+		"2" "System Programs"  \
 		"3" "GUI"  \
 		"4" "Sound"  \
-		"5" "Look and feel"  \
+		"5" "Look and Feel"  \
 		"6" "Gaming"  \
 		"7" "Virtualization"  \
-		"8" "Install selected programs" 3>&2 2>&1 1>&3
+		"8" "Configure Dotfiles"  \
+		"9" "Install Selected Programs" 3>&2 2>&1 1>&3
 	)
 
 	case $CHOICE in
@@ -529,7 +513,12 @@ In order to install selected programs choose the Install option after selecting 
 			menu
 			;;
 		"8")   
+			configure_installed
+			menu
+			;;
+		"9")   
 			install "${programs[@]}"
+			menu
 			;;
 	esac
 }
@@ -541,7 +530,7 @@ sudo pacman -Syu
 
 # Description
 whiptail --title "Information" --msgbox "This install script requires an Arch-based machine with SystemD. \
-Better know what you are doing, because some options NOT selected will conclude in not fully working system!" 10 80
+Better know what you are doing, because some options NOT selected will conclude in not fully working system!" 9 80
 
 # Navigation
 whiptail --title "Navigation" --msgbox "Navigate in lists by using arrow keys. \
