@@ -2,13 +2,9 @@
 # Heavily modified version of script made by Derek Taylor (https://gitlab.com/dwt1)
 # Author: Piotr Marendowski (https://github.com/piotr-marendowski), License: GPL3
 #
-# For more info on 'whiptail' see:
-# https://en.wikibooks.org/wiki/Bash_Shell_Scripting/Whiptail
-#
 # These exports are the only way to specify colors with whiptail.
 # See this thread for more info:
 # https://askubuntu.com/questions/776831/whiptail-change-background-color-dynamically-from-magenta/781062
-
 # colors
 export NEWT_COLORS="
 root=,black
