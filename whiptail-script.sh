@@ -255,28 +255,47 @@ necessary() {
 }
 
 sound() {
- 	CHOICES=$(
-		whiptail --title "Sound" --separate-output --checklist --notags \
-		"\nMusic makes sense when everything else is crazy." 16 60 8 \
-		"pulseaudio"      	"pulseaudio" OFF \
-		"pavucontrol" 		"pavucontrol" OFF \
-		"alsa-utils" 		"alsa-utils" OFF \
-		"pipewire" 			"pipewire" OFF \
-		"pipewire-audio" 	"pipewire-audio" OFF \
-		"pipewire-alsa" 	"pipewire-alsa" OFF \
-		"pipewire-pulse" 	"pipewire-pulse" OFF \
-		"pipewire-jack" 	"pipewire-jack" OFF 3>&1 1>&2 2>&3
+	CHOICE=$(
+		whiptail --title "Menu" --cancel-button "Exit" --notags --menu \
+		"\nMusic makes sense when everything else is crazy." 12 60 3 \
+		"1" "Pipewire"  \
+		"2" "Pulseaudio"  \
+		"3" "Select programs manually"  3>&2 2>&1 1>&3
 	)
 
-	# add selected programs to the array
-	for CHOICE in $CHOICES; do
-		programs+=($CHOICE)
-	done
+	case $CHOICE in
+		"1")   
+			programs+=( "pipewire" "pipewire-audio" "pipewire-alsa" "pipewire-jack" "pipewire-pulse" )
+			;;
+		"2")   
+			programs+=( "pulseaudio" "pavucontrol" "alsa-utils" )
+			;;
+		"3")   
+			CHOICES=$(
+				whiptail --title "Sound" --separate-output --checklist --notags \
+				"\nMusic makes sense when everything else is crazy." 17 60 9 \
+				"pulseaudio"      	"pulseaudio" OFF \
+				"pavucontrol" 		"pavucontrol" OFF \
+				"alsa-utils" 		"alsa-utils" OFF \
+				"pipewire" 		"pipewire" OFF \
+				"pipewire-audio" 	"pipewire-audio" OFF \
+				"pipewire-alsa" 	"pipewire-alsa" OFF \
+				"pipewire-pulse" 	"pipewire-pulse" OFF \
+				"pipewire-jack" 	"pipewire-jack" OFF \
+				"wireplumber" 		"wireplumber" OFF 3>&1 1>&2 2>&3
+			)
 
-	# print if nothing was selected
-	if [ -z $CHOICE ]; then
-	  	echo "No option was selected (user hit Cancel or unselected all options)"
-	fi
+			# add selected programs to the array
+			for CHOICE in $CHOICES; do
+				programs+=($CHOICE)
+			done
+
+			# print if nothing was selected
+			if [ -z $CHOICE ]; then
+				echo "No option was selected (user hit Cancel or unselected all options)"
+			fi
+			;;
+	esac
 
 	echo "${programs[@]}"
 }
