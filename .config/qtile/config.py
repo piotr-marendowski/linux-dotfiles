@@ -78,6 +78,10 @@ keys = [
     # Brightness doesn't work for me (probably working only for laptop users)
     # Key([], "XF86MonBrightnessUp", lazy.spawn("brightnessctl set +10%")),
     # Key([], "XF86MonBrightnessDown", lazy.spawn("brightnessctl set 10%-")),
+
+    # Shutdown and reboot
+    Key(["Shift"], "delete", lazy.spawn("shutdown now")),
+    Key(["Shift"], "print", lazy.spawn("reboot")),
 ]
 
 # USING COLORS FROM TOKYO NIGHT, left are from Catppuccin
@@ -126,6 +130,8 @@ groups = [
         fair = True,
      ), layout.Max()],
      matches=[Match(wm_class = "discord-canary"),
+              Match(wm_class = "easyeffects"),
+              Match(wm_class = "spotube"),
               Match(wm_class = "Spotify")]),
     Group("3", label = "3"),
     Group("4", label = "4"),
@@ -166,38 +172,49 @@ layouts = [
 
 # default for widgets
 widget_defaults = dict(
-    font = "JetBrainsMono Nerd Font Mono Medium",
+    font = "JetBrainsMono Nerd Font",
     fontsize = 14,
     padding = 0,
     margin = 0,
-    # background = colors["background"],
     background = colors["transparent"],
     foreground = colors["background"],
 )
 
 # default decorations
 decoration_defaults = dict(
-    # colour = colors["white"],
     radius = 2,
     filled = True,
     group = True,
     padding = 4,
+    padding_x = 2,
 )
 
 # bar settings
 screens = [
     Screen(
         top = bar.Bar([
+            widget.TaskList(
+                theme_path = "/usr/share/icons/Papirus/index.theme",
+                theme_mode = "preferred",
+                highlight_method = 'block',
+                icon_size = 18,
+                max_title_width = 200,
+                margin = 1.9,                                   # match to center
+                padding = 6.5,                                  # size of a block
+                borderwidth = 3,                                # icon position
+                fontsize = 13,
+                font = "JetBrainsMono Nerd Font",               # size of the block depends on the size of the font
+                border = colors["darkblue"],                    # fill focused window
+                unfocused_border = colors["base"],              # fill unfocused windows
+                foreground = "#ffffff",                         # text colors
+                urgent_border = colors["red"],
+                txt_floating = ' ',
+                txt_minimized = '_ ',
+            ),
             widget.Systray(
-                # background = colors["systray"],
                 icon_size = 20,
                 padding = 2,
             ),
-            #widget.Sep(
-            #   linewidth = 4,
-            #   background = colors["systray"],
-            #   foreground = colors["systray"],
-            #),
             widget.Spacer(length = 5),
             widget.GroupBox(
                 hide_unused = True,
@@ -227,6 +244,7 @@ screens = [
             ),  
             widget.CurrentLayoutIcon(
                 scale = 0.6,
+                padding = 4,
                 custom_icon_paths = [
                     os.path.expanduser("~/.config/qtile/assets/layout/"),
                 ],
@@ -237,24 +255,6 @@ screens = [
                     )
                 ],
             ),
-            widget.TaskList(
-                theme_path = "/usr/share/icons/Papirus/index.theme",
-                theme_mode = "preferred",
-                highlight_method = 'block',
-                icon_size = 18,
-                max_title_width = 150,
-                margin = 1.9,                   # match to center
-                padding = 6.5,                  # size of a block
-                fontsize = 13,
-                font = "JetBrainsMono",
-                border = colors["background"],  # fill current window
-                foreground = "#ffffff",         # text colors
-                borderwidth = 3,                # icon position
-                urgent_border = colors["red"],
-                txt_floating = ' ',
-                txt_minimized = '_ ',
-            ),
-            # RIGHT SIDE
             widget.Image(
                 filename = '~/.config/qtile/assets/music.png',
                 margin = 7,
@@ -317,10 +317,9 @@ screens = [
                     )
                 ],
             ),
-            widget.Volume(
-                theme_path = '~/.config/qtile/assets/volume/',
-                scroll_interval = 1.5,
-                margin = 3,
+            widget.Image(
+                filename = '~/.config/qtile/assets/volume.png',
+                margin = 7,
                 mouse_callbacks = {'Button3': lazy.spawn("pavucontrol")},
                 decorations = [
                     RectDecoration(
@@ -352,7 +351,7 @@ screens = [
             ),
             widget.Clock(
                 padding = 8,
-                format = "%A, %d %b %H:%M",
+                format = "%H:%M",
                 mouse_callbacks = {'Button1': lazy.spawn("gsimplecal")},
                 decorations = [
                     RectDecoration(
@@ -361,32 +360,9 @@ screens = [
                     )
                 ],
             ),
-            widget.Image(
-                filename = '~/.config/qtile/assets/reboot.png',
-                margin = 7,
-                mouse_callbacks = {'Button1': lazy.spawn("sudo reboot now")},
-                decorations = [
-                    RectDecoration(
-                        colour = colors["white"],
-                        **decoration_defaults,
-                    )
-                ],
-            ),
-            widget.Image(
-                filename = '~/.config/qtile/assets/shutdown.png',
-                margin = 7,
-                mouse_callbacks = {'Button1': lazy.spawn("sudo shutdown now")},
-                decorations = [
-                    RectDecoration(
-                        colour = colors["white"],
-                        **decoration_defaults,
-                    )
-                ],
-            ),
             ],
-            35, # WIDTH
-            # margin = 4,
-            margin = 2,
+            35,                         # WIDTH
+            margin = [0, 0, 2, 0],      # N E S W
             background = colors["transparent"],
         ),
     ),
