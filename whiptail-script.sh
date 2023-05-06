@@ -435,7 +435,7 @@ gaming, first you need to enable multilib in pacman.conf in order to install 32 
 
 	case $CHOICE in
 		"1")   
-			programs+=( "steam" "lutris" "wine-staging" "nvidia" "nvidia-dkms" "nvidia-utils" "nvidia-settings" "nvidia-settings" "vulkan-icd-loader" "dxvk-bin" "opencl-nvidia" "libvdpau" "libxnvctrl" "lib32-nvidia-utils" "lib32-opencl-nvidia" "lib32-vulkan-icd-loader" "proton-ge-custom-bin" "mangohud-git" "goverlay-bin" "gwe")
+			programs+=( "steam" "lutris" "wine-staging" "nvidia" "nvidia-dkms" "nvidia-utils" "nvidia-settings" "nvidia-settings" "vulkan-icd-loader" "dxvk-bin" "opencl-nvidia" "libvdpau" "libxnvctrl" "lib32-nvidia-utils" "lib32-opencl-nvidia" "lib32-vulkan-icd-loader" "proton-ge-custom-bin" "mangohud-git" "goverlay-bin" "gwe" "protonup-qt-bin" )
       is_virtualization=true
 			;;
 		"2")   
@@ -460,6 +460,7 @@ gaming, first you need to enable multilib in pacman.conf in order to install 32 
         "proton-ge-custom-bin" 			"proton-ge-custom-bin" OFF \
         "mangohud-git" 				"mangohud-git" OFF \
         "goverlay-bin" 				"goverlay-bin" OFF \
+        "protonup-qt-bin" 		"protonup-qt-bin" OFF \
         "gwe" 						"GreenWithEnvy" OFF 3>&1 1>&2 2>&3
       )
 
@@ -658,7 +659,6 @@ menu() {
 }
 
 ### PROGRAM EXECUTION
-
 mkdir -p ~/.config
 sudo pacman -Syu
 
