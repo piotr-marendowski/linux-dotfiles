@@ -228,7 +228,7 @@ dependencies() {
 	then
 		echo "Paru could not be found"
 		echo "Proceeding to install Paru AUR helper..."
-		sudo pacman -S --needed base-devel
+		sudo pacman -S --noconfirm --needed base-devel
 		cd ~/Downloads
 		git clone https://aur.archlinux.org/paru.git
 		cd paru
@@ -243,7 +243,7 @@ dependencies() {
   # Check if lspci is installed
 
   if ! command -v lspci &> /dev/null; then
-    paru -S lspci
+    paru -S --noconfirm lspci
   fi
 
   # Use lspci to check for NVIDIA graphics card
@@ -541,7 +541,7 @@ install() {
 		# Check if paru is installed
 		if ! command -v paru &> /dev/null; then
 			echo "Paru is not installed. Installing it..."
-			sudo pacman -S --needed base-devel
+			sudo pacman -S --noconfirm --needed base-devel
 			git clone https://aur.archlinux.org/paru.git
 			cd paru
 			makepkg -si
@@ -572,7 +572,7 @@ everything to work. Do you want to do it now?" 8 80
 
 add_manually() {
 	while true; do
-	    program=$(whiptail --inputbox "Enter program names separated by spaces:" 8 80 --title "Program Input" 3>&1 1>&2 2>&3)
+	    program=$(whiptail --inputbox "Enter one program at the time:" 8 80 --title "Program Input" 3>&1 1>&2 2>&3)
 	    if [ $? = 0 ]; then
 		# Add the program name to the programs array
 		programs+=("$program")
@@ -585,6 +585,10 @@ add_manually() {
 	echo "${programs[@]}"
 }
 
+print_programs() {
+  whiptail --title "Programs" --msgbox --scrolltext "$(printf '%s\n' "${programs[@]}")" 20 30
+}
+
 # Menu window
 menu() {
 	# newline character (\n) for better placement
@@ -592,7 +596,7 @@ menu() {
 	CHOICE=$(
 		whiptail --title "Menu" --cancel-button "Exit" --notags --menu \
 		"\nIn order to install selected programs choose the Install option after selecting them \
-(the Full Installation option does this automatically at the end of the process)." 21 80 10 \
+(the Full Installation option does this automatically at the end of the process)." 22 60 11 \
 		"1" "Full Installation (recommended)"  \
 		"2" "System Programs"  \
 		"3" "GUI"  \
@@ -602,7 +606,8 @@ menu() {
 		"7" "Virtualization"  \
 		"8" "Configure Dotfiles"  \
 		"9" "Add Programs That Are Not Listed"  \
-		"10" "Install Selected Programs" 3>&2 2>&1 1>&3
+		"10" "Print All Selected Programs"  \
+		"11" "Install Selected Programs" 3>&2 2>&1 1>&3
 	)
 
 	case $CHOICE in
@@ -651,6 +656,10 @@ menu() {
 			menu
 			;;
 		"10")   
+      print_programs
+			menu
+			;;
+		"11")   
 			dependencies
 			install "${programs[@]}"
 			reboot
@@ -660,7 +669,7 @@ menu() {
 
 ### PROGRAM EXECUTION
 mkdir -p ~/.config
-sudo pacman -Syu
+sudo pacman --noconfirm -Syu
 
 # Description
 whiptail --title "Information" --msgbox "This install script requires an Arch-based machine with SystemD. \
