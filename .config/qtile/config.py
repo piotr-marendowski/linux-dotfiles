@@ -54,7 +54,7 @@ keys = [
     ## CUSTOM
     # Spawn apps
     Key([mod], "Return", lazy.spawn(terminal)),
-    Key([mod], "e", lazy.spawn("Thunar")),
+    Key([mod], "e", lazy.spawn("nemo")),
     # Run "rofi-theme-selector" in terminal to select a theme
     Key([mod], "s", lazy.spawn("rofi -show drun")),
     Key([mod], "f", lazy.spawn("firefox")),
@@ -186,7 +186,7 @@ decoration_defaults = dict(
     filled = True,
     group = True,
     padding = 4,
-    padding_x = 2,
+    padding_x = 3,
 )
 
 # bar settings

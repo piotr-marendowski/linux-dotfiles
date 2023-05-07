@@ -19,6 +19,7 @@ firefox &
 alacritty -e lvim &
 discord-canary &
 spotify &
+easyeffects &
 tutanota-desktop &
 flameshot &             # screenshots
 pulseaudio --start &
