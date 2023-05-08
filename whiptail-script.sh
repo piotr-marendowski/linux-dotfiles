@@ -32,6 +32,8 @@ exclude_files=(assets firefox script.sh whiptail-script.sh README.md LICENSE .gi
 
 # is virtualization installed? 
 is_virtualization=false
+# is full installation?
+is_full_installation=false
 
 # Array of programs to install
 programs=()
@@ -41,179 +43,176 @@ configure_installed() {
   # IF USER SELECTS NO THEN GO TO MENU (ELSE IS AT THE BOTTOM OF THE FUNCTIO )
 	if whiptail --title "Warming" --yesno "Configuring programs can be really dangerous on \
 configured machines, it is advised to run this ONLY on newly set up machines. Do you want to proceed?" 8 80; then
+    mkdir -p ~/.config
 
-	mkdir -p ~/.config
+    # Alacritty
+    if command -v alacritty -h &> /dev/null
+    then
+      mkdir -p ~/.config/alacritty
+      cp /usr/share/doc/alacritty/example/alacritty.yml ~/.config/alacritty/alacritty.yml
+    fi
 
-	# Alacritty
-	if command -v alacritty -h &> /dev/null
-	then
-		mkdir -p ~/.config/alacritty
-		cp /usr/share/doc/alacritty/example/alacritty.yml ~/.config/alacritty/alacritty.yml
-	fi
+    # Dunst
+    if command -v dunst -h &> /dev/null
+    then
+      mkdir -p ~/.config/dunst
+      cp /etc/dunst/dunstrc ~/.config/dunst/dunstrc
+    fi
 
-	# Dunst
-	if command -v dunst -h &> /dev/null
-	then
-		mkdir -p ~/.config/dunst
-		cp /etc/dunst/dunstrc ~/.config/dunst/dunstrc
-	fi
+    # Rofi
+    if command -v rofi -h &> /dev/null
+    then
+      mkdir -p ~/.config/rofi
+      rofi -dump-config > ~/.config/rofi/config.rasi
+      cp $dir/rofi/simple-tokyonight.rasi ~/.config/rofi/simple-tokyonight.rasi
+    fi
 
-	# Rofi
-	if command -v rofi -h &> /dev/null
-	then
-		mkdir -p ~/.config/rofi
-		rofi -dump-config > ~/.config/rofi/config.rasi
-		cp $dir/rofi/simple-tokyonight.rasi ~/.config/rofi/simple-tokyonight.rasi
-	fi
+    # Firefox - install hardened profile, which will need to be changed manually!
+    if command -v firefox -h &> /dev/null
+    then
+      local profile_name=profile1
+      firefox -CreateProfile "$profile_name" && firefox -P "$profile_name" -no-remote
+      cd ~/.mozilla/firefox/*$profile_name*/
+      cp $dir/firefox/prefs.js /prefs.js
+    fi
 
-	# Firefox - install hardened profile, which will need to be changed manually!
-	if command -v firefox -h &> /dev/null
-	then
-		local profile_name=profile1
-		firefox -CreateProfile "$profile_name" && firefox -P "$profile_name" -no-remote
-		cd ~/.mozilla/firefox/*$profile_name*/
-		cp $dir/firefox/prefs.js /prefs.js
-	fi
-
-	# Xorg
-	if command -v X -version &> /dev/null
-	then
-		echo "Configuring Xorg server and adding Qtile as default window manager..."
-		cp /etc/X11/xinit/xinitrc ~/.xinitrc && echo "(1/4)"
-		head -n -5 .xinitrc > .xinitrc-temp && mv .xinitrc-temp .xinitrc && echo "(2/4)"
-		echo exec qtile start >> ~/.xinitrc && echo "(3/4)"
-		rm ~/.xinitrc-new && echo "(4/4)"
-		echo "done"
-	fi
-	
-	pip install dbus-next
-	pip install pyxdg
-
-	# theme
-	sudo cp $dir/assets/TokyoNight /usr/share/themes/
-
-	if command -v nitrogen -h &> /dev/null
-	then
-		echo "Setting wallpaper..."
-		nitrogen --set-auto $dir/assets/wallpaper.jpg
-		echo "done"
-	fi
-
-	# make dotfiles
-	echo "Searching $dir directory..."
-	# search for folders (and not hidden files)
-	for i in ${folders[@]}; do
-		:
-	done
-	# search for all hidden files (even something like '.' and '..')
-	for i in ${files[@]}; do
-		:
-	done
-	# exclude some files and directories from files array
-	for char in "${exclude[@]}"; do
-		for i in "${!files[@]}"; do
-			if [[ ${files[i]} = $char ]]; then
-				unset 'files[i]'
-			fi
-		done
-	done
-
-	# exclude not-dotfolders/not-dotfiles
-	for del in ${exclude_files[@]}
-	do
-		folders=("${folders[@]/$del}") 		# Quotes when working with strings
-	done
-	for del in ${exclude_files[@]}
-	do
-		files=("${files[@]/$del}") 			# Quotes when working with strings
-	done
-	echo "done"
-
-	echo "Folders/files in $dir: ${folders[@]}"
-	echo "Hidden files in $dir: ${files[@]}"
-
-	# create dotfolders_old in homedir
-	echo "Creating $olddir for backup of any existing dotfolders in ~..."
-	mkdir -p $olddir
-	echo "done"
-
-	# enter dotfolder in order to process only files in it and not files in homedir
-	echo "Entering $dir..."
-	cd $dir
-	echo "done"
-
-	# Move any dotfile "listed" (present) in dir to olddir and move a file from this
-	# repo to program's directory e.g. ~/.config
-	echo "Moving any existing dotfolders from ~ to $olddir..."
-	echo "DON'T PANIC IF THERE ARE ERRORS!"
-	# folders/normal files
-	for file in ${folders[@]}; do
-		mv ~/$file $olddir
-		echo "Moving $file to homedir..."
-		cp -rf $dir/$file ~/$file
-	done
-	# hidden files
-	for file in ${files[@]}; do
-		mv ~/$file $olddir
-		echo "Moving $file to homedir..."
-		cp -rf $dir/$file ~/$file
-	done
-	echo "done"
-
-	# login managers - check if pacman -Q name begins with name of the login manager
-	# and enable its service if it is
-	echo "Proceeding to check if login manager is installed..."
-	# if ly is installed
-	pacman -Q ly | grep -q "^ly" && sudo systemctl enable ly && echo "Ly installed."
-	# if sddm is installed - customize it
-	if pacman -Q sddm | grep -q "^sddm"; then
-		sudo systemctl enable sddm
-		echo "Sddm installed."
-		sudo cp /usr/lib/sddm/sddm.conf.d/default.conf /etc/sddm.conf
-
-		# install theme
-		git clone https://github.com/rototrash/tokyo-night-sddm.git ~/tokyo-night-sddm
-		sudo mv ~/tokyo-night-sddm /usr/share/sddm/themes/
-
-		# edit /etc/sddm.conf
-		# read the contents of line 31 into a variable
-		line31=$(sed -n '31p' /etc/sddm.conf)
-		# check if the contents of line 31 match
-		if [[ "$line31" == *"[Theme]"* ]]; then
-			# if the pattern is matched, replace the line 33 with a theme name
-			sed -i '33s/.*/Current=tokyo-night-sddm/' /etc/sddm.conf
-		fi
-	fi
-
-  # start gamemode
-  systemctl --user enable gamemoded && systemctl --user start gamemoded
-
-	# virtualization
-  if [ "$is_virtualization" = true ]; then
-    whiptail --title "VIRTUALIZATION: Warming" --yesno "You need to ensure that these are set to: \
-  unix_sock_group = \"libvirt\", unix_sock_ro_perms = \"0777\", and unix_sock_rw_perms = \"0770\". \
-  Do you want to do it now?" 10 80
+    # Xorg
+    if command -v X -version &> /dev/null
+    then
+      echo "Configuring Xorg server and adding Qtile as default window manager..."
+      cp /etc/X11/xinit/xinitrc ~/.xinitrc && echo "(1/4)"
+      head -n -5 .xinitrc > .xinitrc-temp && mv .xinitrc-temp .xinitrc && echo "(2/4)"
+      echo exec qtile start >> ~/.xinitrc && echo "(3/4)"
+      rm ~/.xinitrc-new && echo "(4/4)"
+      echo "done"
+    fi
     
-    if [ $? -eq 0 ]; then
-      sudo nvim /etc/libvirt/libvirtd.conf
+    pip install dbus-next
+    pip install pyxdg
+
+    # theme
+    sudo cp $dir/assets/TokyoNight /usr/share/themes/
+
+    if command -v nitrogen -h &> /dev/null
+    then
+      echo "Setting wallpaper..."
+      nitrogen --set-auto $dir/assets/wallpaper.jpg
+      echo "done"
     fi
 
-    if systemctl status libvirtd; then
-      local user_name=$(whoami)
-      sudo usermod -aG libvirt $user_name
-      sudo systemctl enable libvirtd
-      sudo systemctl restart libvirtd
+    # make dotfiles
+    echo "Searching $dir directory..."
+    # search for folders (and not hidden files)
+    for i in ${folders[@]}; do
+      :
+    done
+    # search for all hidden files (even something like '.' and '..')
+    for i in ${files[@]}; do
+      :
+    done
+    # exclude some files and directories from files array
+    for char in "${exclude[@]}"; do
+      for i in "${!files[@]}"; do
+        if [[ ${files[i]} = $char ]]; then
+          unset 'files[i]'
+        fi
+      done
+    done
+
+    # exclude not-dotfolders/not-dotfiles
+    for del in ${exclude_files[@]}
+    do
+      folders=("${folders[@]/$del}") 		# Quotes when working with strings
+    done
+    for del in ${exclude_files[@]}
+    do
+      files=("${files[@]/$del}") 			# Quotes when working with strings
+    done
+    echo "done"
+
+    echo "Folders/files in $dir: ${folders[@]}"
+    echo "Hidden files in $dir: ${files[@]}"
+
+    # create dotfolders_old in homedir
+    echo "Creating $olddir for backup of any existing dotfolders in ~..."
+    mkdir -p $olddir
+    echo "done"
+
+    # enter dotfolder in order to process only files in it and not files in homedir
+    echo "Entering $dir..."
+    cd $dir
+    echo "done"
+
+    # Move any dotfile "listed" (present) in dir to olddir and move a file from this
+    # repo to program's directory e.g. ~/.config
+    echo "Moving any existing dotfolders from ~ to $olddir..."
+    echo "DON'T PANIC IF THERE ARE ERRORS!"
+    # folders/normal files
+    for file in ${folders[@]}; do
+      mv ~/$file $olddir
+      echo "Moving $file to homedir..."
+      cp -rf $dir/$file ~/$file
+    done
+    # hidden files
+    for file in ${files[@]}; do
+      mv ~/$file $olddir
+      echo "Moving $file to homedir..."
+      cp -rf $dir/$file ~/$file
+    done
+    echo "done"
+
+    # login managers - check if pacman -Q name begins with name of the login manager
+    # and enable its service if it is
+    echo "Proceeding to check if login manager is installed..."
+    # if ly is installed
+    pacman -Q ly | grep -q "^ly" && sudo systemctl enable ly && echo "Ly installed."
+    # if sddm is installed - customize it
+    if pacman -Q sddm | grep -q "^sddm"; then
+      sudo systemctl enable sddm
+      echo "Sddm installed."
+      sudo cp /usr/lib/sddm/sddm.conf.d/default.conf /etc/sddm.conf
+
+      # install theme
+      git clone https://github.com/rototrash/tokyo-night-sddm.git ~/tokyo-night-sddm
+      sudo mv ~/tokyo-night-sddm /usr/share/sddm/themes/
+
+      # edit /etc/sddm.conf
+      # read the contents of line 31 into a variable
+      line31=$(sed -n '31p' /etc/sddm.conf)
+      # check if the contents of line 31 match
+      if [[ "$line31" == *"[Theme]"* ]]; then
+        # if the pattern is matched, replace the line 33 with a theme name
+        sed -i '33s/.*/Current=tokyo-night-sddm/' /etc/sddm.conf
+      fi
+    fi
+
+    # start gamemode
+    systemctl --user enable gamemoded && systemctl --user start gamemoded
+
+    # virtualization
+    if [ "$is_virtualization" = true ]; then
+      whiptail --title "VIRTUALIZATION: Warming" --yesno "You need to ensure that these are set to: \
+    unix_sock_group = \"libvirt\", unix_sock_ro_perms = \"0777\", and unix_sock_rw_perms = \"0770\". \
+    Do you want to do it now?" 10 80
+      
+      if [ $? -eq 0 ]; then
+        sudo nvim /etc/libvirt/libvirtd.conf
+      fi
+
+      if systemctl status libvirtd; then
+        local user_name=$(whoami)
+        sudo usermod -aG libvirt $user_name
+        sudo systemctl enable libvirtd
+        sudo systemctl restart libvirtd
+      else
+        echo "libvirt is not installed"
+      fi
     else
-      echo "libvirt is not installed"
+        echo "Virtualization is not configured right now."
     fi
-  else
-      echo "Virtualization is not configured right now."
-  fi
-
   else
     menu
   fi
-
 }
 
 ## Function with dependencies to all of the programs
@@ -241,7 +240,6 @@ dependencies() {
 
   # check if machine has an nvidia card
   # Check if lspci is installed
-
   if ! command -v lspci &> /dev/null; then
     paru -S --noconfirm lspci
   fi
@@ -263,8 +261,8 @@ dependencies() {
 # third argument in dimensions = number of options
 necessary() {
 	CHOICE=$(
-		whiptail --title "Menu" --cancel-button "Exit" --notags --menu \
-		"\nPrograms used to achieve fully working modern system." 12 60 3 \
+		whiptail --title "Programs" --cancel-button "Exit" --notags --menu \
+		"\nCore and optional programs." 12 60 3 \
     "1" "Set 1 (necessary)" \
     "2" "Set 2 (everything)" \
 		"3" "Select programs manually" 3>&2 2>&1 1>&3
@@ -275,20 +273,22 @@ necessary() {
 			programs+=( "alacritty" "rofi" "firefox" "htop" "nemo" )
 			;;
 		"2")   
-			programs+=( "alacritty" "rofi" "dunst" "flameshot" "gimp" "firefox" "htop" "nemo" )
+			programs+=( "alacritty" "rofi" "dunst" "flameshot" "gimp" "firefox" "htop" "nemo" "discord-canary" "spotify" )
 			;;
 		"3")   
       CHOICES=$(
-        whiptail --title "System programs" --checklist --notags --separate-output\
-        "\nPrograms used to achieve fully working modern system." 16 60 8 \
-        "alacritty"      	"alacritty" OFF \
-        "rofi" 				"rofi"  OFF \
-        "dunst" 			"dunst" OFF \
-        "flameshot" 			"flameshot" OFF \
-        "gimp" 				"gimp" OFF \
-        "firefox" 			"firefox" OFF \
-        "htop" 				"htop" OFF \
-        "nemo"     "nemo" 3>&1 1>&2 2>&3
+        whiptail --title "Programs" --separate-output --checklist --notags \
+        "\nCore and optional programs." 18 60 10 \
+        "alacritty"      	  "alacritty" OFF \
+        "rofi" 				      "rofi"  OFF \
+        "dunst" 			      "dunst" OFF \
+        "flameshot" 			  "flameshot" OFF \
+        "gimp" 				      "gimp" OFF \
+        "firefox" 			    "firefox" OFF \
+        "htop" 				      "htop" OFF \
+        "discord-canary" 		"discord-canary" OFF \
+        "spotify" 				  "spotify" OFF \
+        "nemo"              "nemo" OFF 3>&1 1>&2 2>&3
       )
 
 			# add selected programs to the array
@@ -296,14 +296,14 @@ necessary() {
 				programs+=($CHOICE)
 			done
 			;;
-	esac
+  esac
 
 	echo "${programs[@]}"
 }
 
 sound() {
 	CHOICE=$(
-		whiptail --title "Menu" --cancel-button "Exit" --notags --menu \
+		whiptail --title "Sound" --cancel-button "Exit" --notags --menu \
 		"\nMusic makes sense when everything else is crazy." 12 60 3 \
 		"1" "Pipewire"  \
 		"2" "Pulseaudio"  \
@@ -345,7 +345,7 @@ sound() {
 
 gui() {
 	CHOICE=$(
-		whiptail --title "Menu" --cancel-button "Exit" --notags --menu \
+		whiptail --title "GUI" --cancel-button "Exit" --notags --menu \
 		"\nThe best GUI is the one you don't notice." 12 60 3 \
     "1" "Qtile (Xorg)"  \
     "2" "Clean Xorg"  \
@@ -386,7 +386,7 @@ gui() {
 # customize GTK and QT themes
 look_and_feel() {
 	CHOICE=$(
-		whiptail --title "Menu" --cancel-button "Exit" --notags --menu \
+		whiptail --title "Look and feel" --cancel-button "Exit" --notags --menu \
 		"\nLife is too short for ugly design." 12 60 3 \
     "1" "Set 1 (everything)"  \
 		"2" "Select programs manually"  3>&2 2>&1 1>&3
@@ -427,7 +427,7 @@ gaming, first you need to enable multilib in pacman.conf in order to install 32 
 	fi
 
 	CHOICE=$(
-		whiptail --title "Menu" --cancel-button "Exit" --notags --menu \
+		whiptail --title "Gaming" --cancel-button "Exit" --notags --menu \
 		"\nThe game is never over, unless you stop playing." 11 60 2 \
 		"1" "Nvidia" \
 		"2" "Select programs manually"  3>&2 2>&1 1>&3
@@ -489,7 +489,7 @@ gaming, first you need to enable multilib in pacman.conf in order to install 32 
 
 virtualization() {
 	CHOICE=$(
-		whiptail --title "Menu" --cancel-button "Exit" --notags --menu \
+		whiptail --title "Virtualization" --cancel-button "Exit" --notags --menu \
 		"\nVirtualization allows you to do more with less." 11 60 2 \
 		"1" "Install and configure virtualization"  \
 		"2" "Select programs manually"  3>&2 2>&1 1>&3
@@ -612,6 +612,7 @@ menu() {
 
 	case $CHOICE in
 		"1")   
+      is_full_installation=true
 			dependencies
 			necessary
 			gui
@@ -662,6 +663,9 @@ menu() {
 		"11")   
 			dependencies
 			install "${programs[@]}"
+      if [ "$is_full_installation" = false ]; then
+        menu
+      fi
 			reboot
 			;;
 	esac
