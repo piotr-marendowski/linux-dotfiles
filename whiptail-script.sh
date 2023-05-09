@@ -321,10 +321,10 @@ sound() {
 			CHOICES=$(
 				whiptail --title "Sound" --separate-output --checklist --notags \
 				"\nMusic makes sense when everything else is crazy." 18 60 10 \
-				"pulseaudio"      	"pulseaudio" OFF \
+				"pulseaudio"      "pulseaudio" OFF \
 				"pavucontrol" 		"pavucontrol" OFF \
-				"alsa-utils" 		"alsa-utils" OFF \
-				"pipewire" 		"pipewire" OFF \
+				"alsa-utils" 		  "alsa-utils" OFF \
+				"pipewire" 		    "pipewire" OFF \
 				"pipewire-audio" 	"pipewire-audio" OFF \
 				"pipewire-alsa" 	"pipewire-alsa" OFF \
 				"pipewire-pulse" 	"pipewire-pulse" OFF \
@@ -363,15 +363,15 @@ gui() {
       CHOICES=$(
         whiptail --title "GUI" --separate-output --checklist --notags \
         $'\nThe best GUI is the one you don\'t notice.' 17 60 9 \
-        "xorg"      		"xorg" OFF \
-        "xorg-xinit" 		"xorg-xinit" OFF \
-        "playerctl" 		"playerctl" OFF \
-        "qtile-git" 		"qtile-git" OFF \
+        "xorg"      		    "xorg" OFF \
+        "xorg-xinit" 		    "xorg-xinit" OFF \
+        "playerctl" 		    "playerctl" OFF \
+        "qtile-git" 		    "qtile-git" OFF \
         "qtile-extras-git" 	"qtile-extras-git" OFF \
-        "sddm" 				"sddm" OFF \
-        "ly" 				"ly" OFF \
-        "qt" 				"qt (group)" OFF \
-        "gsimplecal" 		"gsimplecal" OFF 3>&1 1>&2 2>&3
+        "sddm" 				      "sddm" OFF \
+        "ly" 				        "ly" OFF \
+        "qt" 				        "qt (group)" OFF \
+        "gsimplecal" 		    "gsimplecal" OFF 3>&1 1>&2 2>&3
       )
 
       # add selected programs to the array
@@ -400,12 +400,12 @@ look_and_feel() {
       CHOICES=$(
         whiptail --title "Look and feel" --separate-output --checklist --notags \
         '\nLife is too short for ugly design.' 14 60 6 \
-        "lxappearance"     		"lxappearance" OFF \
-        "nitrogen"     			"nitrogen" OFF \
-        "redshift"     			"redshitf" OFF \
+        "lxappearance"     		  "lxappearance" OFF \
+        "nitrogen"     			    "nitrogen" OFF \
+        "redshift"     			    "redshitf" OFF \
         "nerd-fonts-meta"     	"nerd-fonts-meta" OFF \
-        "papirus-icon-theme"	"papirus-icon-theme" OFF \
-        "picom-jonaburg-git" 	"picom-jonaburg-git" OFF 3>&1 1>&2 2>&3
+        "papirus-icon-theme"	  "papirus-icon-theme" OFF \
+        "picom-jonaburg-git" 	  "picom-jonaburg-git" OFF 3>&1 1>&2 2>&3
       )
 
       # add selected programs to the array
@@ -435,33 +435,33 @@ gaming, first you need to enable multilib in pacman.conf in order to install 32 
 
 	case $CHOICE in
 		"1")   
-			programs+=( "steam" "lutris" "wine-staging" "nvidia" "nvidia-dkms" "nvidia-utils" "nvidia-settings" "nvidia-settings" "vulkan-icd-loader" "dxvk-bin" "opencl-nvidia" "libvdpau" "libxnvctrl" "lib32-nvidia-utils" "lib32-opencl-nvidia" "lib32-vulkan-icd-loader" "proton-ge-custom-bin" "mangohud-git" "goverlay-bin" "gwe" "protonup-qt-bin" )
-      is_virtualization=true
+			programs+=( "steam" "lutris" "wine-staging" "nvidia" "nvidia-dkms" "nvidia-utils" "nvidia-settings" "nvidia-settings" "vulkan-icd-loader" "dxvk-bin" "opencl-nvidia" "libvdpau" "libxnvctrl" "lib32-nvidia-utils" "lib32-opencl-nvidia" "lib32-vulkan-icd-loader" "proton-ge-custom-bin" "mangohud-git" "goverlay-bin" "gwe" "protonup-qt-bin" "gamemode" )
 			;;
 		"2")   
       CHOICES=$(
         whiptail --title "Gaming" --separate-output --checklist --notags \
         "\nThe game is never over, unless you stop playing." 18 60 10 \
-        "steam"      				"steam" OFF \
-        "lutris"      				"lutris" OFF \
-        "wine-staging"      		"wine-staging" OFF \
-        "nvidia"      				"nvidia" OFF \
-        "nvidia-dkms" 				"nvidia-dkms" OFF \
-        "nvidia-utils" 				"nvidia-utils" OFF \
-        "nvidia-settings" 			"nvidia-settings" OFF \
-        "vulkan-icd-loader" 		"vulkan-icd-loader" OFF \
-        "dxvk-bin" 		      "dxvk-bin" OFF \
-        "opencl-nvidia" 		      "opencl-nvidia" OFF \
-        "libvdpau" 		      "libvdpau" OFF \
-        "libxnvctrl" 		      "libxnvctrl" OFF \
-        "lib32-nvidia-utils" 		"lib32-nvidia-utils" OFF \
-        "lib32-opencl-nvidia" 		      "lib32-opencl-nvidia" OFF \
-        "lib32-vulkan-icd-loader" 	"lib32-vulkan-icd-loader" OFF \
+        "steam"      				        "steam" OFF \
+        "lutris"      				      "lutris" OFF \
+        "wine-staging"      		    "wine-staging" OFF \
+        "nvidia"      				      "nvidia" OFF \
+        "nvidia-dkms" 				      "nvidia-dkms" OFF \
+        "nvidia-utils" 				      "nvidia-utils" OFF \
+        "nvidia-settings" 			    "nvidia-settings" OFF \
+        "vulkan-icd-loader" 		    "vulkan-icd-loader" OFF \
+        "dxvk-bin" 		              "dxvk-bin" OFF \
+        "opencl-nvidia" 		        "opencl-nvidia" OFF \
+        "libvdpau" 		              "libvdpau" OFF \
+        "libxnvctrl" 		            "libxnvctrl" OFF \
+        "lib32-nvidia-utils" 		    "lib32-nvidia-utils" OFF \
+        "lib32-opencl-nvidia" 		  "lib32-opencl-nvidia" OFF \
+        "lib32-vulkan-icd-loader"   "lib32-vulkan-icd-loader" OFF \
         "proton-ge-custom-bin" 			"proton-ge-custom-bin" OFF \
-        "mangohud-git" 				"mangohud-git" OFF \
-        "goverlay-bin" 				"goverlay-bin" OFF \
-        "protonup-qt-bin" 		"protonup-qt-bin" OFF \
-        "gwe" 						"GreenWithEnvy" OFF 3>&1 1>&2 2>&3
+        "mangohud-git" 				      "mangohud-git" OFF \
+        "goverlay-bin" 				      "goverlay-bin" OFF \
+        "protonup-qt-bin" 		      "protonup-qt-bin" OFF \
+        "gamemode" 		              "gamemode" OFF \
+        "gwe" 						          "GreenWithEnvy" OFF 3>&1 1>&2 2>&3
       )
 
       # add selected programs to the array
@@ -504,15 +504,15 @@ virtualization() {
       CHOICES=$(
         whiptail --title "Virtualization" --separate-output --checklist --notags  \
         '\nVirtualization allows you to do more with less.' 17 60 9  \
-        "qemu"      		"qemu" OFF  \
+        "qemu"      		  "qemu" OFF  \
         "libvirt"      		"libvirt" OFF  \
         "virt-manager" 		"virt-manager" OFF  \
         "virt-viewer" 		"virt-viewer" OFF  \
-        "dnsmasq" 			"dnsmasq" OFF  \
-        "vde2" 				"vde2" OFF  \
+        "dnsmasq" 			  "dnsmasq" OFF  \
+        "vde2" 				    "vde2" OFF  \
         "bridge-utils" 		"bridge-utils" OFF  \
         "openbsd-netcat" 	"openbsd-netcat" OFF  \
-        "libguestfs" 		"libguestfs" OFF 3>&1 1>&2 2>&3
+        "libguestfs" 		  "libguestfs" OFF 3>&1 1>&2 2>&3
       )
       is_virtualization=true
 
@@ -566,7 +566,7 @@ reboot() {
 everything to work. Do you want to do it now?" 8 80
 	
 	if [ $? -eq 0 ]; then
-		reboot
+		sudo reboot
 	fi
 }
 
@@ -680,8 +680,8 @@ whiptail --title "Information" --msgbox "This install script requires an Arch-ba
 Better know what you are doing, because some options NOT selected will conclude in not fully working system!" 9 80
 
 # Navigation
-whiptail --title "Navigation" --msgbox "Navigate in lists by using arrow keys. \
-Select options with space. Use Tab key to navigate between the <Ok> and <Cancel> buttons." 8 80
+whiptail --title "Navigation" --msgbox "Navigate lists using arrow keys. Select options with space. \
+Use Tab key to navigate between the <Ok> and <Cancel> buttons." 8 80
 
 menu
 
