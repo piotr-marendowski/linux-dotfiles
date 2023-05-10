@@ -30,4 +30,4 @@ for now it will stay in repo as a reference.
 - [Flameshot (screenshots)](https://flameshot.org/)
 - [Pulseaudio (sound)](https://www.freedesktop.org/wiki/Software/PulseAudio/)
 - [or Pipewire (sound)](https://pipewire.org)
-- [Neovim (IDE)](https://neovim.io/)
+- [Neovim (code)](https://neovim.io/)\nLatest commit: 81c4521 Update README

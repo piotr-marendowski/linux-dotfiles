@@ -246,7 +246,7 @@ dependencies() {
 
   # Use lspci to check for NVIDIA graphics card
   if lspci | grep -i NVIDIA &> /dev/null; then
-    programs+=( nvidia nvidia-utils )
+    programs+=( nvidia-dkms nvidia-utils )
   else
     echo "NVIDIA graphics card not found."
   fi
@@ -435,7 +435,7 @@ gaming, first you need to enable multilib in pacman.conf in order to install 32 
 
 	case $CHOICE in
 		"1")   
-			programs+=( "steam" "lutris" "wine-staging" "nvidia" "nvidia-dkms" "nvidia-utils" "nvidia-settings" "nvidia-settings" "vulkan-icd-loader" "dxvk-bin" "opencl-nvidia" "libvdpau" "libxnvctrl" "lib32-nvidia-utils" "lib32-opencl-nvidia" "lib32-vulkan-icd-loader" "proton-ge-custom-bin" "mangohud-git" "goverlay-bin" "gwe" "protonup-qt-bin" "gamemode" )
+			programs+=( "steam" "lutris" "wine-staging" "nvidia-utils" "nvidia-settings" "nvidia-settings" "vulkan-icd-loader" "dxvk-bin" "opencl-nvidia" "libvdpau" "libxnvctrl" "lib32-nvidia-utils" "lib32-opencl-nvidia" "lib32-vulkan-icd-loader" "proton-ge-custom-bin" "mangohud-git" "goverlay-bin" "gwe" "protonup-qt-bin" "gamemode" )
 			;;
 		"2")   
       CHOICES=$(
@@ -482,7 +482,6 @@ gaming, first you need to enable multilib in pacman.conf in order to install 32 
       done
 			;;
 	esac
-
 
 	echo "${programs[@]}"
 }
@@ -589,6 +588,16 @@ print_programs() {
   whiptail --title "Programs" --msgbox --scrolltext "$(printf '%s\n' "${programs[@]}")" 20 30
 }
 
+unselect_programs() {
+  unselect=$(whiptail --title "Program Selector" --menu "Select a program to unselect:" 15 50 4 "${programs[@]}" 3>&1 1>&2 2>&3)
+
+  for program in "${programs[@]}"; do
+    programs=("${programs[@]/$unselect}")
+done
+
+
+}
+
 # Menu window
 menu() {
 	# newline character (\n) for better placement
@@ -596,7 +605,7 @@ menu() {
 	CHOICE=$(
 		whiptail --title "Menu" --cancel-button "Exit" --notags --menu \
 		"\nIn order to install selected programs choose the Install option after selecting them \
-(the Full Installation option does this automatically at the end of the process)." 22 60 11 \
+(the Full Installation option does this automatically at the end of the process)." 23 60 12 \
 		"1" "Full Installation (recommended)"  \
 		"2" "System Programs"  \
 		"3" "GUI"  \
@@ -607,7 +616,8 @@ menu() {
 		"8" "Configure Dotfiles"  \
 		"9" "Add Programs That Are Not Listed"  \
 		"10" "Print All Selected Programs"  \
-		"11" "Install Selected Programs" 3>&2 2>&1 1>&3
+    "11" "Unselect Program(s)" \
+		"12" "Install Selected Programs" 3>&2 2>&1 1>&3
 	)
 
 	case $CHOICE in
@@ -620,6 +630,10 @@ menu() {
 			sound
 			gaming
 			virtualization
+      whiptail --title "Warming" --yesno "Do you want to unselect program(s)?" 8 80
+      if [ $? -eq 0 ]; then
+        unselect_programs
+      fi
 			install "${programs[@]}"
 			configure_installed
 			reboot
@@ -661,6 +675,10 @@ menu() {
 			menu
 			;;
 		"11")   
+      unselect_programs
+			menu
+			;;
+		"12")   
 			dependencies
 			install "${programs[@]}"
       if [ "$is_full_installation" = false ]; then
