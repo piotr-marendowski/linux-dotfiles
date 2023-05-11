@@ -588,15 +588,15 @@ print_programs() {
   whiptail --title "Programs" --msgbox --scrolltext "$(printf '%s\n' "${programs[@]}")" 20 30
 }
 
-unselect_programs() {
-  unselect=$(whiptail --title "Program Selector" --menu "Select a program to unselect:" 15 50 4 "${programs[@]}" 3>&1 1>&2 2>&3)
-
-  for program in "${programs[@]}"; do
-    programs=("${programs[@]/$unselect}")
-done
-
-
-}
+# unselect_programs() {
+#   unselect=$(whiptail --title "Program Selector" --menu "Select a program to unselect:" 15 50 4 "${programs[@]}" 3>&1 1>&2 2>&3)
+#
+#   for program in "${programs[@]}"; do
+#     programs=("${programs[@]/$unselect}")
+# done
+#
+#
+# }
 
 # Menu window
 menu() {
@@ -674,10 +674,10 @@ menu() {
       print_programs
 			menu
 			;;
-		"11")   
-      unselect_programs
-			menu
-			;;
+		# "11")   
+    #   unselect_programs
+		# 	menu
+		# 	;;
 		"12")   
 			dependencies
 			install "${programs[@]}"
