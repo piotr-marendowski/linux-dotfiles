@@ -270,10 +270,10 @@ necessary() {
 
 	case $CHOICE in
 		"1")   
-			programs+=( "alacritty" "rofi" "firefox" "htop" "nemo" )
+			programs+=( "alacritty" "rofi" "firefox" "htop" "nemo" "polkit" "gnome-polkit" )
 			;;
 		"2")   
-			programs+=( "alacritty" "rofi" "dunst" "flameshot" "gimp" "firefox" "htop" "nemo" "discord-canary" "spotify" )
+			programs+=( "alacritty" "rofi" "dunst" "flameshot" "gimp" "firefox" "htop" "nemo" "discord-canary" "spotify" "polkit" "gnome-polkit" )
 			;;
 		"3")   
       CHOICES=$(
@@ -288,7 +288,9 @@ necessary() {
         "htop" 				      "htop" OFF \
         "discord-canary" 		"discord-canary" OFF \
         "spotify" 				  "spotify" OFF \
-        "nemo"              "nemo" OFF 3>&1 1>&2 2>&3
+        "nemo" 				      "nemo" OFF \
+        "polkit" 				    "polkit" OFF \
+        "gnome-polkit" 		  "gnome-polkit" OFF 3>&1 1>&2 2>&3
       )
 
 			# add selected programs to the array
