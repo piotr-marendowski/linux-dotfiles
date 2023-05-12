@@ -192,14 +192,15 @@ configured machines, it is advised to run this ONLY on newly set up machines. Do
     # virtualization
     if [ "$is_virtualization" = true ]; then
       whiptail --title "VIRTUALIZATION: Warming" --yesno "You need to ensure that these are set to: \
-    unix_sock_group = \"libvirt\", unix_sock_ro_perms = \"0777\", and unix_sock_rw_perms = \"0770\". \
-    Do you want to do it now?" 10 80
+unix_sock_group = \"libvirt\", unix_sock_ro_perms = \"0777\", and unix_sock_rw_perms = \"0770\". \
+Do you want to do it now?" 10 80
       
       if [ $? -eq 0 ]; then
         sudo nvim /etc/libvirt/libvirtd.conf
       fi
 
       if systemctl status libvirtd; then
+        sudo groupadd libvirt
         local user_name=$(whoami)
         sudo usermod -aG libvirt $user_name
         sudo systemctl enable libvirtd
