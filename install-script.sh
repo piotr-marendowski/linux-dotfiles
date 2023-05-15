@@ -174,7 +174,8 @@ configured machines, it is advised to run this ONLY on newly set up machines. Do
 
       # install theme
       git clone https://github.com/rototrash/tokyo-night-sddm.git ~/tokyo-night-sddm
-      sudo mv ~/tokyo-night-sddm /usr/share/sddm/themes/
+      mkdir ~/.local/share/themes
+      cp -r ~/tokyo-night-sddm ~/.local/share/themes/
 
       # edit /etc/sddm.conf
       # read the contents of line 31 into a variable
@@ -211,6 +212,7 @@ Do you want to do it now?" 10 80
     else
         echo "Virtualization is not configured right now."
     fi
+    
   else
     menu
   fi
@@ -271,10 +273,10 @@ necessary() {
 
 	case $CHOICE in
 		"1")   
-			programs+=( "alacritty" "rofi" "firefox" "htop" "nemo" "polkit" "gnome-polkit" )
+			programs+=( "alacritty" "rofi" "firefox" "htop" "nemo" "polkit" "gnome-polkit" "ark" )
 			;;
 		"2")   
-			programs+=( "alacritty" "rofi" "dunst" "flameshot" "gimp" "firefox" "htop" "nemo" "discord-canary" "spotify" "polkit" "gnome-polkit" )
+			programs+=( "alacritty" "rofi" "dunst" "flameshot" "gimp" "firefox" "htop" "nemo" "discord-canary" "spotify" "polkit" "gnome-polkit" "ark" )
 			;;
 		"3")   
       CHOICES=$(
@@ -291,7 +293,8 @@ necessary() {
         "spotify" 				  "spotify" OFF \
         "nemo" 				      "nemo" OFF \
         "polkit" 				    "polkit" OFF \
-        "gnome-polkit" 		  "gnome-polkit" OFF 3>&1 1>&2 2>&3
+        "gnome-polkit" 		  "gnome-polkit" OFF \
+        "ark" 		          "ark" OFF 3>&1 1>&2 2>&3
       )
 
 			# add selected programs to the array
