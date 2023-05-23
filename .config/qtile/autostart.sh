@@ -17,8 +17,8 @@ redshift -P -O 3500 &   # night light
 picom --backend glx &
 firefox &
 alacritty -e lvim &
-discord-canary &
-spotify &
+discord-screenaudio &
+nuclear --no-sandbox &
 easyeffects &
 tutanota-desktop &
 flameshot &             # screenshots
