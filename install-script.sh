@@ -273,10 +273,10 @@ necessary() {
 
 	case $CHOICE in
 		"1")   
-			programs+=( "alacritty" "rofi" "firefox" "htop" "nemo" "polkit" "gnome-polkit" "ark" )
+			programs+=( "alacritty" "rofi" "firefox" "htop" "nemo" "polkit" "gnome-polkit" "ark" "zip" "unzip" "tar" )
 			;;
 		"2")   
-			programs+=( "alacritty" "rofi" "dunst" "flameshot" "gimp" "firefox" "htop" "nemo" "discord-canary" "spotify" "polkit" "gnome-polkit" "ark" )
+			programs+=( "alacritty" "rofi" "flameshot" "gimp" "firefox" "htop" "nemo" "discord-canary" "spotify" "polkit" "gnome-polkit" "ark" "zip" "unzip" "tar" )
 			;;
 		"3")   
       CHOICES=$(
@@ -294,6 +294,9 @@ necessary() {
         "nemo" 				      "nemo" OFF \
         "polkit" 				    "polkit" OFF \
         "gnome-polkit" 		  "gnome-polkit" OFF \
+        "zip"			  "zip" OFF \
+        "unzip"			  "unzip" OFF \
+        "tar"			  "tar" OFF \
         "ark" 		          "ark" OFF 3>&1 1>&2 2>&3
       )
 
