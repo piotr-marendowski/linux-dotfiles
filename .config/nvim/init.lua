@@ -25,9 +25,6 @@ if not ok then
 	return
 end
 
-vim.opt.termguicolors = true
-
-
 -- Load plugins from specifications
 -- (The leader key must be set before this)
 lazy.setup("plugins")

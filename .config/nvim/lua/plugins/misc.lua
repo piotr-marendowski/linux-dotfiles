@@ -1,4 +1,3 @@
--- Miscelaneous fun stuff
 return {
 	-- Comment with haste
 	{
@@ -21,4 +20,11 @@ return {
 	},
 	"tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
 	"tpope/vim-surround", -- Surround stuff with the ys-, cs-, ds- commands
+	{
+		"ellisonleao/glow.nvim",
+		config = true,
+		cmd = "Glow"
+	},
+	"lukas-reineke/indent-blankline.nvim", -- ident lines
+	"famiu/bufdelete.nvim", -- better buffer closing
 }

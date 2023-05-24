@@ -12,7 +12,8 @@ return {
 				always_divide_middle = true,
 			},
 			sections = {
-				lualine_x = {'encoding', 'filetype'},
+				lualine_c = {},
+				lualine_x = {'filetype'},
 			}
 		})
 	end,

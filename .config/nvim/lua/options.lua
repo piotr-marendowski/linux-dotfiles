@@ -1,7 +1,6 @@
 -- OPTIONS --
 
-local options = {
-    backup = false,                          -- creates a backup file
+local options = { backup = false,                          -- creates a backup file
     clipboard = "unnamedplus",               -- allows neovim to access the system clipboard
     cmdheight = 0,                           -- more space in the neovim command line for displaying messages
     completeopt = { "menuone", "noselect" }, -- mostly just for cmp
@@ -47,11 +46,12 @@ end
 vim.cmd "set whichwrap+=<,>,[,],h,l"
 vim.cmd [[set iskeyword+=-]]
 
+-- Better colors
+vim.opt.termguicolors = true -- use better colors
+
 
 -- KEYMAPS --
-
 local opts = { noremap = true, silent = true }
-local term_opts = { silent = true }
 
 -- Shorten function name
 local keymap = vim.api.nvim_set_keymap
@@ -73,7 +73,12 @@ vim.g.maplocalleader = " "
 -- Write file by Ctrl + S
 keymap("n", "<C-s>", ":w<cr>", opts)
 -- Close a buffer with Shift + X
-keymap("n", "<S-x>", ":bd<cr>", opts)
+-- Uses "famiu/bufdelete.nvim" plugin for better buffer closing
+keymap("n", "<S-x>", ":Bdelete<cr>", opts)
+-- Save and exit
+keymap("n", "<C-d>", ":wq<cr>", opts)
+-- Exit without saving
+keymap("n", "<leader>tb", ":q!<cr>", opts)
 
 -- Better window navigation
 keymap("n", "<C-h>", "<C-w>h", opts)
@@ -96,7 +101,7 @@ keymap("n", "<A-j>", "<Esc>:m .+1<CR>==gi", opts)
 keymap("n", "<A-k>", "<Esc>:m .-2<CR>==gi", opts)
 
 -- Insert --
--- Press jk fast to enter
+-- Press jk fast to exit insert mode
 keymap("i", "jk", "<ESC>", opts)
 
 -- Visual --
@@ -115,11 +120,4 @@ keymap("x", "J", ":move '>+1<CR>gv-gv", opts)
 keymap("x", "K", ":move '<-2<CR>gv-gv", opts)
 keymap("x", "<A-j>", ":move '>+1<CR>gv-gv", opts)
 keymap("x", "<A-k>", ":move '<-2<CR>gv-gv", opts)
-
--- Terminal --
--- Better terminal navigation
--- keymap("t", "<C-h>", "<C-\\><C-N><C-w>h", term_opts)
--- keymap("t", "<C-j>", "<C-\\><C-N><C-w>j", term_opts)
--- keymap("t", "<C-k>", "<C-\\><C-N><C-w>k", term_opts)
--- keymap("t", "<C-l>", "<C-\\><C-N><C-w>l", term_opts)
 

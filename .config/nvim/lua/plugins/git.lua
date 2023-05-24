@@ -27,5 +27,14 @@ return {
 			map("n", "<leader>ga", "<cmd>Git add %<cr>", "Stage the current file")
 			map("n", "<leader>gb", "<cmd>Git blame<cr>", "Show the blame")
 		end
+	},
+	{
+		"kdheepak/lazygit.nvim",
+		-- optional for floating window border decoration
+		dependencies = {"nvim-lua/plenary.nvim"},
+		config = function ()
+			local map = require("keys").map
+			map("n", "<leader>gl", "<cmd>LazyGit<cr>", "Open Lazygit")
+		end
 	}
 }
