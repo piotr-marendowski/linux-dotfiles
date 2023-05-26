@@ -4,29 +4,37 @@ return {
 		"folke/which-key.nvim",
 		config = function()
 			local wk = require("which-key")
+
 			wk.setup({
+				layout = {
+					height = { min = 1 },
+					width = { min = 20 },
+					spacing = 3, -- spacing between columns
+					align = "center", -- align columns left, center or right
+				},
 				icons = {
 					breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
 					separator = " ", -- symbol used between a key and it's label
-					group = " ", -- symbol prepended to a group
+					group = "", -- symbol prepended to a group
 				},
 			})
 			wk.register(
 				{
 					["<leader>"] = {
-						f = { name = "File" },
-						d = { name = "Delete/Close" },
-						q = { name = "Quit" },
-						s = { name = "Search" },
-						l = { name = "LSP" },
-						t = {
-							name = "Trouble",
-							a = { "<cmd>TroubleToggle<cr>", "Toggle Trouble" },
-							b = { "<cmd>TroubleRefresh<cr>", "Refresh Trouble" },
+						b = {
+							name = " Debugging",
+							a = { "<cmd>TroubleToggle<cr>", " Toggle Trouble" },
+							b = { "<cmd>TroubleRefresh<cr>", " Refresh Trouble" },
 						},
-						b = { name = "Debugging" },
-						g = { name = "Git" },
-					}
+						g = { name = " Git" },
+						l = { name = " LSP" },
+						o = {
+							name = "󰮰 Other options",
+							l = { "<cmd>Lazy<cr>", "󱒋 Lazy" },
+							-- m = { "<cmd>Mason<cr>", "󰕲 Open Mason" },
+						},
+						s = { name = " Search" },
+					},
 				}
 			)
 		end

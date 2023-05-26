@@ -1,8 +1,10 @@
 return {
-	-- Comment with haste
+	-- Comments
 	{
-		"numToStr/Comment.nvim",
-		opts = {},
+		'numToStr/Comment.nvim',
+		config = function()
+			require('Comment').setup()
+		end
 	},
 	-- Move stuff with <M-j> and <M-k> in both normal and visual mode
 	{
@@ -27,4 +29,28 @@ return {
 	},
 	"lukas-reineke/indent-blankline.nvim", -- ident lines
 	"famiu/bufdelete.nvim", -- better buffer closing
+	{
+		"echasnovski/mini.nvim",
+		version = false,
+		config = function()
+			require("mini.move").setup()
+		end,
+	},
+	-- scrollbar
+	{
+		"petertriho/nvim-scrollbar",
+		config = function()
+			require("scrollbar").setup({
+			    excluded_filetypes = {
+					"cmp_docs",
+					"cmp_menu",
+					"noice",
+					"prompt",
+					"TelescopePrompt",
+					"NvimTree",
+				},
+			})
+			require("scrollbar.handlers.gitsigns").setup()
+		end,
+	},
 }

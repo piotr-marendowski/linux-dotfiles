@@ -22,7 +22,7 @@ return {
 			})
 
 			-- Quick access via keymap
-			require("keys").map("n", "<leader>M", "<cmd>Mason<cr>", "Show Mason")
+			require("keys").map("n", "<leader>om", "<cmd>Mason<cr>", "󰕲 Mason")
 
 			-- Neodev setup before LSP config
 			require("neodev").setup()
@@ -77,7 +77,7 @@ return {
 					vim.lsp.buf.format()
 				end, { desc = "Format current buffer with LSP" })
 
-				lsp_map("<leader>ff", "<cmd>Format<cr>", bufnr, "Format")
+				lsp_map("<leader>of", "<cmd>Format<cr>", bufnr, " Format")
 
 				-- Attach and configure vim-illuminate
 				require("illuminate").on_attach(client)
@@ -140,4 +140,12 @@ return {
 			})
 		end,
 	},
+	{
+		"L3MON4D3/LuaSnip",
+		-- follow latest release.
+		version = "1.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+		-- install jsregexp (optional!).
+		build = "make install_jsregexp",
+	},
+
 }

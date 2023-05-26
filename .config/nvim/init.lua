@@ -1,8 +1,6 @@
 -- Config made by Piotr Marendowski <https://github.com/piotr-marendowski>
--- Used repositories: <https://github.com/LunarVim/Neovim-from-scratch>,
--- <https://github.com/frans-johansson/lazy-nvim-starter>,
--- <https://github.com/tokiory/neovim-boilerplate>
 -- License: GPL v.3
+-- NERD-FONT WITH ICONS IS REQUIRED TO VIEW ICONS!
 
 -- Load options
 require("options")
