@@ -39,7 +39,7 @@ return {
 
 			-- Diagnostic config
 			local config = {
-				virtual_text = false,
+				virtual_text = true,
 				signs = {
 					active = signs,
 				},
@@ -59,7 +59,7 @@ return {
 
 			-- This function gets run when an LSP connects to a particular buffer.
 			local on_attach = function(client, bufnr)
-                local lsp_map = require("keys").lsp_map
+			local lsp_map = require("keys").lsp_map
 
 				lsp_map("<leader>lr", vim.lsp.buf.rename, bufnr, "Rename symbol")
 				lsp_map("<leader>la", vim.lsp.buf.code_action, bufnr, "Code action")
@@ -138,6 +138,20 @@ return {
 					},
 				},
 			})
+
+			local function setup_lsp_diags()
+			  vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+				vim.lsp.diagnostic.on_publish_diagnostics,
+				{
+				  virtual_text = true,
+				  signs = true,
+				  update_in_insert = false,
+				  underline = true,
+				}
+			  )
+			end
+
+			setup_lsp_diags()
 		end,
 	},
 	{
@@ -147,5 +161,21 @@ return {
 		-- install jsregexp (optional!).
 		build = "make install_jsregexp",
 	},
-
+	{
+		"jose-elias-alvarez/null-ls.nvim",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+		},
+		config = function()
+			local null_ls = require("null-ls")
+			null_ls.setup({
+				sources = {
+					null_ls.builtins.formatting.stylua,
+					null_ls.builtins.formatting.clang_format,
+					null_ls.builtins.formatting.black,
+					null_ls.builtins.formatting.isort,
+				},
+			})
+		end,
+	}
 }

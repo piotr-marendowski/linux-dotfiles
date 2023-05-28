@@ -2,22 +2,31 @@
 return {
 	{
 		"folke/which-key.nvim",
+		event = "VeryLazy",
 		config = function()
 			local wk = require("which-key")
 
 			wk.setup({
 				layout = {
-					height = { min = 1 },
-					width = { min = 20 },
+					height = { min = 1, max = 100 },
+					width = { min = 3, max = 50 },
 					spacing = 3, -- spacing between columns
-					align = "center", -- align columns left, center or right
+					align = "right", -- align columns left, center or right
 				},
 				icons = {
 					breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
 					separator = " ", -- symbol used between a key and it's label
 					group = "", -- symbol prepended to a group
 				},
+				window = {
+					border = "none", -- none, single, double, shadow
+					position = "bottom", -- bottom, top
+					margin = { 1, 0, 1, 105 }, -- extra window margin [top, right, bottom, left]. When between 0 and 1, will be treated as a percentage of the screen size.
+					padding = { 1, 1, 1, 1 }, -- extra window padding [top, right, bottom, left]
+					winblend = 0, -- value between 0-100 0 for fully opaque and 100 for fully transparent
+				},
 			})
+			-- most of the options have keybindings in their respecting files, some don't have them and are here
 			wk.register(
 				{
 					["<leader>"] = {
@@ -28,12 +37,12 @@ return {
 						},
 						g = { name = " Git" },
 						l = { name = " LSP" },
-						o = {
-							name = "󰮰 Other options",
-							l = { "<cmd>Lazy<cr>", "󱒋 Lazy" },
-							-- m = { "<cmd>Mason<cr>", "󰕲 Open Mason" },
-						},
 						s = { name = " Search" },
+						o = {
+							name = "󰮰 Other actions",
+							l = { "<cmd>Lazy<cr>", "󱒋 Lazy" },
+							a = { "<cmd>NvimTreeClose | Alpha<cr>", " Alpha" },
+						},
 					},
 				}
 			)

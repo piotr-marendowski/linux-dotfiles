@@ -8,6 +8,8 @@ return {
 				open_mapping = [[<c-\>]],
 				shade_terminals = false,
 				direction = "horizontal",
+				autochdir = true,
+				shell = vim.o.shell,
 			})
 
 			function _G.set_terminal_keymaps()

@@ -50,7 +50,7 @@ return {
 				{ "n", "v" },
 				"<leader>e",
 				"<cmd>NvimTreeToggle<cr>",
-				" Toggle file explorer"
+				" File explorer"
 			)
 		end,
 	},

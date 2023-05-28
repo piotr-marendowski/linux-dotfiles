@@ -21,6 +21,13 @@ return {
 							-- separator = true,
 							padding = 1,
 						},
+						{
+							filetype = "Alpha",
+							text = "File Explorer",
+							text_align = "center",
+							-- separator = true,
+							padding = 1,
+						},
 					},
 					show_buffer_close_icons = false,
 					show_close_icon = false,

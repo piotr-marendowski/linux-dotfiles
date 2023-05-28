@@ -1,6 +1,5 @@
 -- Config made by Piotr Marendowski <https://github.com/piotr-marendowski>
--- License: GPL v.3
--- NERD-FONT WITH ICONS IS REQUIRED TO VIEW ICONS!
+-- License: GPL v.3 NERD-FONT WITH ICONS IS REQUIRED TO VIEW ICONS!
 
 -- Load options
 require("options")
@@ -20,9 +19,10 @@ vim.opt.rtp:prepend(lazypath)
 -- Use a protected call so we don't error out on first use
 local ok, lazy = pcall(require, "lazy")
 if not ok then
-	return
+    return
 end
 
 -- Load plugins from specifications
 -- (The leader key must be set before this)
 lazy.setup("plugins")
+

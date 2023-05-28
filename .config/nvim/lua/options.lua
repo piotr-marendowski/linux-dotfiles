@@ -70,15 +70,15 @@ vim.g.maplocalleader = " "
 --   command_mode = "c",
 
 -- Normal --
--- Write file by Ctrl + S
-keymap("n", "<C-s>", ":w<cr>", opts)
 -- Close a buffer with Shift + X
 -- Uses "famiu/bufdelete.nvim" plugin for better buffer closing
 keymap("n", "<S-x>", ":Bdelete<cr>", opts)
+-- Write file by Ctrl + S
+keymap("n", "<C-s>", ":w<cr>", opts)
 -- Save and exit
 keymap("n", "<C-d>", ":wq<cr>", opts)
 -- Exit without saving
-keymap("n", "<leader>tb", ":q!<cr>", opts)
+keymap("n", "<C-f>", ":q!<cr>", opts)
 
 -- Better window navigation
 keymap("n", "<C-h>", "<C-w>h", opts)
