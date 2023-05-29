@@ -6,15 +6,48 @@ return {
 			require('Comment').setup()
 		end
 	},
-	-- Move stuff with <M-j> and <M-k> in both normal and visual mode
+	-- image previewer in ascii
 	{
-		"echasnovski/mini.move",
+		"samodostal/image.nvim",
+		event = "VeryLazy",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"m00qek/baleia.nvim",
+		},
 		config = function()
-			require("mini.move").setup()
-		end,
+			require('image').setup ({
+				render = {
+					min_padding = 5,
+					show_label = true,
+					use_dither = true,
+					foreground_color = true,
+					background_color = true
+				},
+				events = {
+					update_on_nvim_resize = true,
+				},
+			})
+		end
 	},
 	{
+		'sudormrfbin/cheatsheet.nvim',
+		event = "VeryLazy",
+		dependencies = {
+			'nvim-telescope/telescope.nvim',
+			'nvim-lua/popup.nvim',
+			'nvim-lua/plenary.nvim',
+		},
+		config = function()
+			require("cheatsheet").setup()
+
+			local map = require("keys").map
+			map("n", "<leader>sc", "<cmd>Cheatsheet<cr>", "󰞋 Cheatsheet")
+		end
+	},
+	-- show colors
+	{
 		"norcalli/nvim-colorizer.lua",
+		event = "VeryLazy",
 		config = function()
 			require("colorizer").setup()
 		end
@@ -22,6 +55,7 @@ return {
 	-- Better glance at matched information
 	{
 		"kevinhwang91/nvim-hlslens",
+		event = "VeryLazy",
 		config = function()
 			-- ctrl + forward slash to stop searching
 			local map = require("keys").map
@@ -34,13 +68,6 @@ return {
 		config = function()
 			require("nvim-autopairs").setup()
 		end,
-	},
-	"tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
-	"tpope/vim-surround", -- Surround stuff with the ys-, cs-, ds- commands
-	{
-		"ellisonleao/glow.nvim",
-		config = true,
-		cmd = "Glow"
 	},
 	"lukas-reineke/indent-blankline.nvim", -- ident lines
 	"famiu/bufdelete.nvim", -- better buffer closing
@@ -56,10 +83,13 @@ return {
 						update_root = true
 					},
 			})
+
+			require('telescope').load_extension('projects')
 		end
 	},
 	{
 		"echasnovski/mini.nvim",
+		event = "VeryLazy",
 		version = '*',
 		config = function()
 			local map = require('mini.map')

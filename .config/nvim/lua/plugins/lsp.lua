@@ -1,9 +1,8 @@
 -- LSP for nvim
 return {
 	{
-		"neovim/nvim-lspconfig",
-		dependencies = {
-			"williamboman/mason.nvim",
+        "neovim/nvim-lspconfig",
+        dependencies = { "williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
 			"j-hui/fidget.nvim",
 			"folke/neodev.nvim",
@@ -61,10 +60,10 @@ return {
 			local on_attach = function(client, bufnr)
 			local lsp_map = require("keys").lsp_map
 
-				lsp_map("<leader>lr", vim.lsp.buf.rename, bufnr, "Rename symbol")
-				lsp_map("<leader>la", vim.lsp.buf.code_action, bufnr, "Code action")
-				lsp_map("<leader>ld", vim.lsp.buf.type_definition, bufnr, "Type definition")
-				lsp_map("<leader>ls", require("telescope.builtin").lsp_document_symbols, bufnr, "Document symbols")
+				lsp_map("<leader>lr", vim.lsp.buf.rename, bufnr, "󰑕 Rename symbol")
+				lsp_map("<leader>la", vim.lsp.buf.code_action, bufnr, " Code action")
+				lsp_map("<leader>ld", vim.lsp.buf.type_definition, bufnr, "󰡱 Type definition")
+				lsp_map("<leader>ls", require("telescope.builtin").lsp_document_symbols, bufnr, " Document symbols")
 
 				lsp_map("gd", vim.lsp.buf.definition, bufnr, "Goto Definition")
 				lsp_map("gr", require("telescope.builtin").lsp_references, bufnr, "Goto References")
@@ -177,5 +176,15 @@ return {
 				},
 			})
 		end,
-	}
+	},
+    -- Neovim setup for init.lua and plugin development with full signature help,
+    -- docs and completion for the nvim lua API.
+    {
+        "folke/neodev.nvim",
+		config = function()
+            require("neodev").setup({
+                library = { plugins = { "nvim-dap-ui" }, types = true },
+            })
+		end,
+    }
 }

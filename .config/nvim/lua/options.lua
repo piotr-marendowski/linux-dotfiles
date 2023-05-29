@@ -76,9 +76,9 @@ keymap("n", "<S-x>", ":Bdelete<cr>", opts)
 -- Write file by Ctrl + S
 keymap("n", "<C-s>", ":w<cr>", opts)
 -- Save and exit
-keymap("n", "<C-d>", ":wq<cr>", opts)
+keymap("n", "<C-d>", "<cmd>NvimTreeClose | wq<cr>", opts)
 -- Exit without saving
-keymap("n", "<C-f>", ":q!<cr>", opts)
+keymap("n", "<C-f>", "<cmd>NvimTreeClose | q!<cr>", opts)
 
 -- Better window navigation
 keymap("n", "<C-h>", "<C-w>h", opts)

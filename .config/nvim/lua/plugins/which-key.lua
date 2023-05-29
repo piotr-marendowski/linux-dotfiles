@@ -31,13 +31,22 @@ return {
 				{
 					["<leader>"] = {
 						b = {
-							name = " Debugging",
+							name = " Debugging",
 							a = { "<cmd>TroubleToggle<cr>", " Toggle Trouble" },
-							b = { "<cmd>TroubleRefresh<cr>", " Refresh Trouble" },
 						},
 						g = { name = " Git" },
 						l = { name = " LSP" },
-						s = { name = " Search" },
+						s = {
+                            name = " Search",
+                            b = {
+                                name = " Debugging",
+                                b = { "<cmd>Telescope dap list_breakpoints<cr>", " Breakpoints"},
+                                c = { "<cmd>Telescope dap commands<cr>", " Commands"},
+                                f = { "<cmd>Telescope dap variables<cr>", " Frames"},
+                                v = { "<cmd>Telescope dap frames<cr>", "󰫧 Variables"},
+                                s = { "<cmd>Telescope dap configurations<cr>", " Settings"},
+                            }
+                        },
 						o = {
 							name = "󰮰 Other actions",
 							l = { "<cmd>Lazy<cr>", "󱒋 Lazy" },

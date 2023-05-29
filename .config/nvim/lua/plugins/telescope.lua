@@ -33,7 +33,7 @@ return {
 					winblend = 10,
 					previewer = false,
 				}))
-			end, " Search in current buffer")
+			end, " Search in buffer")
 
 			map("n", "<leader>sf", require("telescope.builtin").find_files, " Files")
 			map("n", "<leader>sh", require("telescope.builtin").help_tags, "󰋖 Help")
