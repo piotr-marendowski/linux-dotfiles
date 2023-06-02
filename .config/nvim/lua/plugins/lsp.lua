@@ -1,8 +1,9 @@
 -- LSP for nvim
 return {
 	{
-        "neovim/nvim-lspconfig",
-        dependencies = { "williamboman/mason.nvim",
+		"neovim/nvim-lspconfig",
+		dependencies = {
+			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
 			"j-hui/fidget.nvim",
 			"folke/neodev.nvim",
@@ -58,12 +59,12 @@ return {
 
 			-- This function gets run when an LSP connects to a particular buffer.
 			local on_attach = function(client, bufnr)
-			local lsp_map = require("keys").lsp_map
+				local lsp_map = require("keys").lsp_map
 
-				lsp_map("<leader>lr", vim.lsp.buf.rename, bufnr, "󰑕 Rename symbol")
-				lsp_map("<leader>la", vim.lsp.buf.code_action, bufnr, " Code action")
-				lsp_map("<leader>ld", vim.lsp.buf.type_definition, bufnr, "󰡱 Type definition")
-				lsp_map("<leader>ls", require("telescope.builtin").lsp_document_symbols, bufnr, " Document symbols")
+				lsp_map("<leader>cc", vim.lsp.buf.rename, bufnr, "󰑕 Rename symbol")
+				lsp_map("<leader>ca", vim.lsp.buf.code_action, bufnr, " Code action")
+				lsp_map("<leader>cd", vim.lsp.buf.type_definition, bufnr, "󰡱 Type definition")
+				lsp_map("<leader>cs", require("telescope.builtin").lsp_document_symbols, bufnr, " Document symbols")
 
 				lsp_map("gd", vim.lsp.buf.definition, bufnr, "Goto Definition")
 				lsp_map("gr", require("telescope.builtin").lsp_references, bufnr, "Goto References")
@@ -72,11 +73,11 @@ return {
 				lsp_map("gD", vim.lsp.buf.declaration, bufnr, "Goto Declaration")
 
 				-- Create a command `:Format` local to the LSP buffer
-				vim.api.nvim_buf_create_user_command(bufnr, "Format", function(_)
+				--[[ vim.api.nvim_buf_create_user_command(bufnr, "Format", function(_)
 					vim.lsp.buf.format()
 				end, { desc = "Format current buffer with LSP" })
 
-				lsp_map("<leader>of", "<cmd>Format<cr>", bufnr, " Format")
+				lsp_map("<leader>of", "<cmd>Format<cr>", bufnr, " Format") ]]
 
 				-- Attach and configure vim-illuminate
 				require("illuminate").on_attach(client)
@@ -139,15 +140,13 @@ return {
 			})
 
 			local function setup_lsp_diags()
-			  vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-				vim.lsp.diagnostic.on_publish_diagnostics,
-				{
-				  virtual_text = true,
-				  signs = true,
-				  update_in_insert = false,
-				  underline = true,
-				}
-			  )
+				vim.lsp.handlers["textDocument/publishDiagnostics"] =
+					vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+						virtual_text = true,
+						signs = true,
+						update_in_insert = false,
+						underline = true,
+					})
 			end
 
 			setup_lsp_diags()
@@ -177,14 +176,14 @@ return {
 			})
 		end,
 	},
-    -- Neovim setup for init.lua and plugin development with full signature help,
-    -- docs and completion for the nvim lua API.
-    {
-        "folke/neodev.nvim",
+	-- Neovim setup for init.lua and plugin development with full signature help,
+	-- docs and completion for the nvim lua API.
+	{
+		"folke/neodev.nvim",
 		config = function()
-            require("neodev").setup({
-                library = { plugins = { "nvim-dap-ui" }, types = true },
-            })
+			require("neodev").setup({
+				library = { plugins = { "nvim-dap-ui" }, types = true },
+			})
 		end,
-    }
+	},
 }

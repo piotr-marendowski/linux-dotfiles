@@ -10,7 +10,7 @@ return {
 				layout = {
 					height = { min = 1, max = 100 },
 					width = { min = 3, max = 50 },
-					spacing = 3, -- spacing between columns
+                    spacing = 3, -- spacing between columns
 					align = "right", -- align columns left, center or right
 				},
 				icons = {
@@ -30,12 +30,14 @@ return {
 			wk.register(
 				{
 					["<leader>"] = {
+                        c = {
+                            name = " Code actions"
+                        },
 						b = {
 							name = " Debugging",
 							a = { "<cmd>TroubleToggle<cr>", " Toggle Trouble" },
 						},
 						g = { name = " Git" },
-						l = { name = " LSP" },
 						s = {
                             name = " Search",
                             b = {

@@ -1,12 +1,21 @@
 return {
 	-- Comments
 	{
-		'numToStr/Comment.nvim',
+		"numToStr/Comment.nvim",
+		event = "VeryLazy",
 		config = function()
-			require('Comment').setup()
-		end
+			require("Comment").setup()
+		end,
+	}, -- Code formatter just in case
+	{
+		"sbdchd/neoformat",
+		event = "VeryLazy",
+		config = function()
+			local map = require("keys").map
+			map("n", "<leader>cf", "<cmd>Neoformat<cr>", " Format")
+		end,
 	},
-	-- image previewer in ascii
+	-- Image previewer in ascii
 	{
 		"samodostal/image.nvim",
 		event = "VeryLazy",
@@ -15,34 +24,35 @@ return {
 			"m00qek/baleia.nvim",
 		},
 		config = function()
-			require('image').setup ({
+			require("image").setup({
 				render = {
 					min_padding = 5,
 					show_label = true,
 					use_dither = true,
 					foreground_color = true,
-					background_color = true
+					background_color = true,
 				},
 				events = {
 					update_on_nvim_resize = true,
 				},
 			})
-		end
+		end,
 	},
+	-- Cheatsheet
 	{
-		'sudormrfbin/cheatsheet.nvim',
+		"sudormrfbin/cheatsheet.nvim",
 		event = "VeryLazy",
 		dependencies = {
-			'nvim-telescope/telescope.nvim',
-			'nvim-lua/popup.nvim',
-			'nvim-lua/plenary.nvim',
+			"nvim-telescope/telescope.nvim",
+			"nvim-lua/popup.nvim",
+			"nvim-lua/plenary.nvim",
 		},
 		config = function()
 			require("cheatsheet").setup()
 
 			local map = require("keys").map
 			map("n", "<leader>sc", "<cmd>Cheatsheet<cr>", "󰞋 Cheatsheet")
-		end
+		end,
 	},
 	-- show colors
 	{
@@ -50,9 +60,10 @@ return {
 		event = "VeryLazy",
 		config = function()
 			require("colorizer").setup()
-		end
+		end,
 	},
 	-- Better glance at matched information
+    -- Ctrl + / => disable searching
 	{
 		"kevinhwang91/nvim-hlslens",
 		event = "VeryLazy",
@@ -60,7 +71,7 @@ return {
 			-- ctrl + forward slash to stop searching
 			local map = require("keys").map
 			map("n", "<C-_>", "<cmd>nohlsearch<cr>", " Stop matching")
-		end
+		end,
 	},
 	-- Auto autopairs
 	{
@@ -75,68 +86,47 @@ return {
 	{
 		"ahmedkhalf/project.nvim",
 		config = function()
-			require("project_nvim").setup ({
+			require("project_nvim").setup({
 				sync_root_with_cwd = true,
-					respect_buf_cwd = true,
-					update_focused_file = {
-						enable = true,
-						update_root = true
-					},
+				respect_buf_cwd = true,
+				update_focused_file = {
+					enable = true,
+					update_root = true,
+				},
 			})
 
-			require('telescope').load_extension('projects')
-		end
+			require("telescope").load_extension("projects")
+		end,
 	},
+	-- minimap
 	{
-		"echasnovski/mini.nvim",
-		event = "VeryLazy",
-		version = '*',
+		"gorbit99/codewindow.nvim",
 		config = function()
-			local map = require('mini.map')
+			local codewindow = require("codewindow")
+			-- use tokyonight colors
+			local colors = require("tokyonight.colors").setup()
 
-			require('mini.map').setup({
-				components = {
-					minimap = true,
-				},
-				minimap = {
-					auto_start = true,
-					width = 10,
-					highlight_group = 'MiniMap',
-				},
-				symbols = {
-					-- Scrollbar parts for view and line.
-					-- Use empty string to disable any.
-					scroll_line = '',
-					scroll_view = '',
-				},
-				window = {
-					winblend = 100,
-					-- Don't need extra column
-					show_integration_count = true,
-				},
-				integrations = {
-					map.gen_integration.builtin_search(),
-					map.gen_integration.gitsigns(),
-					map.gen_integration.diagnostic(),
-				},
+			codewindow.setup({
+				auto_enable = true, -- autostart on every buffer opening
+				window_border = "", -- no border
+				exclude_filetypes = { "NvimTree", "alpha" },
+				minimap_width = 10,
 			})
+			codewindow.apply_default_keybinds()
 
-			require("keys").map(
-				{ "n", "v" },
-				"<leader>oi",
-				function() require('mini.map').toggle() end,
-				" Minimap (toggle)"
-			)
+			-- make minimap greyier
+			vim.api.nvim_set_hl(0, "CodewindowBackground", { fg = colors.dark3 })
+			vim.api.nvim_set_hl(0, "CodewindowUnderline", { fg = colors.fg })
 
-			require("keys").map(
-				{ "n", "v" }, "<leader>oo",
-				function()
-					require('mini.map').open()
-					vim.wait(100)
-					require('mini.map').toggle_focus()
-				end,
-				" Minimap (focus)"
-			)
+			-- Toggle minimap
+			require("keys").map({ "n", "v" }, "<leader>oi", function()
+				codewindow.toggle_minimap()
+			end, " Minimap (toggle)")
+
+			-- Toggle minimap and auto focus on it
+			require("keys").map({ "n", "v" }, "<leader>oo", function()
+				codewindow.toggle_focus()
+			end, " Minimap (focus)")
 		end,
 	},
 	-- scrollbar
@@ -149,7 +139,7 @@ return {
 
 			require("scrollbar").setup({
 				handle = {
-					color = "#32344a",
+					color = colors.terminal_black ,
 					blend = 0,
 				},
 				marks = {
@@ -177,11 +167,39 @@ return {
 						color = colors.error,
 					},
 				},
-			    excluded_filetypes = {
+				excluded_filetypes = {
 					"NvimTree",
 					"alpha",
 				},
 			})
+		end,
+	},
+	-- smooth scrolling
+	{
+		"declancm/cinnamon.nvim",
+		config = function()
+			require("cinnamon").setup({
+				extra_keymaps = true,
+				override_keymaps = true,
+				max_length = 500,
+				scroll_limit = -1,
+			})
+
+			-- J/K + Ctrl => normal scroll,
+			-- Half-window movements:
+			vim.keymap.set({ "n", "x" }, "<C-k>", "<Cmd>lua Scroll('<C-u>', 1, 1)<CR>")
+			vim.keymap.set({ "n", "x" }, "<C-j>", "<Cmd>lua Scroll('<C-d>', 1, 1)<CR>")
+
+			-- First unmap these
+			local map = require("keys").map
+			map("n", "<C-f>", "<Nop>", "")
+			map("n", "<C-d>", "<Nop>", "")
+
+			-- Then assign them (and works, I'm so smart I know)
+			-- Save and exit
+			map("n", "<C-d>", "<cmd>NvimTreeClose | wq<cr>", "")
+			-- Exit without saving
+			map("n", "<C-f>", "<cmd>NvimTreeClose | q!<cr>", "")
 		end,
 	},
 }
