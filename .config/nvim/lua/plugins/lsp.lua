@@ -22,7 +22,7 @@ return {
 			})
 
 			-- Quick access via keymap
-			require("keys").map("n", "<leader>om", "<cmd>Mason<cr>", "󰕲 Mason")
+			require("keys").map("n", "<leader>os", "<cmd>Mason<cr>", "󰏗 Mason")
 
 			-- Neodev setup before LSP config
 			require("neodev").setup()
@@ -61,7 +61,7 @@ return {
 			local on_attach = function(client, bufnr)
 				local lsp_map = require("keys").lsp_map
 
-				lsp_map("<leader>cc", vim.lsp.buf.rename, bufnr, "󰑕 Rename symbol")
+				-- lsp_map("<leader>cc", vim.lsp.buf.rename, bufnr, "󰑕 Rename symbol")
 				lsp_map("<leader>ca", vim.lsp.buf.code_action, bufnr, " Code action")
 				lsp_map("<leader>cd", vim.lsp.buf.type_definition, bufnr, "󰡱 Type definition")
 				lsp_map("<leader>cs", require("telescope.builtin").lsp_document_symbols, bufnr, " Document symbols")

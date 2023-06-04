@@ -2,7 +2,7 @@
 return {
 	{
 		"folke/which-key.nvim",
-        event = "VeryLazy",
+		event = "VeryLazy",
 		config = function()
 			local wk = require("which-key")
 
@@ -10,7 +10,7 @@ return {
 				layout = {
 					height = { min = 1, max = 100 },
 					width = { min = 3, max = 50 },
-                    spacing = 3, -- spacing between columns
+					spacing = 3, -- spacing between columns
 					align = "right", -- align columns left, center or right
 				},
 				icons = {
@@ -27,36 +27,34 @@ return {
 				},
 			})
 			-- most of the options have keybindings in their respecting files, some don't have them and are here
-			wk.register(
-				{
-					["<leader>"] = {
-                        c = {
-                            name = " Code actions"
-                        },
+			wk.register({
+				["<leader>"] = {
+					c = {
+						name = " Code actions",
+					},
+					b = {
+						name = " Debugging",
+						a = { "<cmd>TroubleToggle<cr>", " Toggle Trouble" },
+					},
+					g = { name = " Git" },
+					s = {
+						name = " Search",
 						b = {
-							name = " Debugging",
-							a = { "<cmd>TroubleToggle<cr>", " Toggle Trouble" },
-						},
-						g = { name = " Git" },
-						s = {
-                            name = " Search",
-                            b = {
-                                name = " Debugging",
-                                b = { "<cmd>Telescope dap list_breakpoints<cr>", " Breakpoints"},
-                                c = { "<cmd>Telescope dap commands<cr>", " Commands"},
-                                f = { "<cmd>Telescope dap variables<cr>", " Frames"},
-                                v = { "<cmd>Telescope dap frames<cr>", "󰫧 Variables"},
-                                s = { "<cmd>Telescope dap configurations<cr>", " Settings"},
-                            }
-                        },
-						o = {
-							name = "󰮰 Other actions",
-							l = { "<cmd>Lazy<cr>", "󱒋 Lazy" },
-							a = { "<cmd>NvimTreeClose | Alpha<cr>", " Alpha" },
+							name = " Debugging",
+							b = { "<cmd>Telescope dap list_breakpoints<cr>", " Breakpoints" },
+							c = { "<cmd>Telescope dap commands<cr>", " Commands" },
+							f = { "<cmd>Telescope dap variables<cr>", " Frames" },
+							v = { "<cmd>Telescope dap frames<cr>", "󰫧 Variables" },
+							s = { "<cmd>Telescope dap configurations<cr>", " Settings" },
 						},
 					},
-				}
-			)
-		end
-	}
+					o = {
+						name = "󰮰 Other actions",
+						l = { "<cmd>Lazy<cr>", "󱒋 Lazy" },
+						a = { "<cmd>NvimTreeClose | Alpha<cr>", " Alpha" },
+					},
+				},
+			})
+		end,
+	},
 }

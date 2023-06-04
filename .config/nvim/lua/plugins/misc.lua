@@ -38,23 +38,7 @@ return {
 			})
 		end,
 	},
-	-- Cheatsheet
-	{
-		"sudormrfbin/cheatsheet.nvim",
-		event = "VeryLazy",
-		dependencies = {
-			"nvim-telescope/telescope.nvim",
-			"nvim-lua/popup.nvim",
-			"nvim-lua/plenary.nvim",
-		},
-		config = function()
-			require("cheatsheet").setup()
-
-			local map = require("keys").map
-			map("n", "<leader>sc", "<cmd>Cheatsheet<cr>", "󰞋 Cheatsheet")
-		end,
-	},
-	-- show colors
+	-- Show colors
 	{
 		"norcalli/nvim-colorizer.lua",
 		event = "VeryLazy",
@@ -63,17 +47,17 @@ return {
 		end,
 	},
 	-- Better glance at matched information
-    -- Ctrl + / => disable searching
+	-- Ctrl + / => stop searching
 	{
 		"kevinhwang91/nvim-hlslens",
 		event = "VeryLazy",
 		config = function()
-			-- ctrl + forward slash to stop searching
+			require("hlslens").setup()
 			local map = require("keys").map
 			map("n", "<C-_>", "<cmd>nohlsearch<cr>", " Stop matching")
 		end,
 	},
-	-- Auto autopairs
+	-- Autopairs
 	{
 		"windwp/nvim-autopairs",
 		config = function()
@@ -98,82 +82,6 @@ return {
 			require("telescope").load_extension("projects")
 		end,
 	},
-	-- minimap
-	{
-		"gorbit99/codewindow.nvim",
-		config = function()
-			local codewindow = require("codewindow")
-			-- use tokyonight colors
-			local colors = require("tokyonight.colors").setup()
-
-			codewindow.setup({
-				auto_enable = true, -- autostart on every buffer opening
-				window_border = "", -- no border
-				exclude_filetypes = { "NvimTree", "alpha" },
-				minimap_width = 10,
-			})
-			codewindow.apply_default_keybinds()
-
-			-- make minimap greyier
-			vim.api.nvim_set_hl(0, "CodewindowBackground", { fg = colors.dark3 })
-			vim.api.nvim_set_hl(0, "CodewindowUnderline", { fg = colors.fg })
-
-			-- Toggle minimap
-			require("keys").map({ "n", "v" }, "<leader>oi", function()
-				codewindow.toggle_minimap()
-			end, " Minimap (toggle)")
-
-			-- Toggle minimap and auto focus on it
-			require("keys").map({ "n", "v" }, "<leader>oo", function()
-				codewindow.toggle_focus()
-			end, " Minimap (focus)")
-		end,
-	},
-	-- scrollbar
-	{
-		"petertriho/nvim-scrollbar",
-		config = function()
-			-- use tokyonight colors
-			local colors = require("tokyonight.colors").setup()
-			require("scrollbar.handlers.gitsigns").setup() -- enable gitsigns
-
-			require("scrollbar").setup({
-				handle = {
-					color = colors.terminal_black ,
-					blend = 0,
-				},
-				marks = {
-					-- don't display dot
-					Cursor = {
-						text = "",
-					},
-
-					Error = { color = colors.error },
-					Warn = { color = colors.warning },
-					Info = { color = colors.info },
-					Hint = { color = colors.hint },
-					Misc = { color = colors.purple },
-
-					GitAdd = {
-						text = { "-", "=" },
-						color = colors.green,
-					},
-					GitChange = {
-						text = { "-", "=" },
-						color = colors.orange,
-					},
-					GitDelete = {
-						text = { "-", "=" },
-						color = colors.error,
-					},
-				},
-				excluded_filetypes = {
-					"NvimTree",
-					"alpha",
-				},
-			})
-		end,
-	},
 	-- smooth scrolling
 	{
 		"declancm/cinnamon.nvim",
@@ -185,10 +93,10 @@ return {
 				scroll_limit = -1,
 			})
 
-			-- J/K + Ctrl => normal scroll,
+			-- Alt + J/K => normal scroll,
 			-- Half-window movements:
-			vim.keymap.set({ "n", "x" }, "<C-k>", "<Cmd>lua Scroll('<C-u>', 1, 1)<CR>")
-			vim.keymap.set({ "n", "x" }, "<C-j>", "<Cmd>lua Scroll('<C-d>', 1, 1)<CR>")
+            vim.keymap.set({ "n", "x" }, "<A-k>", "<Cmd>lua Scroll('<C-u>', 1, 1)<CR>")
+            vim.keymap.set({ "n", "x" }, "<A-j>", "<Cmd>lua Scroll('<C-d>', 1, 1)<CR>")
 
 			-- First unmap these
 			local map = require("keys").map
@@ -202,4 +110,74 @@ return {
 			map("n", "<C-f>", "<cmd>NvimTreeClose | q!<cr>", "")
 		end,
 	},
+	-- Autosave
+	{
+		"Pocco81/auto-save.nvim",
+		config = function()
+			require("auto-save").setup({
+                -- don't show the message every auto-save
+				execution_message = {
+					message = "",
+				},
+			})
+		end,
+	},
+	-- Zen mode
+	{
+		"folke/zen-mode.nvim",
+		event = "VeryLazy",
+		dependencies = {
+			"folke/twilight.nvim",
+			config = function()
+				local map = require("keys").map
+				map("n", "<leader>ct", "<cmd>Twilight<cr>", " Twilight ")
+			end,
+		},
+		opts = {},
+		config = function()
+			local map = require("keys").map
+			map("n", "<leader>cz", "<cmd>ZenMode<cr>", "󰰶 ZenMode ")
+		end,
+	},
+	-- Automatically open files at the place of the last edit
+	{
+		"ethanholz/nvim-lastplace",
+		config = function()
+			require("nvim-lastplace").setup()
+		end,
+	},
+    -- Rename symbol
+	{
+		"filipdutescu/renamer.nvim",
+		event = "VeryLazy",
+		branch = "master",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		config = function()
+			require("renamer").setup({
+				-- The minimum width of the popup
+				min_width = 30,
+				-- The maximum width of the popup
+				max_width = 50,
+				border_chars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
+			})
+
+			local map = require("keys").map
+			map("n", "<leader>cc", function()
+				require("renamer").rename()
+			end, "󰑕 Rename symbol")
+		end,
+	},
+    -- Markdown preview
+    {
+        "iamcco/markdown-preview.nvim",
+		event = "VeryLazy",
+        build = function() vim.fn["mkdp#util#install"]() end,
+        opts = {
+            mkdp_auto_start = 1
+        },
+		config = function()
+			local map = require("keys").map
+			map("n", "<leader>op", "<cmd>MarkdownPreview<cr>", " Markdown preview")
+        end
+    },
 }

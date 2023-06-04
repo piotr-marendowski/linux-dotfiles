@@ -17,6 +17,7 @@ return {
 							["<C-d>"] = false,
 						},
 					},
+                    borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
 				},
 			})
 
@@ -41,6 +42,22 @@ return {
 			map("n", "<leader>sd", require("telescope.builtin").diagnostics, " Diagnostics")
 
 			map("n", "<C-p>", require("telescope.builtin").keymaps, "󰌌 Search keymaps")
+		end,
+	},
+	-- Keybindings
+	{
+		"sudormrfbin/cheatsheet.nvim",
+		event = "VeryLazy",
+		dependencies = {
+			"nvim-telescope/telescope.nvim",
+			"nvim-lua/popup.nvim",
+			"nvim-lua/plenary.nvim",
+		},
+		config = function()
+			require("cheatsheet").setup()
+
+			local map = require("keys").map
+			map("n", "<leader>sk", "<cmd>Cheatsheet<cr>", "󰞋 Keybindings")
 		end,
 	},
 }

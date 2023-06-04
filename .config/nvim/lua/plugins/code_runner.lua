@@ -32,7 +32,7 @@ return {
 
 			local map = require("keys").map
 			map("n", "<leader>cr", "<cmd>RunCode<cr>", " Run code")
-			map("n", "<leader>ce", "<cmd>RunCode c89<cr>", " Run code (c89)")
+			map("n", "<leader>ce", "<cmd>RunCode c89<cr>", " Run code (C89)")
 
 			-- Run code and specify which one preset to use
 			function RunCodePrompt()

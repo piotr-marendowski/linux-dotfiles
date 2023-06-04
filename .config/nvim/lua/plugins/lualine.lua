@@ -5,7 +5,7 @@ return {
 		require("lualine").setup({
 			options = {
 				disabled_filetypes = { "NvimTree", "alpha" },
-				theme = 'tokyonight',
+				theme = "tokyonight",
 				icons_enabled = true,
 				component_separators = { left = "", right = "" },
 				section_separators = { left = "", right = "" },
@@ -13,8 +13,8 @@ return {
 			},
 			sections = {
 				lualine_c = {},
-				lualine_x = {'filetype'},
-			}
+				lualine_x = { "filetype" },
+			},
 		})
 	end,
 }

@@ -66,7 +66,7 @@ return {
 			map("n", "<leader>sp", ":Telescope projects <CR>", "󰱓 Find project")
 			map("n", "<leader>su", ":Telescope oldfiles <CR>", "󰄉 Recent files")
 			-- map("n", "<leader>at", ":Telescope live_grep <CR>", "󰊄 Find text")
-			map("n", "<leader>oc", ":e ~/.config/nvim/init.lua <CR>", " Configuration")
+			map("n", "<leader>oi", ":e ~/.config/nvim/init.lua <CR>", " init.lua")
 
 			dashboard.section.header.opts.hl = "Include"
 			dashboard.section.buttons.opts.hl = "Keyword"
