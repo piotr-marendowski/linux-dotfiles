@@ -33,10 +33,10 @@ return {
 				-- you can enable a preset for easier configuration
 				presets = {
 					-- bottom_search = true, -- use a classic bottom cmdline for search
-					command_palette = true, -- position the cmdline and popupmenu together
-					long_message_to_split = true, -- long messages will be sent to a split
+					-- command_palette = true, -- position the cmdline and popupmenu together
+					-- long_message_to_split = true, -- long messages will be sent to a split
 					-- inc_rename = true, -- enables an input dialog for inc-rename.nvim
-					lsp_doc_border = true, -- add a border to hover docs and signature help
+					-- lsp_doc_border = true, -- add a border to hover docs and signature help
 				},
                 messages = {
                     enabled = false,
@@ -45,7 +45,7 @@ return {
 					cmdline_popup = {
 						cmdline_popup = {
 							border = {
-								style = "none",
+								style = "single",
 								padding = { 2, 3 },
 							},
 							filter_options = {},
@@ -65,7 +65,7 @@ return {
 							height = 10,
 						},
 						border = {
-							style = "rounded",
+							style = "single",
 							padding = { 0, 1 },
 						},
 						win_options = {

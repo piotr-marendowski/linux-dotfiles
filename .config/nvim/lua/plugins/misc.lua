@@ -95,8 +95,8 @@ return {
 
 			-- Alt + J/K => normal scroll,
 			-- Half-window movements:
-            vim.keymap.set({ "n", "x" }, "<A-k>", "<Cmd>lua Scroll('<C-u>', 1, 1)<CR>")
-            vim.keymap.set({ "n", "x" }, "<A-j>", "<Cmd>lua Scroll('<C-d>', 1, 1)<CR>")
+			vim.keymap.set({ "n", "x" }, "<A-k>", "<Cmd>lua Scroll('<C-u>', 1, 1)<CR>")
+			vim.keymap.set({ "n", "x" }, "<A-j>", "<Cmd>lua Scroll('<C-d>', 1, 1)<CR>")
 
 			-- First unmap these
 			local map = require("keys").map
@@ -115,7 +115,7 @@ return {
 		"Pocco81/auto-save.nvim",
 		config = function()
 			require("auto-save").setup({
-                -- don't show the message every auto-save
+				-- don't show the message every auto-save
 				execution_message = {
 					message = "",
 				},
@@ -130,13 +130,13 @@ return {
 			"folke/twilight.nvim",
 			config = function()
 				local map = require("keys").map
-				map("n", "<leader>ct", "<cmd>Twilight<cr>", " Twilight ")
+				map("n", "<leader>ot", "<cmd>Twilight<cr>", " Twilight ")
 			end,
 		},
 		opts = {},
 		config = function()
 			local map = require("keys").map
-			map("n", "<leader>cz", "<cmd>ZenMode<cr>", "󰰶 ZenMode ")
+			map("n", "<leader>oz", "<cmd>ZenMode<cr>", "󰰶 ZenMode ")
 		end,
 	},
 	-- Automatically open files at the place of the last edit
@@ -146,7 +146,7 @@ return {
 			require("nvim-lastplace").setup()
 		end,
 	},
-    -- Rename symbol
+	-- Rename symbol
 	{
 		"filipdutescu/renamer.nvim",
 		event = "VeryLazy",
@@ -167,17 +167,24 @@ return {
 			end, "󰑕 Rename symbol")
 		end,
 	},
-    -- Markdown preview
-    {
-        "iamcco/markdown-preview.nvim",
+	-- Markdown preview
+	{
+		"iamcco/markdown-preview.nvim",
 		event = "VeryLazy",
-        build = function() vim.fn["mkdp#util#install"]() end,
-        opts = {
-            mkdp_auto_start = 1
-        },
+		build = function()
+			vim.fn["mkdp#util#install"]()
+		end,
+		opts = {
+			mkdp_auto_start = 1,
+		},
 		config = function()
 			local map = require("keys").map
 			map("n", "<leader>op", "<cmd>MarkdownPreview<cr>", " Markdown preview")
-        end
-    },
+		end,
+	},
+	-- Overrides the delete operations to actually just delete and not affect the current yank
+	{
+		"gbprod/cutlass.nvim",
+		opts = {},
+	},
 }

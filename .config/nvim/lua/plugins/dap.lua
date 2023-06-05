@@ -1,25 +1,38 @@
 return {
-    {
-        "folke/trouble.nvim",
-        dependencies = { "nvim-tree/nvim-web-devicons" },
-        config = function()
-            require("trouble").setup()
-        end,
-    },
-    {
-        "mfussenegger/nvim-dap",
+	{
+		"folke/trouble.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		config = function()
+			require("trouble").setup()
+		end,
+	},
+	{
+		"mfussenegger/nvim-dap",
 		event = "VeryLazy",
-        dependencies = { "Microsoft/vscode-cpptools" },
-        config = function()
-            local dap = require("dap")
+		dependencies = { "Microsoft/vscode-cpptools" },
+		config = function()
+			local dap = require("dap")
 
-            -- set keybindings
-			require("keys").map({ "n", "v" }, "<leader>bb", function() dap.toggle_breakpoint() end, " Breakpoint")
-			require("keys").map({ "n", "v" }, "<leader>bc", function() dap.continue() end, " Continue")
-			require("keys").map({ "n", "v" }, "<leader>bo", function() dap.step_over() end, " Step over")
-			require("keys").map({ "n", "v" }, "<leader>bi", function() dap.step_into() end, " Step into")
+            -- customize icons
+            vim.fn.sign_define('DapBreakpoint', {text='', texthl='', linehl='', numhl=''})
+            vim.fn.sign_define('DapBreakpointRejected', {text='', texthl='', linehl='', numhl=''})
 
-            -- configure C/C++ for debugging
+			-- set keybindings
+			require("keys").map({ "n", "v" }, "<leader>bb", function()
+				dap.toggle_breakpoint()
+			end, " Breakpoint")
+			require("keys").map({ "n", "v" }, "<leader>bc", function()
+				dap.continue()
+			end, " Continue")
+			require("keys").map({ "n", "v" }, "<leader>bo", function()
+				dap.step_over()
+			end, " Step over")
+			require("keys").map({ "n", "v" }, "<leader>bi", function()
+				dap.step_into()
+			end, " Step into")
+
+			-- configure C/C++ for debugging
+            -- USE -G OPTION IN GCC/G++ IN ORDER TO GET DEBUGGING!!
             dap.adapters.cppdbg = {
               id = 'cppdbg',
               type = 'executable',
@@ -50,54 +63,56 @@ return {
               },
             }
 
-            dap.configurations.c = dap.configurations.cpp
-            dap.configurations.rust = dap.configurations.cpp
-        end,
-    },
-    {
-        "rcarriga/nvim-dap-ui",
+			dap.configurations.c = dap.configurations.cpp
+			dap.configurations.rust = dap.configurations.cpp
+		end,
+	},
+	{
+		"rcarriga/nvim-dap-ui",
 		event = "VeryLazy",
-        dependencies = {
-            "mfussenegger/nvim-dap",
-            "nvim-telescope/telescope.nvim",
-            "nvim-treesitter/nvim-treesitter",
-        },
-        config = function()
-            local dapui = require("dapui")
-            dapui.setup()
+		dependencies = {
+			"mfussenegger/nvim-dap",
+			"nvim-telescope/telescope.nvim",
+			"nvim-treesitter/nvim-treesitter",
+		},
+		config = function()
+			local dapui = require("dapui")
+			dapui.setup()
 
-			require("keys").map({ "n", "v" }, "<leader>bd", function() dapui.toggle() end, " Debugging window")
+			require("keys").map({ "n", "v" }, "<leader>bd", function()
+				dapui.toggle()
+			end, " Debugging window")
 
-            -- use nvim-dap events to open and close the windows automatically
-            local dap, dapui = require("dap"), require("dapui")
-            dap.listeners.after.event_initialized["dapui_config"] = function()
-                dapui.open()
-            end
-            dap.listeners.before.event_terminated["dapui_config"] = function()
-                dapui.close()
-            end
-            dap.listeners.before.event_exited["dapui_config"] = function()
-                dapui.close()
-            end
-        end,
-    },
-    {
-        "theHamsta/nvim-dap-virtual-text",
+			-- use nvim-dap events to open and close the windows automatically
+			local dap, dapui = require("dap"), require("dapui")
+			dap.listeners.after.event_initialized["dapui_config"] = function()
+				dapui.open()
+			end
+			dap.listeners.before.event_terminated["dapui_config"] = function()
+				dapui.close()
+			end
+			dap.listeners.before.event_exited["dapui_config"] = function()
+				dapui.close()
+			end
+		end,
+	},
+	{
+		"theHamsta/nvim-dap-virtual-text",
 		event = "VeryLazy",
-        config = function()
-            require('nvim-dap-virtual-text').setup()
-        end,
-    },
-    {
-        "nvim-telescope/telescope-dap.nvim",
+		config = function()
+			require("nvim-dap-virtual-text").setup()
+		end,
+	},
+	{
+		"nvim-telescope/telescope-dap.nvim",
 		event = "VeryLazy",
-        dependencies = {
-            "nvim-telescope/telescope.nvim",
-            "nvim-treesitter/nvim-treesitter",
-        },
-        config = function()
-            require('telescope').load_extension('dap')
-        end,
-    },
-    'ldelossa/nvim-dap-projects',
+		dependencies = {
+			"nvim-telescope/telescope.nvim",
+			"nvim-treesitter/nvim-treesitter",
+		},
+		config = function()
+			require("telescope").load_extension("dap")
+		end,
+	},
+	"ldelossa/nvim-dap-projects",
 }

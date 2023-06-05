@@ -17,6 +17,7 @@ return {
 				ensure_installed = {
 					"lua_ls",
 					"pylsp",
+					"clangd",
 				},
 				automatic_installation = true,
 			})
@@ -49,7 +50,7 @@ return {
 				float = {
 					focusable = true,
 					style = "minimal",
-					border = "rounded",
+					border = "single",
 					source = "always",
 					header = "",
 					prefix = "",
