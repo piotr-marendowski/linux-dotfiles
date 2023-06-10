@@ -220,7 +220,7 @@ Do you want to do it now?" 10 80
 
 ## Function with dependencies to all of the programs
 dependencies() {
-	dependencies_list=(wget curl ripgrep python-pip meson ninja neovim)
+	dependencies_list=(wget curl ripgrep python-pip meson ninja neovim lazygit)
 
 	mkdir -p ~/Downloads
 	
@@ -266,8 +266,8 @@ necessary() {
 	CHOICE=$(
 		whiptail --title "Programs" --cancel-button "Exit" --notags --menu \
 		"\nCore and optional programs." 12 60 3 \
-    "1" "Set 1 (necessary)" \
-    "2" "Set 2 (everything)" \
+        "1" "Set 1 (necessary)" \
+        "2" "Set 2 (everything)" \
 		"3" "Select programs manually" 3>&2 2>&1 1>&3
 	)
 
@@ -276,7 +276,7 @@ necessary() {
 			programs+=( "alacritty" "rofi" "firefox" "htop" "nemo" "polkit" "gnome-polkit" "ark" "zip" "unzip" "tar" )
 			;;
 		"2")   
-			programs+=( "alacritty" "rofi" "flameshot" "gimp" "firefox" "htop" "nemo" "discord-canary" "spotify" "polkit" "gnome-polkit" "ark" "zip" "unzip" "tar" )
+			programs+=( "alacritty" "rofi" "flameshot" "gimp" "firefox" "htop" "nemo" "discord-canary" "spotify" "polkit" "gnome-polkit" "ark" "zip" "unzip" "tar" "vieb-bin" "ncdu" "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" )
 			;;
 		"3")   
       CHOICES=$(
@@ -297,7 +297,13 @@ necessary() {
         "zip"			  "zip" OFF \
         "unzip"			  "unzip" OFF \
         "tar"			  "tar" OFF \
-        "ark" 		          "ark" OFF 3>&1 1>&2 2>&3
+        "ark" 		          "ark" OFF \
+        "vieb-bin" 		      "vieb-bin" OFF \
+        "ncdu" 		          "ncdu" OFF \
+        "mtpfs (android)" 		      "mtpfs" OFF \
+        "jmtpfs (android)" 		      "jmtpfs" OFF \
+        "gvfs-mtp (android)" 		      "gvfs-mtp" OFF \
+        "gvfs-gphoto2 (android)" 		  "gvfs-gphoto2" OFF 3>&1 1>&2 2>&3
       )
 
 			# add selected programs to the array
