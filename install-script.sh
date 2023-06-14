@@ -620,7 +620,7 @@ menu() {
 	CHOICE=$(
 		whiptail --title "Menu" --cancel-button "Exit" --notags --menu \
 		"\nIn order to install selected programs choose the Install option after selecting them \
-(the Full Installation option does this automatically at the end of the process)." 23 60 12 \
+(the Full Installation option does this automatically at the end of the process)." 24 60 12 \
 		"1" "Full Installation (recommended)"  \
 		"2" "System Programs"  \
 		"3" "GUI"  \
@@ -631,7 +631,7 @@ menu() {
 		"8" "Configure Dotfiles"  \
 		"9" "Add Programs That Are Not Listed"  \
 		"10" "Print All Selected Programs"  \
-    "11" "Unselect Program(s)" \
+        "11" "Unselect Program(s)" \
 		"12" "Install Selected Programs" 3>&2 2>&1 1>&3
 	)
 
@@ -690,15 +690,15 @@ menu() {
 			menu
 			;;
 		# "11")   
-    #   unselect_programs
+        #   unselect_programs
 		# 	menu
 		# 	;;
 		"12")   
 			dependencies
 			install "${programs[@]}"
-      if [ "$is_full_installation" = false ]; then
-        menu
-      fi
+            if [ "$is_full_installation" = false ]; then
+                menu
+            fi
 			reboot
 			;;
 	esac
