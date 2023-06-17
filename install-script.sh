@@ -717,7 +717,6 @@ menu() {
 }
 
 ### PROGRAM EXECUTION
-mkdir -p ~/.config
 sudo pacman --noconfirm -Syu
 
 # Description
