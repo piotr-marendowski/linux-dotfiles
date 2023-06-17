@@ -5,7 +5,7 @@
 <img src="/assets/whiptail1.png"  width="60%">
 <img src="/assets/whiptail2.png"  width="60%">
 
-## Installation
+## Installation for preconfigured machines
 Installation only requires git to clone this repository and rename it do `.dotfiles`.
 ```
 git clone https://github.com/piotr-marendowski/dotfiles.git
@@ -28,4 +28,4 @@ mv dotfiles .dotfiles
 - [Flameshot (screenshots)](https://flameshot.org/)
 - [Pulseaudio (sound)](https://www.freedesktop.org/wiki/Software/PulseAudio/)
 - [or Pipewire (sound)](https://pipewire.org)
-- [Neovim (code)](https://neovim.io/)\nLatest commit: 81c4521 Update README
+- [Neovim (code)](https://neovim.io/)

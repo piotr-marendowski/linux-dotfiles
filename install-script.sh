@@ -568,9 +568,6 @@ install() {
 		for program in "${@}"; do
 			paru -S --noconfirm "$program"
 		done
-		  
-		whiptail --title "Info" --infobox "Installation successful.\
-		Do you want to do it now?" 9 80
 	fi
 
 	menu
@@ -579,7 +576,7 @@ install() {
 reboot() {
 	whiptail --title "Warming" --yesno "It is recommended to reboot system after configuration.\
 Do you want to do it now?" 8 80
-	
+
 	if [ $? -eq 0 ]; then
 		sudo reboot
 	fi
@@ -611,7 +608,7 @@ unselect_programs() {
     done
 
     # Display the whiptail menu and let the user choose elements to delete
-    whiptail --title "Delete Programs" --checklist "Select programs to delete:" 20 60 5 "$(printf '%s\n' "${programs[@]}")" 3>&1 1>&2 2>&3
+    whiptail --title "Delete Programs" --checklist "Select programs to delete" 20 60 5 "$(printf '%s\n' "${programs[@]}")" 3>&1 1>&2 2>&3
 
     # Loop through the selected programs and remove them from the array
     for program in ${selected[@]}; do
@@ -649,7 +646,7 @@ menu() {
 
 	case $CHOICE in
 		"1")   
-      is_full_installation=true
+            is_full_installation=true
 			dependencies
 			utilities
 			gui
@@ -657,7 +654,8 @@ menu() {
 			sound
 			gaming
 			virtualization
-            whiptail --title "Warming" --yesno "Do you want to unselect program(s)?" 8 80
+            # choose to unselect programs
+            whiptail --title "Warming" --yesno "Do you want to unselect programs?" 8 80
             if [ $? -eq 0 ]; then
                 unselect_programs
             fi
