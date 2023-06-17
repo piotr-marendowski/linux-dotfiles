@@ -48,43 +48,43 @@ configured machines, it is advised to run this ONLY on newly set up machines. Do
     # Alacritty
     if command -v alacritty -h &> /dev/null
     then
-      mkdir -p ~/.config/alacritty
-      cp /usr/share/doc/alacritty/example/alacritty.yml ~/.config/alacritty/alacritty.yml
+        mkdir -p ~/.config/alacritty
+        cp /usr/share/doc/alacritty/example/alacritty.yml ~/.config/alacritty/alacritty.yml
     fi
 
     # Dunst
     if command -v dunst -h &> /dev/null
     then
-      mkdir -p ~/.config/dunst
-      cp /etc/dunst/dunstrc ~/.config/dunst/dunstrc
+        mkdir -p ~/.config/dunst
+        cp /etc/dunst/dunstrc ~/.config/dunst/dunstrc
     fi
 
     # Rofi
     if command -v rofi -h &> /dev/null
     then
-      mkdir -p ~/.config/rofi
-      rofi -dump-config > ~/.config/rofi/config.rasi
-      cp $dir/rofi/simple-tokyonight.rasi ~/.config/rofi/simple-tokyonight.rasi
+        mkdir -p ~/.config/rofi
+        rofi -dump-config > ~/.config/rofi/config.rasi
+        cp $dir/rofi/simple-tokyonight.rasi ~/.config/rofi/simple-tokyonight.rasi
     fi
 
     # Firefox - install hardened profile, which will need to be changed manually!
     if command -v firefox -h &> /dev/null
     then
-      local profile_name=profile1
-      firefox -CreateProfile "$profile_name" && firefox -P "$profile_name" -no-remote
-      cd ~/.mozilla/firefox/*$profile_name*/
-      cp $dir/firefox/prefs.js /prefs.js
+        local profile_name=profile1
+        firefox -CreateProfile "$profile_name" && firefox -P "$profile_name" -no-remote
+        cd ~/.mozilla/firefox/*$profile_name*/
+        cp $dir/firefox/prefs.js /prefs.js
     fi
 
     # Xorg
     if command -v X -version &> /dev/null
     then
-      echo "Configuring Xorg server and adding Qtile as default window manager..."
-      cp /etc/X11/xinit/xinitrc ~/.xinitrc && echo "(1/4)"
-      head -n -5 .xinitrc > .xinitrc-temp && mv .xinitrc-temp .xinitrc && echo "(2/4)"
-      echo exec qtile start >> ~/.xinitrc && echo "(3/4)"
-      rm ~/.xinitrc-new && echo "(4/4)"
-      echo "done"
+        echo "Configuring Xorg server and adding Qtile as default window manager..."
+        cp /etc/X11/xinit/xinitrc ~/.xinitrc && echo "(1/4)"
+        head -n -5 .xinitrc > .xinitrc-temp && mv .xinitrc-temp .xinitrc && echo "(2/4)"
+        echo exec qtile start >> ~/.xinitrc && echo "(3/4)"
+        rm ~/.xinitrc-new && echo "(4/4)"
+        echo "done"
     fi
     
     pip install dbus-next
@@ -95,38 +95,39 @@ configured machines, it is advised to run this ONLY on newly set up machines. Do
 
     if command -v nitrogen -h &> /dev/null
     then
-      echo "Setting wallpaper..."
-      nitrogen --set-auto $dir/assets/wallpaper.jpg
-      echo "done"
+        echo "Setting wallpaper..."
+        nitrogen --set-auto $dir/assets/wallpaper.jpg
+        echo "done"
     fi
 
     # make dotfiles
     echo "Searching $dir directory..."
     # search for folders (and not hidden files)
     for i in ${folders[@]}; do
-      :
+        :
     done
     # search for all hidden files (even something like '.' and '..')
     for i in ${files[@]}; do
-      :
+        :
     done
     # exclude some files and directories from files array
     for char in "${exclude[@]}"; do
-      for i in "${!files[@]}"; do
-        if [[ ${files[i]} = $char ]]; then
-          unset 'files[i]'
-        fi
-      done
+        for i in "${!files[@]}"; do
+            if [[ ${files[i]} = $char ]]; then
+                unset 'files[i]'
+            fi
+        done
     done
 
     # exclude not-dotfolders/not-dotfiles
     for del in ${exclude_files[@]}
     do
-      folders=("${folders[@]/$del}") 		# Quotes when working with strings
+        folders=("${folders[@]/$del}") 		# Quotes when working with strings
     done
+
     for del in ${exclude_files[@]}
     do
-      files=("${files[@]/$del}") 			# Quotes when working with strings
+        files=("${files[@]/$del}") 			# Quotes when working with strings
     done
     echo "done"
 
@@ -149,15 +150,15 @@ configured machines, it is advised to run this ONLY on newly set up machines. Do
     echo "DON'T PANIC IF THERE ARE ERRORS!"
     # folders/normal files
     for file in ${folders[@]}; do
-      mv ~/$file $olddir
-      echo "Moving $file to homedir..."
-      cp -rf $dir/$file ~/$file
+        mv ~/$file $olddir
+        echo "Moving $file to homedir..."
+        cp -rf $dir/$file ~/$file
     done
     # hidden files
     for file in ${files[@]}; do
-      mv ~/$file $olddir
-      echo "Moving $file to homedir..."
-      cp -rf $dir/$file ~/$file
+        mv ~/$file $olddir
+        echo "Moving $file to homedir..."
+        cp -rf $dir/$file ~/$file
     done
     echo "done"
 
@@ -168,23 +169,23 @@ configured machines, it is advised to run this ONLY on newly set up machines. Do
     pacman -Q ly | grep -q "^ly" && sudo systemctl enable ly && echo "Ly installed."
     # if sddm is installed - customize it
     if pacman -Q sddm | grep -q "^sddm"; then
-      sudo systemctl enable sddm
-      echo "Sddm installed."
-      sudo cp /usr/lib/sddm/sddm.conf.d/default.conf /etc/sddm.conf
+        sudo systemctl enable sddm
+        echo "Sddm installed."
+        sudo cp /usr/lib/sddm/sddm.conf.d/default.conf /etc/sddm.conf
 
-      # install theme
-      git clone https://github.com/rototrash/tokyo-night-sddm.git ~/tokyo-night-sddm
-      mkdir ~/.local/share/themes
-      cp -r ~/tokyo-night-sddm ~/.local/share/themes/
+        # install theme
+        git clone https://github.com/rototrash/tokyo-night-sddm.git ~/tokyo-night-sddm
+        mkdir ~/.local/share/themes
+        cp -r ~/tokyo-night-sddm ~/.local/share/themes/
 
-      # edit /etc/sddm.conf
-      # read the contents of line 31 into a variable
-      line31=$(sed -n '31p' /etc/sddm.conf)
-      # check if the contents of line 31 match
-      if [[ "$line31" == *"[Theme]"* ]]; then
-        # if the pattern is matched, replace the line 33 with a theme name
-        sed -i '33s/.*/Current=tokyo-night-sddm/' /etc/sddm.conf
-      fi
+        # edit /etc/sddm.conf
+        # read the contents of line 31 into a variable
+        line31=$(sed -n '31p' /etc/sddm.conf)
+        # check if the contents of line 31 match
+        if [[ "$line31" == *"[Theme]"* ]]; then
+            # if the pattern is matched, replace the line 33 with a theme name
+            sed -i '33s/.*/Current=tokyo-night-sddm/' /etc/sddm.conf
+        fi
     fi
 
     # start gamemode
@@ -192,30 +193,30 @@ configured machines, it is advised to run this ONLY on newly set up machines. Do
 
     # virtualization
     if [ "$is_virtualization" = true ]; then
-      whiptail --title "VIRTUALIZATION: Warming" --yesno "You need to ensure that these are set to: \
+
+        whiptail --title "VIRTUALIZATION: Warming" --yesno "You need to ensure that these are set to: \
 unix_sock_group = \"libvirt\", unix_sock_ro_perms = \"0777\", and unix_sock_rw_perms = \"0770\". \
 Do you want to do it now?" 10 80
-      
-      if [ $? -eq 0 ]; then
-        sudo nvim /etc/libvirt/libvirtd.conf
-      fi
+        if [ $? -eq 0 ]; then
+            sudo nvim /etc/libvirt/libvirtd.conf
+        fi
 
-      if systemctl status libvirtd; then
-        sudo groupadd libvirt
-        local user_name=$(whoami)
-        sudo usermod -aG libvirt $user_name
-        sudo systemctl enable libvirtd
-        sudo systemctl restart libvirtd
-      else
-        echo "libvirt is not installed"
-      fi
-    else
-        echo "Virtualization is not configured right now."
-    fi
+        if systemctl status libvirtd; then
+            sudo groupadd libvirt
+            local user_name=$(whoami)
+            sudo usermod -aG libvirt $user_name
+            sudo systemctl enable libvirtd
+            sudo systemctl restart libvirtd
+        else
+            echo "libvirt is not installed"
+        fi
+        else
+            echo "Virtualization is not configured right now."
+        fi
     
-  else
-    menu
-  fi
+    else
+        menu
+    fi
 }
 
 ## Function with dependencies to all of the programs
@@ -241,18 +242,18 @@ dependencies() {
 	# add them to the programs array
 	programs+=( "${dependencies_list[@]}" )
 
-  # check if machine has an nvidia card
-  # Check if lspci is installed
-  if ! command -v lspci &> /dev/null; then
-    paru -S --noconfirm lspci
-  fi
+    # check if machine has an nvidia card
+    # Check if lspci is installed
+    if ! command -v lspci &> /dev/null; then
+        paru -S --noconfirm lspci
+    fi
 
-  # Use lspci to check for NVIDIA graphics card
-  if lspci | grep -i NVIDIA &> /dev/null; then
-    programs+=( nvidia-dkms nvidia-utils )
-  else
-    echo "NVIDIA graphics card not found."
-  fi
+      # Use lspci to check for NVIDIA graphics card
+    if lspci | grep -i NVIDIA &> /dev/null; then
+        programs+=( nvidia-dkms nvidia-utils )
+    else
+        echo "NVIDIA graphics card not found."
+    fi
 
 	echo "${programs[@]}"
 }
@@ -279,32 +280,32 @@ utilities() {
 			programs+=( "alacritty" "rofi" "flameshot" "gimp" "firefox" "htop" "nemo" "discord-canary" "spotify" "polkit" "gnome-polkit" "ark" "zip" "unzip" "tar" "vieb-bin" "ncdu" "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" )
 			;;
 		"3")   
-      CHOICES=$(
-        whiptail --title "Programs" --separate-output --checklist --notags \
-        "\nCore and optional programs." 18 60 10 \
-        "alacritty"      	        "alacritty" OFF \
-        "rofi" 				        "rofi"  OFF \
-        "dunst" 			        "dunst" OFF \
-        "flameshot" 			    "flameshot" OFF \
-        "gimp" 				        "gimp" OFF \
-        "firefox" 			        "firefox" OFF \
-        "htop" 				        "htop" OFF \
-        "discord-canary" 		    "discord-canary" OFF \
-        "spotify" 				    "spotify" OFF \
-        "nemo" 				        "nemo" OFF \
-        "polkit" 				    "polkit" OFF \
-        "gnome-polkit" 		        "gnome-polkit" OFF \
-        "zip"			            "zip" OFF \
-        "unzip"			            "unzip" OFF \
-        "tar"			            "tar" OFF \
-        "ark" 		                "ark" OFF \
-        "vieb-bin" 		            "vieb-bin" OFF \
-        "ncdu" 		                "ncdu" OFF \
-        "mtpfs (android)" 		    "mtpfs" OFF \
-        "jmtpfs (android)" 		    "jmtpfs" OFF \
-        "gvfs-mtp (android)" 		"gvfs-mtp" OFF \
-        "gvfs-gphoto2 (android)"    "gvfs-gphoto2" OFF 3>&1 1>&2 2>&3
-      )
+            CHOICES=$(
+                whiptail --title "Programs" --separate-output --checklist --notags \
+                "\nCore and optional programs." 18 60 10 \
+                "alacritty"      	        "alacritty" OFF \
+                "rofi" 				        "rofi"  OFF \
+                "dunst" 			        "dunst" OFF \
+                "flameshot" 			    "flameshot" OFF \
+                "gimp" 				        "gimp" OFF \
+                "firefox" 			        "firefox" OFF \
+                "htop" 				        "htop" OFF \
+                "discord-canary" 		    "discord-canary" OFF \
+                "spotify" 				    "spotify" OFF \
+                "nemo" 				        "nemo" OFF \
+                "polkit" 				    "polkit" OFF \
+                "gnome-polkit" 		        "gnome-polkit" OFF \
+                "zip"			            "zip" OFF \
+                "unzip"			            "unzip" OFF \
+                "tar"			            "tar" OFF \
+                "ark" 		                "ark" OFF \
+                "vieb-bin" 		            "vieb-bin" OFF \
+                "ncdu" 		                "ncdu" OFF \
+                "mtpfs (android)" 		    "mtpfs" OFF \
+                "jmtpfs (android)" 		    "jmtpfs" OFF \
+                "gvfs-mtp (android)" 		"gvfs-mtp" OFF \
+                "gvfs-gphoto2 (android)"    "gvfs-gphoto2" OFF 3>&1 1>&2 2>&3
+            )
 
 			# add selected programs to the array
 			for CHOICE in $CHOICES; do
@@ -375,25 +376,25 @@ gui() {
 			programs+=( "xorg" "xorg-xinit" )
 			;;
 		"3")   
-      CHOICES=$(
-        whiptail --title "GUI" --separate-output --checklist --notags \
-        $'\nThe best GUI is the one you don\'t notice.' 17 60 9 \
-        "xorg"      		    "xorg" OFF \
-        "xorg-xinit" 		    "xorg-xinit" OFF \
-        "playerctl" 		    "playerctl" OFF \
-        "qtile-git" 		    "qtile-git" OFF \
-        "qtile-extras-git" 	    "qtile-extras-git" OFF \
-        "sddm" 				    "sddm" OFF \
-        "ly" 				    "ly" OFF \
-        "qt" 				    "qt (group)" OFF \
-        "gsimplecal" 		    "gsimplecal" OFF 3>&1 1>&2 2>&3
-      )
+            CHOICES=$(
+                whiptail --title "GUI" --separate-output --checklist --notags \
+                $'\nThe best GUI is the one you don\'t notice.' 17 60 9 \
+                "xorg"      		    "xorg" OFF \
+                "xorg-xinit" 		    "xorg-xinit" OFF \
+                "playerctl" 		    "playerctl" OFF \
+                "qtile-git" 		    "qtile-git" OFF \
+                "qtile-extras-git" 	    "qtile-extras-git" OFF \
+                "sddm" 				    "sddm" OFF \
+                "ly" 				    "ly" OFF \
+                "qt" 				    "qt (group)" OFF \
+                "gsimplecal" 		    "gsimplecal" OFF 3>&1 1>&2 2>&3
+            )
 
-      # add selected programs to the array
-      for CHOICE in $CHOICES; do
-        programs+=($CHOICE)
-      done
-  esac
+            # add selected programs to the array
+            for CHOICE in $CHOICES; do
+                programs+=($CHOICE)
+            done
+    esac
 
 	echo "${programs[@]}"
 }
@@ -412,22 +413,22 @@ look_and_feel() {
 			programs+=( "lxappearance" "nitrogen" "redshift" "nerd-fonts-meta" "papirus-icon-theme" "picom-jonaburg-git" )
 			;;
 		"2")   
-      CHOICES=$(
-        whiptail --title "Look and feel" --separate-output --checklist --notags \
-        '\nLife is too short for ugly design.' 14 60 6 \
-        "lxappearance"     		    "lxappearance" OFF \
-        "nitrogen"     			    "nitrogen" OFF \
-        "redshift"     			    "redshitf" OFF \
-        "nerd-fonts-meta"     	    "nerd-fonts-meta" OFF \
-        "papirus-icon-theme"	    "papirus-icon-theme" OFF \
-        "picom-jonaburg-git" 	    "picom-jonaburg-git" OFF 3>&1 1>&2 2>&3
-      )
+            CHOICES=$(
+                whiptail --title "Look and feel" --separate-output --checklist --notags \
+                '\nLife is too short for ugly design.' 14 60 6 \
+                "lxappearance"     		    "lxappearance" OFF \
+                "nitrogen"     			    "nitrogen" OFF \
+                "redshift"     			    "redshitf" OFF \
+                "nerd-fonts-meta"     	    "nerd-fonts-meta" OFF \
+                "papirus-icon-theme"	    "papirus-icon-theme" OFF \
+                "picom-jonaburg-git" 	    "picom-jonaburg-git" OFF 3>&1 1>&2 2>&3
+            )
 
-      # add selected programs to the array
-      for CHOICE in $CHOICES; do
-        programs+=($CHOICE)
-      done
-  esac
+            # add selected programs to the array
+            for CHOICE in $CHOICES; do
+                programs+=($CHOICE)
+            done
+    esac
 
 	echo "${programs[@]}"
 }
@@ -453,57 +454,57 @@ gaming, first you need to enable multilib in pacman.conf in order to install 32 
 			programs+=( "steam" "lutris" "wine-staging" "nvidia-utils" "nvidia-settings" "nvidia-settings" "vulkan-icd-loader" "dxvk-bin" "opencl-nvidia" "libvdpau" "libxnvctrl" "lib32-nvidia-utils" "lib32-opencl-nvidia" "lib32-vulkan-icd-loader" "proton-ge-custom-bin" "mangohud-git" "goverlay-bin" "gwe" "protonup-qt-bin" "gamemode" )
 			;;
 		"2")   
-      CHOICES=$(
-        whiptail --title "Gaming" --separate-output --checklist --notags \
-        "\nThe game is never over, unless you stop playing." 18 60 10 \
-        "steam"      				    "steam" OFF \
-        "lutris"      				    "lutris" OFF \
-        "wine-staging"      		    "wine-staging" OFF \
-        "nvidia"      				    "nvidia" OFF \
-        "nvidia-dkms" 				    "nvidia-dkms" OFF \
-        "nvidia-utils" 				    "nvidia-utils" OFF \
-        "nvidia-settings" 			    "nvidia-settings" OFF \
-        "vulkan-icd-loader" 		    "vulkan-icd-loader" OFF \
-        "dxvk-bin" 		                "dxvk-bin" OFF \
-        "opencl-nvidia" 		        "opencl-nvidia" OFF \
-        "libvdpau" 		                "libvdpau" OFF \
-        "libxnvctrl" 		            "libxnvctrl" OFF \
-        "lib32-nvidia-utils" 		    "lib32-nvidia-utils" OFF \
-        "lib32-opencl-nvidia" 		    "lib32-opencl-nvidia" OFF \
-        "lib32-vulkan-icd-loader"       "lib32-vulkan-icd-loader" OFF \
-        "proton-ge-custom-bin" 			"proton-ge-custom-bin" OFF \
-        "mangohud-git" 				    "mangohud-git" OFF \
-        "goverlay-bin" 				    "goverlay-bin" OFF \
-        "protonup-qt-bin" 		        "protonup-qt-bin" OFF \
-        "gamemode" 		                "gamemode" OFF \
-        "gwe" 						    "GreenWithEnvy" OFF 3>&1 1>&2 2>&3
-      )
+            CHOICES=$(
+                whiptail --title "Gaming" --separate-output --checklist --notags \
+                "\nThe game is never over, unless you stop playing." 18 60 10 \
+                "steam"      				    "steam" OFF \
+                "lutris"      				    "lutris" OFF \
+                "wine-staging"      		    "wine-staging" OFF \
+                "nvidia"      				    "nvidia" OFF \
+                "nvidia-dkms" 				    "nvidia-dkms" OFF \
+                "nvidia-utils" 				    "nvidia-utils" OFF \
+                "nvidia-settings" 			    "nvidia-settings" OFF \
+                "vulkan-icd-loader" 		    "vulkan-icd-loader" OFF \
+                "dxvk-bin" 		                "dxvk-bin" OFF \
+                "opencl-nvidia" 		        "opencl-nvidia" OFF \
+                "libvdpau" 		                "libvdpau" OFF \
+                "libxnvctrl" 		            "libxnvctrl" OFF \
+                "lib32-nvidia-utils" 		    "lib32-nvidia-utils" OFF \
+                "lib32-opencl-nvidia" 		    "lib32-opencl-nvidia" OFF \
+                "lib32-vulkan-icd-loader"       "lib32-vulkan-icd-loader" OFF \
+                "proton-ge-custom-bin" 			"proton-ge-custom-bin" OFF \
+                "mangohud-git" 				    "mangohud-git" OFF \
+                "goverlay-bin" 				    "goverlay-bin" OFF \
+                "protonup-qt-bin" 		        "protonup-qt-bin" OFF \
+                "gamemode" 		                "gamemode" OFF \
+                "gwe" 						    "GreenWithEnvy" OFF 3>&1 1>&2 2>&3
+            )
 
-      # add selected programs to the array
-      for CHOICE in $CHOICES; do
-        programs+=($CHOICE)
-        if [ "$CHOICE" == "gwe" ] ; then
-          echo "Installing GreenWithEnvy"
-          cd ~/Downloads
-          git clone --recurse-submodules -j4 https://gitlab.com/leinardi/gwe.git
-          cd gwe
-          git checkout release
-          sudo -H pip3 install -r requirements.txt
-          meson . build --prefix /usr
-          ninja -v -C build
-          sudo ninja -v -C build install
-          echo "done"
-          fi
-      done
-			;;
-	esac
+            # add selected programs to the array
+            for CHOICE in $CHOICES; do
+                programs+=($CHOICE)
+                if [ "$CHOICE" == "gwe" ] ; then
+                    echo "Installing GreenWithEnvy"
+                    cd ~/Downloads
+                    git clone --recurse-submodules -j4 https://gitlab.com/leinardi/gwe.git
+                    cd gwe
+                    git checkout release
+                    sudo -H pip3 install -r requirements.txt
+                    meson . build --prefix /usr
+                    ninja -v -C build
+                    sudo ninja -v -C build install
+                    echo "done"
+                fi
+            done
+            ;;
+        esac
 
-	echo "${programs[@]}"
-}
+        echo "${programs[@]}"
+    }
 
-virtualization() {
-	CHOICE=$(
-		whiptail --title "Virtualization" --cancel-button "Exit" --notags --menu \
+    virtualization() {
+        CHOICE=$(
+            whiptail --title "Virtualization" --cancel-button "Exit" --notags --menu \
 		"\nVirtualization allows you to do more with less." 11 60 2 \
 		"1" "Install and configure virtualization" \
 		"2" "Select programs manually" 3>&2 2>&1 1>&3
@@ -512,23 +513,23 @@ virtualization() {
 	case $CHOICE in
 		"1")   
 			programs+=( "qemu" "libvirt" "virt-manager" "virt-viewer" "dnsmasq" "vde2" "bridge-utils" "openbsd-netcat" "libguestfs" )
-      is_virtualization=true
+            is_virtualization=true
 			;;
 		"2")   
-      CHOICES=$(
-        whiptail --title "Virtualization" --separate-output --checklist --notags  \
-        '\nVirtualization allows you to do more with less.' 17 60 9  \
-        "qemu"      		    "qemu" OFF  \
-        "libvirt"      		    "libvirt" OFF  \
-        "virt-manager" 		    "virt-manager" OFF  \
-        "virt-viewer" 		    "virt-viewer" OFF  \
-        "dnsmasq" 			    "dnsmasq" OFF  \
-        "vde2" 				    "vde2" OFF  \
-        "bridge-utils" 		    "bridge-utils" OFF  \
-        "openbsd-netcat" 	    "openbsd-netcat" OFF  \
-        "libguestfs" 		    "libguestfs" OFF 3>&1 1>&2 2>&3
-      )
-      is_virtualization=true
+            CHOICES=$(
+                whiptail --title "Virtualization" --separate-output --checklist --notags  \
+                '\nVirtualization allows you to do more with less.' 17 60 9  \
+                "qemu"      		    "qemu" OFF  \
+                "libvirt"      		    "libvirt" OFF  \
+                "virt-manager" 		    "virt-manager" OFF  \
+                "virt-viewer" 		    "virt-viewer" OFF  \
+                "dnsmasq" 			    "dnsmasq" OFF  \
+                "vde2" 				    "vde2" OFF  \
+                "bridge-utils" 		    "bridge-utils" OFF  \
+                "openbsd-netcat" 	    "openbsd-netcat" OFF  \
+                "libguestfs" 		    "libguestfs" OFF 3>&1 1>&2 2>&3
+            )
+            is_virtualization=true
 
 			# add selected programs to the array
 			for CHOICE in $CHOICES; do
@@ -543,7 +544,7 @@ virtualization() {
 			;;
 	esac
 
-	    echo "${programs[@]}"
+	echo "${programs[@]}"
     echo $is_virtualization
 }
 
@@ -588,11 +589,11 @@ add_manually() {
 	while true; do
 	    program=$(whiptail --inputbox "Enter one program at the time:" 8 80 --title "Program Input" 3>&1 1>&2 2>&3)
 	    if [ $? = 0 ]; then
-		# Add the program name to the programs array
-		programs+=("$program")
-	    else
-		# Exit the loop if the user cancels the input
-		break
+            # Add the program name to the programs array
+            programs+=("$program")
+            else
+            # Exit the loop if the user cancels the input
+            break
 	    fi
 	done
 
