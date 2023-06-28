@@ -7,6 +7,7 @@
 
 ## Installation for preconfigured machines
 Installation only requires git to clone this repository and rename it do `.dotfiles`.
+
 ```
 git clone https://github.com/piotr-marendowski/dotfiles.git
 mv dotfiles .dotfiles
