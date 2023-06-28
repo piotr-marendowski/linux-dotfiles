@@ -16,10 +16,7 @@ nitrogen --restore &    # wallpaper
 redshift -P -O 3500 &   # night light
 picom --backend glx &
 firefox &
-alacritty -e lvim &
+alacritty -e nvim &
 discord-screenaudio &
-nuclear --no-sandbox &
-easyeffects &
-tutanota-desktop &
+MellowPlayer &          # spotify
 flameshot &             # screenshots
-pulseaudio --start &

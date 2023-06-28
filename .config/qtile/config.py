@@ -131,7 +131,7 @@ groups = [
      ), layout.Max()],
      matches=[Match(wm_class = "discord-screenaudio"),
               Match(wm_class = "easyeffects"),
-              Match(wm_class = "nuclear"),
+              Match(wm_class = "MellowPlayer"),
               Match(wm_class = "Spotify")]),
     Group("3", label = "3"),
     Group("4", label = "4"),
@@ -160,10 +160,10 @@ layouts = [
     ),
     # In order to change aspects of floating windows in other layouts,
     # see floating_layout at the Advanced section at the bottom
-    layout.floating.Floating(
-        border_focus = colors["red"],
-        border_normal = colors["base"],
-    ),
+    # layout.floating.Floating(
+    #     border_focus = colors["red"],
+    #     border_normal = colors["base"],
+    # ),
 ]
 
 

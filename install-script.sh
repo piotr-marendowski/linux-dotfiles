@@ -274,10 +274,10 @@ utilities() {
 
 	case $CHOICE in
 		"1")   
-			programs+=( "alacritty" "rofi" "firefox" "htop" "nemo" "polkit" "gnome-polkit" "ark" "zip" "unzip" "tar" )
+			programs+=( "alacritty" "rofi" "firefox" "htop" "nemo" "polkit" "gnome-polkit" "zip" "unzip" "tar" )
 			;;
 		"2")   
-			programs+=( "alacritty" "rofi" "flameshot" "gimp" "firefox" "htop" "nemo" "discord-canary" "spotify" "polkit" "gnome-polkit" "ark" "zip" "unzip" "tar" "vieb-bin" "ncdu" "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" )
+			programs+=( "alacritty" "rofi" "flameshot" "gimp" "firefox" "htop" "nemo" "discord-canary" "spotify" "polkit" "gnome-polkit" "ark" "zip" "unzip" "tar" "ncdu" "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" "libreoffice-fresh" "ttf-ms-fonts" )
 			;;
 		"3")   
             CHOICES=$(
@@ -301,6 +301,8 @@ utilities() {
                 "ark" 		                "ark" OFF \
                 "vieb-bin" 		            "vieb-bin" OFF \
                 "ncdu" 		                "ncdu" OFF \
+                "libreoffice-fresh" 		"libreoffice-fresh" OFF \
+                "ttf-ms-fonts" 		        "ttf-ms-fonts" OFF \
                 "mtpfs (android)" 		    "mtpfs" OFF \
                 "jmtpfs (android)" 		    "jmtpfs" OFF \
                 "gvfs-mtp (android)" 		"gvfs-mtp" OFF \
