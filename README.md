@@ -23,7 +23,7 @@ mv dotfiles .dotfiles
 - [SDDM (session manager)](https://github.com/sddm/sddm)
 - [or Ly (session manager)](https://github.com/fairyglade/ly)
 - [Alacritty (terminal emulator)](https://alacritty.org/)
-- [Rofi (program launcher)](https://github.com/davatorium/rofi)
+- [Dmenu](https://tools.suckless.org/dmenu/)
 - [Dunst (notifications)](https://dunst-project.org/)
 - [Htop (system monitor)](https://htop.dev/)
 - [Flameshot (screenshots)](https://flameshot.org/)
