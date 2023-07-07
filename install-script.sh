@@ -67,15 +67,6 @@ configured machines, it is advised to run this ONLY on newly set up machines. Do
         cp $dir/rofi/simple-tokyonight.rasi ~/.config/rofi/simple-tokyonight.rasi
     fi
 
-    # Firefox - install hardened profile, which will need to be changed manually!
-    if command -v firefox -h &> /dev/null
-    then
-        local profile_name=profile1
-        firefox -CreateProfile "$profile_name" && firefox -P "$profile_name" -no-remote
-        cd ~/.mozilla/firefox/*$profile_name*/
-        cp $dir/firefox/prefs.js /prefs.js
-    fi
-
     # Xorg
     if command -v X -version &> /dev/null
     then
@@ -657,7 +648,7 @@ menu() {
 			gaming
 			virtualization
             # choose to unselect programs
-            whiptail --title "Warming" --yesno "Do you want to unselect programs?" 8 80
+            whiptail --title "Warming" --yesno "Do you want to unselect programs?" 8 50
             if [ $? -eq 0 ]; then
                 unselect_programs
             fi
