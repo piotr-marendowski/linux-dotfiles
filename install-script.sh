@@ -227,7 +227,7 @@ dependencies() {
 # newline character (\n) is for better placement
 # don't know if it will be different on other monitors, but in mine it displays all equally
 # third argument in dimensions = number of options
-install_programs() {
+add_programs() {
     # core
 	programs+=( "vieb" "sioyek" "flameshot" "gimp" "htop" "discord-screenaudio" "mellowplayer" "polkit" "gnome-polkit" "zip" "unzip" "tar" "ncdu" "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" "libreoffice-fresh" "ttf-ms-fonts" )
 
@@ -286,9 +286,15 @@ install() {
 
 		# Loop through the program names array and install each program using paru
 		# --noconfirm to automatically say yes to every installation
-		for program in "${@}"; do
-			paru -S --noconfirm "$program"
-		done
+        whiptail --title "Progress" --gauge "\nDon't panic if its stuck! Wait." 7 50 0 < <(
+            for ((i=0; i<${#programs[@]}; i++)); do
+                # Install packages and don't print output
+                paru -S --noconfirm --quiet "${programs[$i]}" &>/dev/null
+                # Update the gauge
+                gauge=$((100 * (i + 1) / ${#programs[@]}))
+                echo "$gauge"
+            done
+        )
 	fi
 
 	menu
@@ -360,7 +366,7 @@ menu() {
 	case $CHOICE in
 		"1")   
             is_full_installation=true
-            install_programs
+            add_programs
             # choose to unselect programs
             whiptail --title "Warming" --yesno "Do you want to unselect programs?" 8 80
             if [ $? -eq 0 ]; then
