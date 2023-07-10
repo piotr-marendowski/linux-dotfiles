@@ -554,7 +554,7 @@ install() {
 	whiptail --title "Warming" --yesno "Do you want to install selected programs?" 7 45
 	
 	if [ $? -eq 0 ]; then
-		echo "Installing selected programs..."
+		echo "Installing selected programs"
 		# Check if paru is installed
 		if ! command -v paru &> /dev/null; then
 			echo "Paru is not installed. Installing it..."
@@ -567,17 +567,22 @@ install() {
 
 		# Loop through the program names array and install each program using paru
 		# --noconfirm to automatically say yes to every installation
-		for program in "${@}"; do
-			paru -S --noconfirm "$program"
-		done
+        whiptail --title "Progress" --gauge "\nDon't panic if its stuck! Wait." 7 50 0 < <(
+            for ((i=0; i<${#programs[@]}; i++)); do
+                # Install packages and don't print output
+                paru -S --noconfirm --quiet "${programs[$i]}" &>/dev/null
+                # Update the gauge
+                gauge=$((100 * (i + 1) / ${#programs[@]}))
+                echo "$gauge"
+            done
+        )
 	fi
 
 	menu
 }
 
 reboot() {
-	whiptail --title "Warming" --yesno "It is recommended to reboot system after configuration.\
-Do you want to do it now?" 8 80
+	whiptail --title "Warming" --yesno "Do you want to reboot now?" 7 80
 
 	if [ $? -eq 0 ]; then
 		sudo reboot
