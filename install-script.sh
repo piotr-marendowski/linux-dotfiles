@@ -557,10 +557,12 @@ install() {
 		echo "Installing selected programs"
 		# Check if paru is installed
 		if ! command -v paru &> /dev/null; then
-			echo "Paru is not installed. Installing it..."
-			git clone https://aur.archlinux.org/paru.git
-			cd paru
-			sudo -u $user_name makepkg
+            echo "Proceeding to install Paru AUR helper..."
+            sudo pacman -S --noconfirm --needed base-devel
+            cd ~/Downloads
+            git clone https://aur.archlinux.org/paru.git
+            cd paru
+            makepkg -si
             exit
 			echo "done"
 		fi
