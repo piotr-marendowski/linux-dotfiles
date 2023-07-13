@@ -44,6 +44,9 @@ configure_installed() {
 	if whiptail --title "Warming" --yesno "Configuring programs can be really dangerous on \
 configured machines, it is advised to run this ONLY on newly set up machines. Do you want to proceed?" 8 80; then
     mkdir -p ~/.config
+    mkdir -p ~/Downloads
+	mkdir -p ~/Documents
+	mkdir -p ~/Games
 
     # Xorg
     if command -v X -version &> /dev/null
@@ -165,52 +168,9 @@ Do you want to do it now?" 10 80
     fi
 }
 
-## Function with dependencies to all of the programs
-dependencies() {
-	programs+=( "wget" "curl" "ripgrep" "python-pip" "meson" "ninja" "neovim" "lazygit" )
-
-	mkdir -p ~/Downloads
-	mkdir -p ~/Documents
-	mkdir -p ~/Games
-	
-	# check if there is Paru on machine and install it if not
-	echo "Checking if there is Paru installed..."
-	if ! command -v paru -h &> /dev/null
-	then
-		echo "Paru could not be found"
-		echo "Proceeding to install Paru AUR helper..."
-		sudo pacman -S --noconfirm --needed base-devel
-		sudo pacman -Syy
-		cd ~/Downloads
-		git clone https://aur.archlinux.org/paru.git
-		cd paru
-		makepkg -si --noconfirm
-		echo "done"
-	fi
-
-    # check if machine has an nvidia card
-    # Check if lspci is installed
-    if ! command -v lspci &> /dev/null; then
-        paru -S --noconfirm lspci
-    fi
-
-    # Use lspci to check for NVIDIA graphics card
-    if lspci | grep -i NVIDIA &> /dev/null; then
-        programs+=( nvidia-dkms nvidia-utils )
-    else
-        echo "NVIDIA graphics card not found."
-    fi
-
-	echo "${programs[@]}"
-}
-
-# tag and descriptions --notags is used to only show descriptions
-# newline character (\n) is for better placement
-# don't know if it will be different on other monitors, but in mine it displays all equally
-# third argument in dimensions = number of options
 add_programs() {
     # core
-	programs+=( "vieb" "sioyek" "flameshot" "gimp" "htop" "discord-screenaudio" "mellowplayer" "polkit" "gnome-polkit" "zip" "unzip" "tar" "ncdu" "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" "libreoffice-fresh" "ttf-ms-fonts" )
+	programs+=( "vieb" "sioyek" "flameshot" "gimp" "htop" "discord-screenaudio" "mellowplayer" "polkit" "gnome-polkit" "zip" "unzip" "tar" "ncdu" "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" "libreoffice-fresh" "ttf-ms-fonts" "wget" "curl" "ripgrep" "python-pip" "meson" "ninja" "neovim" "lazygit" )
 
     # sound - pipewire
     programs+=( "pipewire" "pipewire-audio" "pipewire-alsa" "pipewire-jack" "pipewire-pulse" )
@@ -273,7 +233,7 @@ install() {
         whiptail --title "Progress" --gauge "\nDon't panic if its stuck! Wait." 7 50 0 < <(
             for ((i=0; i<${#programs[@]}; i++)); do
                 # Install packages and don't print output
-                paru -S --noconfirm --quiet "${programs[$i]}" &>/dev/null
+                paru -S --noconfirm --quiet "${programs[$i]}" &> /dev/null
                 # Update the gauge
                 gauge=$((100 * (i + 1) / ${#programs[@]}))
                 echo "$gauge"
