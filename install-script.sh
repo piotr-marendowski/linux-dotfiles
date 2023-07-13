@@ -203,7 +203,7 @@ Do you want to do it now?" 10 80
 
         if systemctl status libvirtd; then
             sudo groupadd libvirt
-            local user_name=$(whoami)
+            user_name=$(whoami) # not local
             sudo usermod -aG libvirt $user_name
             sudo systemctl enable libvirtd
             sudo systemctl restart libvirtd
@@ -560,7 +560,7 @@ install() {
 			echo "Paru is not installed. Installing it..."
 			git clone https://aur.archlinux.org/paru.git
 			cd paru
-			sudo -u nobody makepkg
+			sudo -u $user_name makepkg
             exit
 			echo "done"
 		fi
