@@ -48,10 +48,10 @@ configured machines, it is advised to run this ONLY on newly set up machines. Do
     # Xorg
     if command -v X -version &> /dev/null
     then
-        echo "Configuring Xorg server and adding Qtile as default window manager..."
+        echo "Configuring Xorg server and adding DWM as default window manager..."
         cp /etc/X11/xinit/xinitrc ~/.xinitrc && echo "(1/4)"
         head -n -5 .xinitrc > .xinitrc-temp && mv .xinitrc-temp .xinitrc && echo "(2/4)"
-        echo exec qtile start >> ~/.xinitrc && echo "(3/4)"
+        echo exec dwm >> ~/.xinitrc && echo "(3/4)"
         rm ~/.xinitrc-new && echo "(4/4)"
         echo "done"
     fi
@@ -133,26 +133,6 @@ configured machines, it is advised to run this ONLY on newly set up machines. Do
     echo "Proceeding to check if login manager is installed..."
     # if ly is installed
     pacman -Q ly | grep -q "^ly" && sudo systemctl enable ly && echo "Ly installed."
-    # if sddm is installed - customize it
-    if pacman -Q sddm | grep -q "^sddm"; then
-        sudo systemctl enable sddm
-        echo "Sddm installed."
-        sudo cp /usr/lib/sddm/sddm.conf.d/default.conf /etc/sddm.conf
-
-        # install theme
-        git clone https://github.com/rototrash/tokyo-night-sddm.git ~/tokyo-night-sddm
-        mkdir ~/.local/share/themes
-        cp -r ~/tokyo-night-sddm ~/.local/share/themes/
-
-        # edit /etc/sddm.conf
-        # read the contents of line 31 into a variable
-        line31=$(sed -n '31p' /etc/sddm.conf)
-        # check if the contents of line 31 match
-        if [[ "$line31" == *"[Theme]"* ]]; then
-            # if the pattern is matched, replace the line 33 with a theme name
-            sed -i '33s/.*/Current=tokyo-night-sddm/' /etc/sddm.conf
-        fi
-    fi
 
     # start gamemode
     systemctl --user enable gamemoded && systemctl --user start gamemoded
@@ -235,7 +215,7 @@ add_programs() {
     programs+=( "pipewire" "pipewire-audio" "pipewire-alsa" "pipewire-jack" "pipewire-pulse" )
 
     # gui
-    programs+=( "xorg" "xorg-xinit" "sddm" "qt" "redshift" "picom-jonaburg-git" "ttf-jetbrains-mono-nerd" "lxappearance" )
+    programs+=( "xorg" "xorg-xinit" "dwm" "ly" "qt" "redshift" "picom-jonaburg-git" "ttf-jetbrains-mono-nerd" "lxappearance" )
 
     # gaming
 	whiptail --title "Warming" --yesno "Before installing and configuring system for \
@@ -279,7 +259,7 @@ install() {
 			echo "Paru is not installed. Installing it..."
 			git clone https://aur.archlinux.org/paru.git
 			cd paru
-			makepkg -si
+			makepkg -si --noconfirm
 			echo "done"
 		fi
 
