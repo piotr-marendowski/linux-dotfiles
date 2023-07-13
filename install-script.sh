@@ -560,7 +560,7 @@ install() {
 			echo "Paru is not installed. Installing it..."
 			git clone https://aur.archlinux.org/paru.git
 			cd paru
-			make install
+			sudo -u nobody makepkg
             exit
 			echo "done"
 		fi
