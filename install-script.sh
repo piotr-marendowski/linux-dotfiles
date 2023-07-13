@@ -277,7 +277,6 @@ install() {
 		# Check if paru is installed
 		if ! command -v paru &> /dev/null; then
 			echo "Paru is not installed. Installing it..."
-			sudo pacman -S --noconfirm --needed base-devel
 			git clone https://aur.archlinux.org/paru.git
 			cd paru
 			makepkg -si
