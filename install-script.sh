@@ -242,10 +242,10 @@ gaming, first you need to enable multilib in pacman.conf in order to install 32 
         fi
     done
 
-	programs+=( "steam" "lutris" "wine-staging" "nvidia-utils" "nvidia-settings" "nvidia-settings" "vulkan-icd-loader" "dxvk-bin" "opencl-nvidia" "libvdpau" "libxnvctrl" "lib32-nvidia-utils" "lib32-opencl-nvidia" "lib32-vulkan-icd-loader" "proton-ge-custom-bin" "mangohud-git" "goverlay-bin" "gwe" "protonup-qt-bin" "gamemode" )
+	# programs+=( "steam" "lutris" "wine-staging" "nvidia-utils" "nvidia-settings" "nvidia-settings" "vulkan-icd-loader" "dxvk-bin" "opencl-nvidia" "libvdpau" "libxnvctrl" "lib32-nvidia-utils" "lib32-opencl-nvidia" "lib32-vulkan-icd-loader" "proton-ge-custom-bin" "mangohud-git" "goverlay-bin" "gwe" "protonup-qt-bin" "gamemode" )
 
     # virtualization
-    programs+=( "qemu" "libvirt" "virt-manager" "virt-viewer" "dnsmasq" "vde2" "bridge-utils" "openbsd-netcat" "libguestfs" )
+    # programs+=( "qemu" "libvirt" "virt-manager" "virt-viewer" "dnsmasq" "vde2" "bridge-utils" "openbsd-netcat" "libguestfs" )
     is_virtualization=true
 }
 
@@ -288,21 +288,6 @@ Do you want to do it now?" 8 80
 	fi
 }
 
-add_manually() {
-	while true; do
-	    program=$(whiptail --inputbox "Enter one program at the time:" 8 80 --title "Program Input" 3>&1 1>&2 2>&3)
-	    if [ $? = 0 ]; then
-            # Add the program name to the programs array
-            programs+=("$program")
-            else
-            # Exit the loop if the user cancels the input
-            break
-	    fi
-	done
-
-	echo "${programs[@]}"
-}
-
 print_programs() {
     whiptail --title "Programs" --msgbox --scrolltext "$(printf '%s\n' "${programs[@]}")" 20 30
 }
@@ -333,13 +318,11 @@ menu() {
 	# newline character (\n) for better placement
 	# we don't need to "set" shadow for every object as in radiolist
 	CHOICE=$(
-		whiptail --title "Menu" --cancel-button "Exit" --notags --menu 15 60 12 \
+		whiptail --title "Menu" --cancel-button "Exit" --notags --menu 13 60 12 \
 		"1" "Full installation"  \
 		"2" "Configure dotfiles and programs"  \
-		"3" "Add programs that are not listed"  \
-		"4" "Print selected programs"  \
-        "5" "Unselect program(s)" \
-		"6" "Install selected programs" 3>&2 2>&1 1>&3
+        "3" "Unselect program(s)" \
+		"4" "Install selected programs" 3>&2 2>&1 1>&3
 	)
 
 	case $CHOICE in
@@ -360,18 +343,10 @@ menu() {
 			menu
 			;;
 		"3")   
-			add_manually
-			menu
-			;;
-		"4")   
-            print_programs
-			menu
-			;;
-		"5")   
             unselect_programs
 		 	menu
 		 	;;
-		"6")   
+		"4")   
 			dependencies
 			install "${programs[@]}"
             if [ "$is_full_installation" = false ]; then
