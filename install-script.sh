@@ -670,7 +670,6 @@ menu() {
             fi
 			install "${programs[@]}"
 			configure_installed
-            rm /etc/profile.d/firstboot.sh
 			reboot
 			;;
 		"2")   
