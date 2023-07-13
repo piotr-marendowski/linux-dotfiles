@@ -180,6 +180,7 @@ dependencies() {
 		echo "Paru could not be found"
 		echo "Proceeding to install Paru AUR helper..."
 		sudo pacman -S --noconfirm --needed base-devel
+		sudo pacman -Syy
 		cd ~/Downloads
 		git clone https://aur.archlinux.org/paru.git
 		cd paru
@@ -256,11 +257,15 @@ install() {
 		echo "Installing selected programs..."
 		# Check if paru is installed
 		if ! command -v paru &> /dev/null; then
-			echo "Paru is not installed. Installing it..."
-			git clone https://aur.archlinux.org/paru.git
-			cd paru
-			makepkg -si --noconfirm
-			echo "done"
+            echo "Paru could not be found"
+            echo "Proceeding to install Paru AUR helper..."
+            sudo pacman -S --noconfirm --needed base-devel
+            sudo pacman -Syy
+            cd ~/Downloads
+            git clone https://aur.archlinux.org/paru.git
+            cd paru
+            makepkg -si --noconfirm
+            echo "done"
 		fi
 
 		# Loop through the program names array and install each program using paru
