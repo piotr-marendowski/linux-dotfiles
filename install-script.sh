@@ -62,13 +62,6 @@ configured machines, it is advised to run this ONLY on newly set up machines. Do
     # theme
     sudo cp $dir/assets/TokyoNight /usr/share/themes/
 
-    if command -v nitrogen -h &> /dev/null
-    then
-        echo "Setting wallpaper..."
-        nitrogen --set-auto $dir/assets/wallpaper.jpg
-        echo "done"
-    fi
-
     # make dotfiles
     echo "Searching $dir directory..."
     # search for folders (and not hidden files)
@@ -207,7 +200,7 @@ gaming, first you need to enable multilib in pacman.conf in order to install 32 
 
     # virtualization
     # programs+=( "qemu" "libvirt" "virt-manager" "virt-viewer" "dnsmasq" "vde2" "bridge-utils" "openbsd-netcat" "libguestfs" )
-    is_virtualization=true
+    # is_virtualization=true
 }
 
 install() {
