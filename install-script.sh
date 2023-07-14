@@ -584,7 +584,7 @@ install() {
 }
 
 reboot() {
-	whiptail --title "Warming" --yesno "Do you want to reboot now?" 7 80
+	whiptail --title "Warming" --yesno "Do you want to reboot now?" 7 50
 
 	if [ $? -eq 0 ]; then
 		sudo reboot
