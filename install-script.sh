@@ -223,7 +223,7 @@ install() {
 
 		# Loop through the program names array and install each program using paru
 		# --noconfirm to automatically say yes to every installation
-        whiptail --title "Progress" --gauge "\nDon't panic if its stuck! Wait." 7 50 0 < <(
+        whiptail --title "Progress" --gauge "\nDon't panic if its stuck!" 7 50 0 < <(
             for ((i=0; i<${#programs[@]}; i++)); do
                 # Install packages and don't print output
                 paru -S --noconfirm --quiet "${programs[$i]}" &> /dev/null
