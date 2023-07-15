@@ -216,7 +216,6 @@ install() {
 then reboot and restart install script in .dotfiles folder." 9 60
             echo "Proceeding to install Paru AUR helper..."
             sudo pacman -S --noconfirm --needed base-devel
-            sudo pacman -Syy
             cd ~/Downloads
             git clone https://aur.archlinux.org/paru.git
             cd paru
