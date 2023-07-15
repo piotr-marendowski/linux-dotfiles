@@ -25,8 +25,8 @@ actlistbox=black,white
 textbox=white,black 
 roottext=white,black
 emptyscale=white,black
-fullscale=gray,gray
-disentry=gray,gray
+fullscale=white,white
+disentry=white,white
 actsellistbox=black,white
 sellistbox=white,black"
 
