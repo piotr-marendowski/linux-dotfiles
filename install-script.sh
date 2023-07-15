@@ -212,8 +212,8 @@ install() {
 		# Check if paru is installed
 		if ! command -v paru &> /dev/null; then
             echo "Paru could not be found"
-            whiptail --title "Information" --msgbox "This will take a few minutes. If it'll be stuck for about 10 minutes then \
-restart install script in .dotfiles folder." 9 60
+            whiptail --title "Information" --msgbox "This will take a few minutes. If it'll be stuck on "(1/1) Arming ConditionNeedsUpdate" \
+then reboot and restart install script in .dotfiles folder." 9 60
             echo "Proceeding to install Paru AUR helper..."
             sudo pacman -S --noconfirm --needed base-devel
             sudo pacman -Syy
