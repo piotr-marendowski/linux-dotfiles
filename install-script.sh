@@ -294,7 +294,7 @@ menu() {
 		"1")   
             add_programs
             # choose to unselect programs
-            whiptail --title "Warming" --yesno "Do you want to unselect programs?" 8 50
+            whiptail --title "Warming" --yesno "Do you want to unselect programs?" 8 40
             if [ $? -eq 0 ]; then
                 unselect_programs
             fi
