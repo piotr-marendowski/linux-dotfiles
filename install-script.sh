@@ -320,6 +320,7 @@ menu() {
 
 ### PROGRAM EXECUTION
 sudo pacman --noconfirm -Syu
+sudo pacman --noconfirm -Syy
 
 # Description
 whiptail --title "Information" --msgbox "This install script requires an Arch-based machine with SystemD. \
