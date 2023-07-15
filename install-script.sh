@@ -211,14 +211,15 @@ install() {
 		# Check if paru is installed
 		if ! command -v paru &> /dev/null; then
             echo "Paru could not be found"
-            whiptail --title "Information" --msgbox "This will take a few minutes." 9 80
+            whiptail --title "Information" --msgbox "This will take a few minutes. If it'll be stuck for about 10 minutes then \
+restart install script in .dotfiles folder." 9 80
             echo "Proceeding to install Paru AUR helper..."
             sudo pacman -S --noconfirm --needed base-devel
             sudo pacman -Syy
             cd ~/Downloads
             git clone https://aur.archlinux.org/paru.git
             cd paru
-            timeout 5m makepkg -si --noconfirm || exit
+            makepkg -si --noconfirm
 
             cd ..
             rm -r paru
