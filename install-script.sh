@@ -18,7 +18,17 @@ label=black,white
 checkbox=white,black
 compactbutton=black,white
 listbox=white,black
-button=black,red"
+button=black,red
+actbutton=white,black
+entry=black,white
+actlistbox=black,white
+textbox=white,black 
+roottext=white,black
+emptyscale=white,black
+fullscale=gray,gray
+disentry=gray,gray
+actsellistbox=black,white
+sellistbox=white,black"
 
 # dotfolders directory
 dir=~/.dotfiles
@@ -163,15 +173,15 @@ add_programs() {
 	programs+=( "vieb" "sioyek" "flameshot" "gimp" "htop" "discord-screenaudio" "mellowplayer" "polkit" "gnome-polkit" "zip" "unzip" "tar" "ncdu" "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" "libreoffice-fresh" "ttf-ms-fonts" "wget" "curl" "ripgrep" "python-pip" "meson" "ninja" "neovim" "lazygit" )
 
     # sound - pipewire
-    programs+=( "pipewire" "pipewire-audio" "pipewire-alsa" "pipewire-jack" "pipewire-pulse" )
+    #programs+=( "pipewire" "pipewire-audio" "pipewire-alsa" "pipewire-jack" "pipewire-pulse" )
 
     # gui
-    programs+=( "xorg" "xorg-xinit" "dwm" "ly" "qt" "redshift" "picom-jonaburg-git" "ttf-jetbrains-mono-nerd" "lxappearance" )
+    #programs+=( "xorg" "xorg-xinit" "dwm" "ly" "qt" "redshift" "picom-jonaburg-git" "ttf-jetbrains-mono-nerd" "lxappearance" )
 
     # gaming
 	whiptail --title "Warming" --yesno "Before installing and configuring system for \
-gaming, first you need to enable multilib in pacman.conf in order to install 32 bit drivers. \
-	Do you want to do it now?" 9 80
+gaming, first you need to enable multilib in pacman.conf in order to install 32-bit drivers. \
+Do you want to do it now?" 9 80
 	
 	if [ $? -eq 0 ]; then
 		sudo nvim /etc/pacman.conf
@@ -210,7 +220,7 @@ install() {
 		# Check if paru is installed
 		if ! command -v paru &> /dev/null; then
             echo "Paru could not be found"
-            whiptail --title "Information" --msgbox "This will take a few minutes. If it'll be stuck on "(1/1) Arming ConditionNeedsUpdate" \
+            whiptail --title "Information" --msgbox "This will take a few minutes. If it'll be stuck on (1/1) Arming ConditionNeedsUpdate \
 then reboot and restart install script in .dotfiles folder." 9 60
             echo "Proceeding to install Paru AUR helper..."
             sudo pacman -S --noconfirm --needed base-devel
@@ -229,15 +239,13 @@ then reboot and restart install script in .dotfiles folder." 9 60
         whiptail --title "Progress" --gauge "\nDon't panic if its stuck!" 7 50 0 < <(
             for ((i=0; i<${#programs[@]}; i++)); do
                 # Install packages and don't print output
-                paru -S --noconfirm --quiet "${programs[$i]}" &> /dev/tty1
+                paru -S --noconfirm --quiet "${programs[$i]}" &> /dev/null
                 # Update the gauge
                 gauge=$((100 * (i + 1) / ${#programs[@]}))
                 echo "$gauge"
             done
         )
 	fi
-
-	menu
 }
 
 reboot_now() {
@@ -285,10 +293,9 @@ menu() {
 
 	case $CHOICE in
 		"1")   
-            is_full_installation=true
             add_programs
             # choose to unselect programs
-            whiptail --title "Warming" --yesno "Do you want to unselect programs?" 8 60
+            whiptail --title "Warming" --yesno "Do you want to unselect programs?" 8 50
             if [ $? -eq 0 ]; then
                 unselect_programs
             fi
@@ -305,12 +312,8 @@ menu() {
 		 	menu
 		 	;;
 		"4")   
-			dependencies
 			install "${programs[@]}"
-            if [ "$is_full_installation" = false ]; then
-                menu
-            fi
-			reboot_now
+            menu
 			;;
 	esac
 }
