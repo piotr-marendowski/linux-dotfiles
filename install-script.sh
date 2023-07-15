@@ -218,22 +218,7 @@ install() {
             cd ~/Downloads
             git clone https://aur.archlinux.org/paru.git
             cd paru
-            # timeout 5m makepkg -si --noconfirm || exit
-
-            TIMEOUT_TO_SIGNAL=10
-            SIGNAL_AFTER_TIMEOUT=TERM
-            WAIT_FOR_KILL="3s"
-            COMMAND_TO_EXEC="makepkg -si --noconfirm"
-
-            echo "Run \"$COMMAND_TO_EXEC\", timeout on $TIMEOUT_TO_SIGNAL seconds, then kill \"$SIGNAL_AFTER_TIMEOUT\", wait $WAIT_FOR_KILL, then kill -9"
-            timeout --signal=$SIGNAL_AFTER_TIMEOUT --kill-after=$WAIT_FOR_KILL $TIMEOUT_TO_SIGNAL $COMMAND_TO_EXEC
-
-            if [ $? -eq 124 ]
-            then
-                echo "The command $COMMAND_TO_EXEC timed out"
-            else
-                echo "The command $COMMAND_TO_EXEC executed without timeout"
-            fi
+            timeout 5m makepkg -si --noconfirm || exit
 
             cd ..
             rm -r paru
@@ -293,7 +278,7 @@ unselect_programs() {
 # Menu window
 menu() {
 	CHOICE=$(
-		whiptail --title "Menu" --cancel-button "Exit" --notags --menu "" 11 60 4 \
+		whiptail --title "Menu" --cancel-button "Exit" --notags --menu "" 11 50 4 \
 		"1" "Full installation"  \
 		"2" "Configure dotfiles and programs"  \
         "3" "Unselect program(s)" \
@@ -305,7 +290,7 @@ menu() {
             is_full_installation=true
             add_programs
             # choose to unselect programs
-            whiptail --title "Warming" --yesno "Do you want to unselect programs?" 8 80
+            whiptail --title "Warming" --yesno "Do you want to unselect programs?" 8 60
             if [ $? -eq 0 ]; then
                 unselect_programs
             fi
