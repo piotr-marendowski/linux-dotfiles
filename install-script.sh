@@ -276,8 +276,6 @@ unselect_programs() {
 
 # Menu window
 menu() {
-	# newline character (\n) for better placement
-	# we don't need to "set" shadow for every object as in radiolist
 	CHOICE=$(
 		whiptail --title "Menu" --cancel-button "Exit" --notags --menu 13 60 12 \
 		"1" "Full installation"  \
@@ -320,7 +318,6 @@ menu() {
 
 ### PROGRAM EXECUTION
 sudo pacman --noconfirm -Syu
-sudo pacman --noconfirm -Syy
 
 # Description
 whiptail --title "Information" --msgbox "This install script requires an Arch-based machine with SystemD. \
