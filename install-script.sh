@@ -82,12 +82,12 @@ configure_installed() {
     # exclude not-dotfolders/not-dotfiles
     for del in ${exclude_files[@]}
     do
-        folders=("${folders[@]/$del}") 		# Quotes when working with strings
+        folders=("${folders[@]/$del}")
     done
 
     for del in ${exclude_files[@]}
     do
-        files=("${files[@]/$del}") 			# Quotes when working with strings
+        files=("${files[@]/$del}")
     done
     echo "done"
 
@@ -122,10 +122,9 @@ configure_installed() {
     done
     echo "done"
 
-    # login managers - check if pacman -Q name begins with name of the login manager
+    # check if pacman -Q name begins with name of ly
     # and enable its service if it is
     echo "Proceeding to check if login manager is installed..."
-    # if ly is installed
     pacman -Q ly | grep -q "^ly" && sudo systemctl enable ly && echo "Ly installed."
 
     # start gamemode
