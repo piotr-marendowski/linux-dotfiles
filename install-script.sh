@@ -583,7 +583,7 @@ install() {
 	menu
 }
 
-reboot() {
+reboot_now() {
 	whiptail --title "Warming" --yesno "Do you want to reboot now?" 7 50
 
 	if [ $? -eq 0 ]; then
@@ -670,7 +670,7 @@ menu() {
             fi
 			install "${programs[@]}"
 			configure_installed
-			reboot
+			reboot_now
 			;;
 		"2")   
 			utilities
@@ -718,7 +718,7 @@ menu() {
             if [ "$is_full_installation" = false ]; then
                 menu
             fi
-			reboot
+			reboot_now
 			;;
 	esac
 }
