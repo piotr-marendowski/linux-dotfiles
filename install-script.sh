@@ -52,117 +52,116 @@ programs=()
 configure_installed() {
   # IF USER SELECTS NO THEN GO TO MENU (ELSE IS AT THE BOTTOM OF THE FUNCTIO )
 	if whiptail --title "Warming" --yesno "Do you want to configure dotfiles?" 7 50; then
-    mkdir -p ~/.config
-	mkdir -p ~/Documents
-	mkdir -p ~/Games
+        mkdir -p ~/.config
+        mkdir -p ~/Documents
+        mkdir -p ~/Games
 
-    # Xorg
-    if command -v X -version &> /dev/null
-    then
-        echo "Configuring Xorg server and adding DWM as default window manager..."
-        cp /etc/X11/xinit/xinitrc ~/.xinitrc && echo "(1/4)"
-        head -n -5 .xinitrc > .xinitrc-temp && mv .xinitrc-temp .xinitrc && echo "(2/4)"
-        echo exec dwm >> ~/.xinitrc && echo "(3/4)"
-        rm ~/.xinitrc-new && echo "(4/4)"
-        echo "done"
-    fi
-    
-    # theme
-    sudo cp $dir/assets/TokyoNight /usr/share/themes/
+        # Xorg
+        if command -v X -version &> /dev/null
+        then
+            echo "Configuring Xorg server and adding DWM as default window manager..."
+            cp /etc/X11/xinit/xinitrc ~/.xinitrc && echo "(1/4)"
+            head -n -5 .xinitrc > .xinitrc-temp && mv .xinitrc-temp .xinitrc && echo "(2/4)"
+            echo exec dwm >> ~/.xinitrc && echo "(3/4)"
+            rm ~/.xinitrc-new && echo "(4/4)"
+            echo "done"
+        fi
+        
+        # theme
+        sudo cp $dir/assets/TokyoNight /usr/share/themes/
 
-    # make dotfiles
-    echo "Searching $dir directory..."
-    # search for folders (and not hidden files)
-    for i in ${folders[@]}; do
-        :
-    done
-    # search for all hidden files (even something like '.' and '..')
-    for i in ${files[@]}; do
-        :
-    done
-    # exclude some files and directories from files array
-    for char in "${exclude[@]}"; do
-        for i in "${!files[@]}"; do
-            if [[ ${files[i]} = $char ]]; then
-                unset 'files[i]'
-            fi
+        # make dotfiles
+        echo "Searching $dir directory..."
+        # search for folders (and not hidden files)
+        for i in ${folders[@]}; do
+            :
         done
-    done
+        # search for all hidden files (even something like '.' and '..')
+        for i in ${files[@]}; do
+            :
+        done
+        # exclude some files and directories from files array
+        for char in "${exclude[@]}"; do
+            for i in "${!files[@]}"; do
+                if [[ ${files[i]} = $char ]]; then
+                    unset 'files[i]'
+                fi
+            done
+        done
 
-    # exclude not-dotfolders/not-dotfiles
-    for del in ${exclude_files[@]}
-    do
-        folders=("${folders[@]/$del}")
-    done
+        # exclude not-dotfolders/not-dotfiles
+        for del in ${exclude_files[@]}
+        do
+            folders=("${folders[@]/$del}")
+        done
 
-    for del in ${exclude_files[@]}
-    do
-        files=("${files[@]/$del}")
-    done
-    echo "done"
+        for del in ${exclude_files[@]}
+        do
+            files=("${files[@]/$del}")
+        done
+        echo "done"
 
-    echo "Folders/files in $dir: ${folders[@]}"
-    echo "Hidden files in $dir: ${files[@]}"
+        echo "Folders/files in $dir: ${folders[@]}"
+        echo "Hidden files in $dir: ${files[@]}"
 
-    # create dotfolders_old in homedir
-    echo "Creating $olddir for backup of any existing dotfolders in ~..."
-    mkdir -p $olddir
-    echo "done"
+        # create dotfolders_old in homedir
+        echo "Creating $olddir for backup of any existing dotfolders in ~..."
+        mkdir -p $olddir
+        echo "done"
 
-    # enter dotfolder in order to process only files in it and not files in homedir
-    echo "Entering $dir..."
-    cd $dir
-    echo "done"
+        # enter dotfolder in order to process only files in it and not files in homedir
+        echo "Entering $dir..."
+        cd $dir
+        echo "done"
 
-    # Move any dotfile "listed" (present) in dir to olddir and move a file from this
-    # repo to program's directory e.g. ~/.config
-    echo "Moving any existing dotfolders from ~ to $olddir..."
-    echo "DON'T PANIC IF THERE ARE ERRORS!"
-    # folders/normal files
-    for file in ${folders[@]}; do
-        mv ~/$file $olddir
-        echo "Moving $file to homedir..."
-        cp -rf $dir/$file ~/$file
-    done
-    # hidden files
-    for file in ${files[@]}; do
-        mv ~/$file $olddir
-        echo "Moving $file to homedir..."
-        cp -rf $dir/$file ~/$file
-    done
-    echo "done"
+        # Move any dotfile "listed" (present) in dir to olddir and move a file from this
+        # repo to program's directory e.g. ~/.config
+        echo "Moving any existing dotfolders from ~ to $olddir..."
+        echo "DON'T PANIC IF THERE ARE ERRORS!"
+        # folders/normal files
+        for file in ${folders[@]}; do
+            mv ~/$file $olddir
+            echo "Moving $file to homedir..."
+            cp -rf $dir/$file ~/$file
+        done
+        # hidden files
+        for file in ${files[@]}; do
+            mv ~/$file $olddir
+            echo "Moving $file to homedir..."
+            cp -rf $dir/$file ~/$file
+        done
+        echo "done"
 
-    # check if pacman -Q name begins with name of ly
-    # and enable its service if it is
-    echo "Proceeding to check if login manager is installed..."
-    pacman -Q ly | grep -q "^ly" && sudo systemctl enable ly && echo "Ly installed."
+        # check if pacman -Q name begins with name of ly
+        # and enable its service if it is
+        echo "Proceeding to check if login manager is installed..."
+        pacman -Q ly | grep -q "^ly" && sudo systemctl enable ly && echo "Ly installed."
 
-    # start gamemode
-    systemctl --user enable gamemoded && systemctl --user start gamemoded
+        # start gamemode
+        systemctl --user enable gamemoded && systemctl --user start gamemoded
 
-    # virtualization
-    if [ "$is_virtualization" = true ]; then
+        # virtualization
+        if [ "$is_virtualization" = true ]; then
 
-        whiptail --title "VIRTUALIZATION: Warming" --yesno "You need to ensure that these are set to: \
+            whiptail --title "VIRTUALIZATION: Warming" --yesno "You need to ensure that these are set to: \
 unix_sock_group = \"libvirt\", unix_sock_ro_perms = \"0777\", and unix_sock_rw_perms = \"0770\". \
 Do you want to do it now?" 10 80
-        if [ $? -eq 0 ]; then
-            sudo nvim /etc/libvirt/libvirtd.conf
-        fi
+            if [ $? -eq 0 ]; then
+                sudo nvim /etc/libvirt/libvirtd.conf
+            fi
 
-        if systemctl status libvirtd; then
-            sudo groupadd libvirt
-            local user_name=$(whoami)
-            sudo usermod -aG libvirt $user_name
-            sudo systemctl enable libvirtd
-            sudo systemctl restart libvirtd
-        else
-            echo "libvirt is not installed"
-        fi
-        else
-            echo "Virtualization is not configured right now."
-        fi
-    
+            if systemctl status libvirtd; then
+                sudo groupadd libvirt
+                local user_name=$(whoami)
+                sudo usermod -aG libvirt $user_name
+                sudo systemctl enable libvirtd
+                sudo systemctl restart libvirtd
+            else
+                echo "libvirt is not installed"
+            fi
+            else
+                echo "Virtualization is not configured right now."
+            fi
     else
         menu
     fi
@@ -301,6 +300,7 @@ menu() {
             fi
 			install "${programs[@]}"
 			configure_installed
+            sudo rm /etc/profile.d/firstboot.sh
 			reboot_now
 			;;
 		"2")   
