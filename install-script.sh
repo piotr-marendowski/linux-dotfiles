@@ -41,8 +41,7 @@ programs=()
 ## Configure installed packages
 configure_installed() {
   # IF USER SELECTS NO THEN GO TO MENU (ELSE IS AT THE BOTTOM OF THE FUNCTIO )
-	if whiptail --title "Warming" --yesno "Configuring programs can be really dangerous on \
-configured machines, it is advised to run this ONLY on newly set up machines. Do you want to proceed?" 8 80; then
+	if whiptail --title "Warming" --yesno "Do you want to configure dotfiles?" 7 50; then
     mkdir -p ~/.config
 	mkdir -p ~/Documents
 	mkdir -p ~/Games
@@ -231,7 +230,7 @@ then reboot and restart install script in .dotfiles folder." 9 60
         whiptail --title "Progress" --gauge "\nDon't panic if its stuck!" 7 50 0 < <(
             for ((i=0; i<${#programs[@]}; i++)); do
                 # Install packages and don't print output
-                paru -S --noconfirm --quiet "${programs[$i]}" &> /dev/null
+                paru -S --noconfirm --quiet "${programs[$i]}" &> /dev/tty1
                 # Update the gauge
                 gauge=$((100 * (i + 1) / ${#programs[@]}))
                 echo "$gauge"
@@ -242,9 +241,8 @@ then reboot and restart install script in .dotfiles folder." 9 60
 	menu
 }
 
-reboot() {
-	whiptail --title "Warming" --yesno "It is recommended to reboot system after configuration.\
-Do you want to do it now?" 8 80
+reboot_now() {
+	whiptail --title "Warming" --yesno "Do you want to reboot now?" 7 50
 
 	if [ $? -eq 0 ]; then
 		sudo reboot
@@ -297,7 +295,7 @@ menu() {
             fi
 			install "${programs[@]}"
 			configure_installed
-			reboot
+			reboot_now
 			;;
 		"2")   
 			configure_installed
@@ -313,7 +311,7 @@ menu() {
             if [ "$is_full_installation" = false ]; then
                 menu
             fi
-			reboot
+			reboot_now
 			;;
 	esac
 }
