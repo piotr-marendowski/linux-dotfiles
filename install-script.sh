@@ -218,7 +218,9 @@ install() {
             cd ~/Downloads
             git clone https://aur.archlinux.org/paru.git
             cd paru
-            timeout 5m -si --noconfirm || exit 1
+            timeout 5m -si --noconfirm || exit
+            cd ..
+            rm -r paru
             echo "done"
 		fi
 
