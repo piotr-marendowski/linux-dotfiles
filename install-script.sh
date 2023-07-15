@@ -44,7 +44,6 @@ configure_installed() {
 	if whiptail --title "Warming" --yesno "Configuring programs can be really dangerous on \
 configured machines, it is advised to run this ONLY on newly set up machines. Do you want to proceed?" 8 80; then
     mkdir -p ~/.config
-    mkdir -p ~/Downloads
 	mkdir -p ~/Documents
 	mkdir -p ~/Games
 
@@ -204,6 +203,8 @@ gaming, first you need to enable multilib in pacman.conf in order to install 32 
 }
 
 install() {
+    mkdir -p ~/Downloads
+
 	whiptail --title "Warming" --yesno "Do you want to install selected programs?" 7 45
 	
 	if [ $? -eq 0 ]; then
@@ -212,7 +213,7 @@ install() {
 		if ! command -v paru &> /dev/null; then
             echo "Paru could not be found"
             whiptail --title "Information" --msgbox "This will take a few minutes. If it'll be stuck for about 10 minutes then \
-restart install script in .dotfiles folder." 9 80
+restart install script in .dotfiles folder." 9 60
             echo "Proceeding to install Paru AUR helper..."
             sudo pacman -S --noconfirm --needed base-devel
             sudo pacman -Syy
