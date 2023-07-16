@@ -16,9 +16,19 @@ textbox=white,black
 radiolist=white,black
 label=black,white
 checkbox=white,black
-compactbutton=black,white
 listbox=white,black
-button=black,red"
+compactbutton=white,black
+button=black,white
+actbutton=white,black
+entry=black,white
+actlistbox=black,white
+textbox=white,black 
+roottext=white,black
+emptyscale=white,black
+fullscale=white,white
+disentry=white,white
+actsellistbox=black,white
+sellistbox=white,black"
 
 # dotfolders directory
 dir=~/.dotfiles

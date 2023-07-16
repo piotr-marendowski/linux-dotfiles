@@ -29,4 +29,4 @@ mv dotfiles .dotfiles
 - [Flameshot (screenshots)](https://flameshot.org/)
 - [Pulseaudio (sound)](https://www.freedesktop.org/wiki/Software/PulseAudio/)
 - [or Pipewire (sound)](https://pipewire.org)
-- [Neovim (code)](https://neovim.io/)
+- [Neovim (code editor)](https://neovim.io/)
