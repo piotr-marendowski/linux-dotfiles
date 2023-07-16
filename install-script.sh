@@ -222,6 +222,7 @@ install() {
             whiptail --title "Information" --msgbox "This will take a few minutes. If it'll be stuck on Arming ConditionNeedsUpdate \
 then reboot and restart install script in .dotfiles folder." 9 60
             echo "Proceeding to install Paru AUR helper..."
+            clear
             sudo pacman -S --noconfirm --needed base-devel
             cd ~/Downloads
             git clone https://aur.archlinux.org/paru.git
