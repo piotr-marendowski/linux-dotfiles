@@ -322,10 +322,6 @@ menu() {
 ### PROGRAM EXECUTION
 sudo pacman --noconfirm -Syu
 
-# Description
-whiptail --title "Information" --msgbox "This install script requires an Arch-based machine with SystemD. \
-Better know what you are doing, because some options NOT selected will conclude in not fully working system!" 9 80
-
 # Navigation
 whiptail --title "Navigation" --msgbox "Navigate lists using arrow keys. Select options with space. \
 Use Tab key to navigate between the <Ok> and <Cancel> buttons." 8 80
