@@ -236,7 +236,7 @@ then reboot and restart install script in .dotfiles folder." 9 60
 
 		# Loop through the program names array and install each program using paru
 		# --noconfirm to automatically say yes to every installation
-        whiptail --title "Program Installation" --gauge "\n      Don't panic if its stuck!" 7 50 0 < <(
+        whiptail --title "Program Installation" --gauge "\nDon't panic if its stuck!" 7 50 0 < <(
             for ((i=0; i<${#programs[@]}; i++)); do
                 # Install packages and don't print output
                 paru -S --noconfirm --quiet "${programs[$i]}" &> /dev/null
@@ -258,6 +258,21 @@ reboot_now() {
 
 print_programs() {
     whiptail --title "Programs" --msgbox --scrolltext "$(printf '%s\n' "${programs[@]}")" 20 30
+}
+
+add_manually() {
+	while true; do
+	    program=$(whiptail --ok-button "Add" --inputbox "Enter one program at the time:" 8 60 --title "Add Program" 3>&1 1>&2 2>&3)
+	    if [ $? = 0 ]; then
+            # Add the program name to the programs array
+            programs+=("$program")
+            else
+            # Exit the loop if the user cancels the input
+            break
+	    fi
+	done
+
+	echo "${programs[@]}"
 }
 
 unselect_programs() {
@@ -284,11 +299,12 @@ unselect_programs() {
 # Menu window
 menu() {
 	CHOICE=$(
-		whiptail --title "Menu" --cancel-button "Exit" --notags --menu "" 11 50 4 \
+		whiptail --title "Menu" --ok-button "Select" --cancel-button "Exit" --notags --menu "" 12 50 5 \
 		"1" "Full installation"  \
-		"2" "Configure dotfiles and programs"  \
+		"2" "Configure dotfiles"  \
         "3" "Unselect program(s)" \
-		"4" "Install selected programs" 3>&2 2>&1 1>&3
+        "4" "Add program(s) manually" \
+		"5" "Install selected programs" 3>&2 2>&1 1>&3
 	)
 
 	case $CHOICE in
@@ -313,6 +329,10 @@ menu() {
 		 	menu
 		 	;;
 		"4")   
+            add_manually
+		 	menu
+		 	;;
+		"5")   
 			install "${programs[@]}"
             menu
 			;;
