@@ -236,7 +236,7 @@ then reboot and restart install script in .dotfiles folder." 9 60
 
 		# Loop through the program names array and install each program using paru
 		# --noconfirm to automatically say yes to every installation
-        whiptail --title "Progress" --gauge "\nDon't panic if its stuck!" 7 50 0 < <(
+        whiptail --title "Program Installation" --gauge "\n      Don't panic if its stuck!" 7 50 0 < <(
             for ((i=0; i<${#programs[@]}; i++)); do
                 # Install packages and don't print output
                 paru -S --noconfirm --quiet "${programs[$i]}" &> /dev/null
