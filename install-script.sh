@@ -93,15 +93,10 @@ configure_installed() {
         # repo to program's directory e.g. ~/.config
         echo "Moving dotfiles from $dir to homedir..."
         echo "DON'T PANIC IF THERE ARE ERRORS!"
-        # folders/normal files
-        for file in ${folders[@]}; do
-            echo "Moving $file to homedir..."
-            cp -Rf $dir/$file ~/$file
-        done
-        # hidden files
+        # hidden files/folders
         for file in ${files[@]}; do
             echo "Moving $file to homedir..."
-            cp -f $dir/$file ~/$file
+            cp -Rf $dir/$file ~/$file
         done
         echo "done"
 
