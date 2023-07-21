@@ -30,16 +30,6 @@ disentry=white,white
 actsellistbox=black,white
 sellistbox=white,black"
 
-# dotfolders directory
-dir=~/.dotfiles
-# old dotfolders backup directory
-olddir=~/.dotfiles_old 
-# create arrays for: folders/normal files, hidden files, and excluded characters/files
-folders=(*)
-files=(.*)
-exclude=(. ..)
-exclude_files=(assets script.sh whiptail-script.sh README.md LICENSE .git)
-
 # is virtualization installed? 
 is_virtualization=false
 # is full installation?
@@ -50,12 +40,16 @@ programs=()
 
 ## Configure installed packages
 configure_installed() {
-  # IF USER SELECTS NO THEN GO TO MENU (ELSE IS AT THE BOTTOM OF THE FUNCTIO )
-	if whiptail --title "Warming" --yesno "Do you want to configure dotfiles?" 7 50; then
-        mkdir -p ~/.config
-        mkdir -p ~/Documents
-        mkdir -p ~/Games
+    # dotfolders directory
+    dir=~/.dotfiles
+    # create arrays for: folders/normal files, hidden files, and excluded characters/files
+    folders=(*)
+    files=(.*)
+    exclude=(. ..)
+    exclude_files=(assets whiptail-script.sh README.md LICENSE .git)
 
+    # IF USER SELECTS NO THEN GO TO MENU (ELSE IS AT THE BOTTOM OF THE FUNCTIO )
+	if whiptail --title "Warming" --yesno "Do you want to configure dotfiles?" 7 50; then
         # Xorg
         if command -v X -version &> /dev/null
         then
@@ -63,15 +57,16 @@ configure_installed() {
             cp /etc/X11/xinit/xinitrc ~/.xinitrc && echo "(1/4)"
             head -n -5 .xinitrc > .xinitrc-temp && mv .xinitrc-temp .xinitrc && echo "(2/4)"
             echo exec dwm >> ~/.xinitrc && echo "(3/4)"
-            rm ~/.xinitrc-new && echo "(4/4)"
+            rm ~/.xinitrc-temp && echo "(4/4)"
             echo "done"
         fi
         
         # theme
-        sudo cp $dir/assets/TokyoNight /usr/share/themes/
+        sudo cp -r $dir/assets/TokyoNight /usr/share/themes/
 
         # make dotfiles
         echo "Searching $dir directory..."
+        cd $dir
         # search for folders (and not hidden files)
         for i in ${folders[@]}; do
             :
@@ -99,34 +94,25 @@ configure_installed() {
         do
             files=("${files[@]/$del}")
         done
-        echo "done"
 
         echo "Folders/files in $dir: ${folders[@]}"
         echo "Hidden files in $dir: ${files[@]}"
 
-        # create dotfolders_old in homedir
-        echo "Creating $olddir for backup of any existing dotfolders in ~..."
-        mkdir -p $olddir
-        echo "done"
-
-        # enter dotfolder in order to process only files in it and not files in homedir
-        echo "Entering $dir..."
-        cd $dir
-        echo "done"
+        mkdir -p ~/.config
+        mkdir -p ~/Documents
+        mkdir -p ~/Games
 
         # Move any dotfile "listed" (present) in dir to olddir and move a file from this
         # repo to program's directory e.g. ~/.config
-        echo "Moving any existing dotfolders from ~ to $olddir..."
+        echo "Moving dotfiles from $dir to homedir..."
         echo "DON'T PANIC IF THERE ARE ERRORS!"
         # folders/normal files
         for file in ${folders[@]}; do
-            mv ~/$file $olddir
             echo "Moving $file to homedir..."
             cp -rf $dir/$file ~/$file
         done
         # hidden files
         for file in ${files[@]}; do
-            mv ~/$file $olddir
             echo "Moving $file to homedir..."
             cp -rf $dir/$file ~/$file
         done
