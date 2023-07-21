@@ -44,7 +44,6 @@ configure_installed() {
     dir=~/dotfiles
     # create arrays for: folders/normal files, hidden files, and excluded characters/files
     files=(.*)
-    exclude=(assets install-script.sh README.md LICENSE .git)
 
     # IF USER SELECTS NO THEN GO TO MENU (ELSE IS AT THE BOTTOM OF THE FUNCTIO )
 	if whiptail --title "Warming" --yesno "Do you want to configure dotfiles?" 7 50; then
