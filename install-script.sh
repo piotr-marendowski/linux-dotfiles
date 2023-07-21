@@ -44,7 +44,7 @@ configure_installed() {
     dir=~/dotfiles
     # create arrays for: folders/normal files, hidden files, and excluded characters/files
     files=(.*)
-    exclude_files=(assets install-script.sh README.md LICENSE .git)
+    exclude=(assets install-script.sh README.md LICENSE .git)
 
     # IF USER SELECTS NO THEN GO TO MENU (ELSE IS AT THE BOTTOM OF THE FUNCTIO )
 	if whiptail --title "Warming" --yesno "Do you want to configure dotfiles?" 7 50; then
@@ -61,9 +61,12 @@ configure_installed() {
         files+=($(find . -maxdepth 1 -type f \! -name '.*'))
 
         # exclude not-dotfolders/not-dotfiles
-        for del in ${exclude_files[@]}
-        do
-            files=("${files[@]/$del}")
+        for i in "${!files[@]}"; do
+            for j in "${exclude[@]}"; do
+                if [[ "${files[$i]}" == "$j" ]]; then
+                    unset files[$i]
+                fi
+            done
         done
 
         echo "Hidden files in $dir: ${files[@]}"
