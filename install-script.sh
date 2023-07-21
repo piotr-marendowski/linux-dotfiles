@@ -96,7 +96,7 @@ configure_installed() {
         # folders/normal files
         for file in ${folders[@]}; do
             echo "Moving $file to homedir..."
-            cp -rf $dir/$file ~/$file
+            cp -Rf $dir/$file ~/$file
         done
         # hidden files
         for file in ${files[@]}; do
