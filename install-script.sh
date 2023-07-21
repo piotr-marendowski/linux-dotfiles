@@ -49,7 +49,7 @@ configure_installed() {
             gauge=$((100 * (1 + 1) / 8))
             echo "$gauge"
 
-            sudo cp -r $dir/assets/TokyoNight /usr/share/themes/
+            sudo cp -r $dir/assets/TokyoNight /usr/share/themes/ &> /dev/null
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
@@ -60,10 +60,10 @@ configure_installed() {
             echo "Searching $dir directory..." &> /dev/null
             cd $dir
             # seach for all files in dir
-            files+=($(find . -maxdepth 1 -type d -name '.*'))
-            files+=($(find . -maxdepth 1 -type d \! -name '.*'))
-            files+=($(find . -maxdepth 1 -type f -name '.*'))
-            files+=($(find . -maxdepth 1 -type f \! -name '.*'))
+            files+=($(find . -maxdepth 1 -type d -name '.*')) &> /dev/null
+            files+=($(find . -maxdepth 1 -type d \! -name '.*')) &> /dev/null
+            files+=($(find . -maxdepth 1 -type f -name '.*')) &> /dev/null
+            files+=($(find . -maxdepth 1 -type f \! -name '.*')) &> /dev/null
 
             echo "Files in $dir: ${files[@]}" &> /dev/null
         )
@@ -72,8 +72,8 @@ configure_installed() {
             gauge=$((100 * (3 + 1) / 8))
             echo "$gauge"
 
-            mkdir -p ~/documents
-            mkdir -p ~/games
+            mkdir -p ~/documents &> /dev/null
+            mkdir -p ~/games &> /dev/null
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
@@ -87,7 +87,7 @@ configure_installed() {
             # hidden files/folders
             for file in ${files[@]}; do
                 echo "Moving $file to homedir..." &> /dev/null
-                cp -Rf $dir/$file ~/$file
+                cp -Rf $dir/$file ~/$file &> /dev/null
             done
             echo "done"
         )
@@ -97,11 +97,11 @@ configure_installed() {
             echo "$gauge"
 
             # delete unnecessary items
-            rm -r ~/assets
-            rm -r ~/install-script.sh
-            rm -r ~/LICENSE
-            rm -r ~/README.md
-            rm -r ~/.config/.config/
+            rm -r ~/assets &> /dev/null
+            rm -r ~/install-script.sh &> /dev/null
+            rm -r ~/LICENSE &> /dev/null
+            rm -r ~/README.md &> /dev/null
+            rm -r ~/.config/.config/ &> /dev/null
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
@@ -109,11 +109,11 @@ configure_installed() {
             echo "$gauge"
 
             # Configure Suckless' software
-            cd ~/.config/st/
-            sudo make install
+            cd ~/.config/st/ &> /dev/null
+            sudo make install &> /dev/null
 
-            cd ~/.config/dmenu/
-            sudo make install
+            cd ~/.config/dmenu/ &> /dev/null
+            sudo make install &> /dev/null
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
@@ -149,11 +149,11 @@ Do you want to do it now?" 10 80
                 fi
 
                 if systemctl status libvirtd; then
-                    sudo groupadd libvirt
-                    local user_name=$(whoami)
-                    sudo usermod -aG libvirt $user_name
-                    sudo systemctl enable libvirtd
-                    sudo systemctl restart libvirtd
+                    sudo groupadd libvirt &> /dev/null
+                    local user_name=$(whoami) &> /dev/null
+                    sudo usermod -aG libvirt $user_name &> /dev/null
+                    sudo systemctl enable libvirtd &> /dev/null
+                    sudo systemctl restart libvirtd &> /dev/null
                 else
                     echo "libvirt is not installed" &> /dev/null
                 fi
