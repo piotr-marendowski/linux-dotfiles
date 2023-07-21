@@ -60,20 +60,10 @@ configure_installed() {
         files+=($(find . -maxdepth 1 -type f -name '.*'))
         files+=($(find . -maxdepth 1 -type f \! -name '.*'))
 
-        # exclude not-dotfolders/not-dotfiles
-        for i in "${!files[@]}"; do
-            for j in "${exclude[@]}"; do
-                if [[ "${files[$i]}" == "$j" ]]; then
-                    unset files[$i]
-                fi
-            done
-        done
-
         echo "Hidden files in $dir: ${files[@]}"
 
-        mkdir -p ~/.config
-        mkdir -p ~/Documents
-        mkdir -p ~/Games
+        mkdir -p ~/documents
+        mkdir -p ~/games
 
         # Move any dotfile "listed" (present) in dir to olddir and move a file from this
         # repo to program's directory e.g. ~/.config
@@ -85,6 +75,13 @@ configure_installed() {
             cp -Rf $dir/$file ~/$file
         done
         echo "done"
+
+        # delete unnecessary items
+        rm -r ~/assets
+        rm -r ~/install-script.sh
+        rm -r ~/LICENSE
+        rm -r ~/README.md
+        rm -r ~/.config/.config/
 
         # Configure Suckless' software
         cd ~/.config/st/
