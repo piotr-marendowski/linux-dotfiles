@@ -5,7 +5,7 @@
 <img src="/assets/whiptail1.png"  width="60%">
 <img src="/assets/whiptail2.png"  width="60%">
 
-## Installation for preconfigured machines
+## Installation for preinstalled machines
 Installation only requires git to clone this repository and rename it do `.dotfiles`.
 
 ```
@@ -30,3 +30,5 @@ mv dotfiles .dotfiles
 - [Pulseaudio (sound)](https://www.freedesktop.org/wiki/Software/PulseAudio/)
 - [or Pipewire (sound)](https://pipewire.org)
 - [Neovim (code editor)](https://neovim.io/)
+
+### While this is the base "OG" branch, the updated and focused on the [IvoryOS](https://github.com/piotr-marendowski/ivoryos) is the [DWM branch](https://github.com/piotr-marendowski/dotfiles/tree/dwm).
