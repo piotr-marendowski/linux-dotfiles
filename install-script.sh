@@ -212,7 +212,7 @@ Do you want to do it now?" 9 80
 install() {
     mkdir -p ~/Downloads
 
-	whiptail --title "Warming" --yesno "Do you want to install selected programs?" 7 45
+	whiptail --title "Warming" --yesno "Do you want to begin installation?" 7 45
 	
 	if [ $? -eq 0 ]; then
 		echo "Installing selected programs..."
