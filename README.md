@@ -6,25 +6,23 @@
 <img src="/assets/whiptail2.png"  width="60%">
 
 ## Installation for preconfigured machines
-Installation only requires git to clone this repository and rename it do `.dotfiles`.
+Installation only requires git to clone this repository with DWM branch.
 
 ```
-git clone https://github.com/piotr-marendowski/dotfiles.git
-mv dotfiles .dotfiles
-.dotfiles/install-script.sh
+git clone --single-branch --branch dwm https://github.com/piotr-marendowski/dotfiles.git
+dotfiles/install-script.sh
 ```
 
 ## Used programs/packages
 - [Nvidia drivers](https://www.nvidia.com/en-us/drivers/unix/)
-- [Paru (AUR helper)](https://github.com/Morganamilo/paru)
+- [Paru](https://github.com/Morganamilo/paru)
 - [Xorg Window System](https://wiki.archlinux.org/title/Xorg)
 - [Xorg-Xinit](https://wiki.archlinux.org/title/Xinit)
-- [Qtile (window Manager)](http://www.qtile.org/)
-- [SDDM (session manager)](https://github.com/sddm/sddm)
-- [or Ly (session manager)](https://github.com/fairyglade/ly)
-- [Alacritty (terminal emulator)](https://alacritty.org/)
-- [Dmenu](https://tools.suckless.org/dmenu/)
-- [Htop (system monitor)](https://htop.dev/)
-- [Flameshot (screenshots)](https://flameshot.org/)
-- [Pipewire (sound)](https://pipewire.org)
-- [Neovim (code)](https://neovim.io/)
+- [dwm](https://dwm.suckless.org/)
+- [ly](https://github.com/fairyglade/ly)
+- [st](https://st.suckless.org/)
+- [dmenu](https://tools.suckless.org/dmenu/)
+- [htop](https://htop.dev/)
+- [Flameshot](https://flameshot.org/)
+- [Pipewire](https://pipewire.org)
+- [Neovim](https://neovim.io/)
