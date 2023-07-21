@@ -41,7 +41,7 @@ programs=()
 ## Configure installed packages
 configure_installed() {
     # dotfolders directory
-    dir=~/.dotfiles
+    dir=~/dotfiles
     # create arrays for: folders/normal files, hidden files, and excluded characters/files
     files=(.*)
     exclude=(. ..)
@@ -188,7 +188,7 @@ install() {
 		if ! command -v paru &> /dev/null; then
             echo "Paru could not be found"
             whiptail --title "Information" --msgbox "This will take a few minutes. If it'll be stuck on Arming ConditionNeedsUpdate \
-then reboot and restart install script in .dotfiles folder." 9 60
+then reboot and restart install script in dotfiles folder." 9 60
             echo "Proceeding to install Paru AUR helper..."
             clear
             sudo pacman -S --noconfirm --needed base-devel
@@ -286,6 +286,7 @@ menu() {
 			install "${programs[@]}"
 			configure_installed
             sudo rm /etc/profile.d/firstboot.sh
+            sudo rm $dir
 			reboot_now
 			;;
 		"2")   
