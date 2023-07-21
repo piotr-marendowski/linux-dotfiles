@@ -20,14 +20,14 @@ listbox=white,black
 compactbutton=white,black
 button=black,white
 actbutton=white,black
-entry=black,white
 actlistbox=black,white
+actsellistbox=black,white
 textbox=white,black 
 roottext=white,black
-emptyscale=white,black
-fullscale=white,white
+emptyscale=gray,black
+fullscale=gray,gray
+entry=black,white
 disentry=white,white
-actsellistbox=black,white
 sellistbox=white,black"
 
 # is virtualization installed? 
@@ -48,77 +48,124 @@ configure_installed() {
     # IF USER SELECTS NO THEN GO TO MENU (ELSE IS AT THE BOTTOM OF THE FUNCTIO )
 	if whiptail --title "Warming" --yesno "Do you want to configure dotfiles?" 7 50; then
         # theme
-        sudo cp -r $dir/assets/TokyoNight /usr/share/themes/
+        whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
+            # Update the gauge
+            gauge=$((100 * (1 + 1) / 8))
+            echo "$gauge"
 
-        # make dotfiles
-        echo "Searching $dir directory..."
-        cd $dir
-        # seach for all files in dir
-        files+=($(find . -maxdepth 1 -type d -name '.*'))
-        files+=($(find . -maxdepth 1 -type d \! -name '.*'))
-        files+=($(find . -maxdepth 1 -type f -name '.*'))
-        files+=($(find . -maxdepth 1 -type f \! -name '.*'))
+            sudo cp -r $dir/assets/TokyoNight /usr/share/themes/
+        )
+        whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
+            # Update the gauge
+            gauge=$((100 * (2 + 1) / 8))
+            echo "$gauge"
 
-        echo "Hidden files in $dir: ${files[@]}"
+            # make dotfiles
+            echo "Searching $dir directory..."
+            cd $dir
+            # seach for all files in dir
+            files+=($(find . -maxdepth 1 -type d -name '.*'))
+            files+=($(find . -maxdepth 1 -type d \! -name '.*'))
+            files+=($(find . -maxdepth 1 -type f -name '.*'))
+            files+=($(find . -maxdepth 1 -type f \! -name '.*'))
 
-        mkdir -p ~/documents
-        mkdir -p ~/games
+            echo "Files in $dir: ${files[@]}"
+        )
+        whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
+            # Update the gauge
+            gauge=$((100 * (3 + 1) / 8))
+            echo "$gauge"
 
-        # Move any dotfile "listed" (present) in dir to olddir and move a file from this
-        # repo to program's directory e.g. ~/.config
-        echo "Moving dotfiles from $dir to homedir..."
-        echo "DON'T PANIC IF THERE ARE ERRORS!"
-        # hidden files/folders
-        for file in ${files[@]}; do
-            echo "Moving $file to homedir..."
-            cp -Rf $dir/$file ~/$file
-        done
-        echo "done"
+            mkdir -p ~/documents
+            mkdir -p ~/games
+        )
+        whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
+            # Update the gauge
+            gauge=$((100 * (3 + 1) / 8))
+            echo "$gauge"
 
-        # delete unnecessary items
-        rm -r ~/assets
-        rm -r ~/install-script.sh
-        rm -r ~/LICENSE
-        rm -r ~/README.md
-        rm -r ~/.config/.config/
+            # Move any dotfile "listed" (present) in dir to olddir and move a file from this
+            # repo to program's directory e.g. ~/.config
+            echo "Moving dotfiles from $dir to homedir..."
+            echo "DON'T PANIC IF THERE ARE ERRORS!"
+            # hidden files/folders
+            for file in ${files[@]}; do
+                echo "Moving $file to homedir..."
+                cp -Rf $dir/$file ~/$file
+            done
+            echo "done"
+        )
+        whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
+            # Update the gauge
+            gauge=$((100 * (4 + 1) / 8))
+            echo "$gauge"
 
-        # Configure Suckless' software
-        cd ~/.config/st/
-        sudo make install
+            # delete unnecessary items
+            rm -r ~/assets
+            rm -r ~/install-script.sh
+            rm -r ~/LICENSE
+            rm -r ~/README.md
+            rm -r ~/.config/.config/
+        )
+        whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
+            # Update the gauge
+            gauge=$((100 * (5 + 1) / 8))
+            echo "$gauge"
 
-        cd ~/.config/dmenu/
-        sudo make install
+            # Configure Suckless' software
+            cd ~/.config/st/
+            sudo make install
 
-        # check if pacman -Q name begins with name of ly
-        # and enable its service if it is
-        echo "Proceeding to check if login manager is installed..."
-        pacman -Q ly | grep -q "^ly" && sudo systemctl enable ly && echo "Ly installed."
+            cd ~/.config/dmenu/
+            sudo make install
+        )
+        whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
+            # Update the gauge
+            gauge=$((100 * (6 + 1) / 8))
+            echo "$gauge"
 
-        # start gamemode
-        systemctl --user enable gamemoded && systemctl --user start gamemoded
+            # check if pacman -Q name begins with name of ly
+            # and enable its service if it is
+            echo "Proceeding to check if login manager is installed..."
+            pacman -Q ly | grep -q "^ly" && sudo systemctl enable ly && echo "Ly installed."
+        )
+        whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
+            # Update the gauge
+            gauge=$((100 * (7 + 1) / 8))
+            echo "$gauge"
 
-        # virtualization
-        if [ "$is_virtualization" = true ]; then
+            # start gamemode
+            systemctl --user enable gamemoded && systemctl --user start gamemoded
+        )
+        whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
+            # Update the gauge
+            gauge=$((100 * (8 + 1) / 8))
+            echo "$gauge"
 
-            whiptail --title "VIRTUALIZATION: Warming" --yesno "You need to ensure that these are set to: \
+            # virtualization
+            if [ "$is_virtualization" = true ]; then
+
+                whiptail --title "VIRTUALIZATION: Warming" --yesno "You need to ensure that these are set to: \
 unix_sock_group = \"libvirt\", unix_sock_ro_perms = \"0777\", and unix_sock_rw_perms = \"0770\". \
 Do you want to do it now?" 10 80
-            if [ $? -eq 0 ]; then
-                sudo nvim /etc/libvirt/libvirtd.conf
-            fi
+                if [ $? -eq 0 ]; then
+                    sudo nvim /etc/libvirt/libvirtd.conf
+                fi
 
-            if systemctl status libvirtd; then
-                sudo groupadd libvirt
-                local user_name=$(whoami)
-                sudo usermod -aG libvirt $user_name
-                sudo systemctl enable libvirtd
-                sudo systemctl restart libvirtd
-            else
-                echo "libvirt is not installed"
+                if systemctl status libvirtd; then
+                    sudo groupadd libvirt
+                    local user_name=$(whoami)
+                    sudo usermod -aG libvirt $user_name
+                    sudo systemctl enable libvirtd
+                    sudo systemctl restart libvirtd
+                else
+                    echo "libvirt is not installed"
+                fi
+                else
+                    echo "Virtualization is not configured right now."
             fi
-            else
-                echo "Virtualization is not configured right now."
-            fi
+        )
+
     else
         menu
     fi
