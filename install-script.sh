@@ -44,7 +44,6 @@ configure_installed() {
     dir=~/dotfiles
     # create arrays for: folders/normal files, hidden files, and excluded characters/files
     files=(.*)
-    exclude=(. ..)
     exclude_files=(assets install-script.sh README.md LICENSE .git)
 
     # IF USER SELECTS NO THEN GO TO MENU (ELSE IS AT THE BOTTOM OF THE FUNCTIO )
@@ -60,15 +59,6 @@ configure_installed() {
         files+=($(find . -maxdepth 1 -type d \! -name '.*'))
         files+=($(find . -maxdepth 1 -type f -name '.*'))
         files+=($(find . -maxdepth 1 -type f \! -name '.*'))
-
-        # exclude some files and directories from files array
-        for char in "${exclude[@]}"; do
-            for i in "${!files[@]}"; do
-                if [[ ${files[i]} = $char ]]; then
-                    unset 'files[i]'
-                fi
-            done
-        done
 
         # exclude not-dotfolders/not-dotfiles
         for del in ${exclude_files[@]}
