@@ -56,14 +56,12 @@ configure_installed() {
         # make dotfiles
         echo "Searching $dir directory..."
         cd $dir
-        # search for folders (and not hidden files)
-        for i in ${folders[@]}; do
-            :
-        done
-        # search for all hidden files (even something like '.' and '..')
-        for i in ${files[@]}; do
-            :
-        done
+        # seach for all files in dir
+        files+=($(find . -maxdepth 1 -type d -name '.*'))
+        files+=($(find . -maxdepth 1 -type d \! -name '.*'))
+        files+=($(find . -maxdepth 1 -type f -name '.*'))
+        files+=($(find . -maxdepth 1 -type f \! -name '.*'))
+
         # exclude some files and directories from files array
         for char in "${exclude[@]}"; do
             for i in "${!files[@]}"; do
@@ -103,7 +101,7 @@ configure_installed() {
         # hidden files
         for file in ${files[@]}; do
             echo "Moving $file to homedir..."
-            cp -rf $dir/$file ~/$file
+            cp -f $dir/$file ~/$file
         done
         echo "done"
 
