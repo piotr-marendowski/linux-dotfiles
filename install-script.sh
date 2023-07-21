@@ -50,17 +50,6 @@ configure_installed() {
 
     # IF USER SELECTS NO THEN GO TO MENU (ELSE IS AT THE BOTTOM OF THE FUNCTIO )
 	if whiptail --title "Warming" --yesno "Do you want to configure dotfiles?" 7 50; then
-        # Xorg
-        if command -v X -version &> /dev/null
-        then
-            echo "Configuring Xorg server and adding DWM as default window manager..."
-            cp /etc/X11/xinit/xinitrc ~/.xinitrc && echo "(1/4)"
-            head -n -5 .xinitrc > .xinitrc-temp && mv .xinitrc-temp .xinitrc && echo "(2/4)"
-            echo exec dwm >> ~/.xinitrc && echo "(3/4)"
-            rm ~/.xinitrc-temp && echo "(4/4)"
-            echo "done"
-        fi
-        
         # theme
         sudo cp -r $dir/assets/TokyoNight /usr/share/themes/
 
