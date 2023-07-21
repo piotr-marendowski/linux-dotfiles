@@ -2,6 +2,8 @@
 # Heavily modified version of script made by Derek Taylor (https://gitlab.com/dwt1)
 # Author: Piotr Marendowski (https://github.com/piotr-marendowski), License: GPL3
 #
+# &> /dev/null IS USED TO SEND OUTPUT OF THE COMMANDS INTO THE VOID, SO THEY ARE NOT DISPLAYED ON PROGRESS BAR
+#
 # These exports are the only way to specify colors with whiptail.
 # See this thread for more info:
 # https://askubuntu.com/questions/776831/whiptail-change-background-color-dynamically-from-magenta/781062
@@ -26,18 +28,15 @@ textbox=white,black
 roottext=white,black
 emptyscale=gray,black
 fullscale=gray,gray
-entry=black,white
+entry=black,gray
 disentry=white,white
 sellistbox=white,black"
 
-# is virtualization installed? 
-is_virtualization=false
-# Array of programs to install
-programs=()
-# dotfolders directory
-dir=~/dotfiles
-# create arrays for: folders/normal files, hidden files, and excluded characters/files
-files=(.*)
+is_virtualization=false # is virtualization enabled? 
+programs=()             # Array of programs to install
+exclude=()              # programs to unselect
+dir=~/dotfiles          # dotfolders directory
+files=(.*)              # files array 
 
 ## Configure installed packages in progress bar
 configure_installed() {
@@ -262,7 +261,7 @@ print_programs() {
 
 add_manually() {
 	while true; do
-	    program=$(whiptail --ok-button "Add" --inputbox "Enter one program at the time:" 8 60 --title "Add Program" 3>&1 1>&2 2>&3)
+	    program=$(whiptail --ok-button "Add" --inputbox "\nEnter one program at the time:" 9 50 --title "Add a program" 3>&1 1>&2 2>&3)
 	    if [ $? = 0 ]; then
             # Add the program name to the programs array
             programs+=("$program")
@@ -276,24 +275,23 @@ add_manually() {
 }
 
 unselect_programs() {
-    options=()
-    for program in "${programs[@]}"; do
-        options+=("$program" "")
+	while true; do
+	    program=$(whiptail --ok-button "Unselect" --inputbox "\nEnter one program at the time:" 9 50 --title "Unselect a program" 3>&1 1>&2 2>&3)
+	    if [ $? = 0 ]; then
+            # Add the program name to the programs array
+            exclude+=("$program")
+            else
+            # Exit the loop if the user cancels the input
+            break
+	    fi
+	done
+
+    # unselect programs
+    for i in "${exclude[@]}"; do
+        programs=("${programs[@]/$i}")
     done
 
-    # Display the whiptail menu and let the user choose elements to delete
-    whiptail --title "Delete Programs" --checklist "Select programs to delete" 20 60 5 "$(printf '%s\n' "${programs[@]}")" 3>&1 1>&2 2>&3
-
-    # Loop through the selected programs and remove them from the array
-    for program in ${selected[@]}; do
-        programs=("${programs[@]/$program}")
-    done
-
-    # Print the updated programs array
-    echo "Updated programs array:"
-    for program in "${programs[@]}"; do
-        echo "$program"
-    done
+	echo "${programs[@]}"
 }
 
 # Menu window
