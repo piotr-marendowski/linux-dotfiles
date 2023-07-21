@@ -18,10 +18,10 @@ label=black,white
 checkbox=white,black
 listbox=white,black
 compactbutton=white,black
-button=black,white
-actbutton=white,black
-actlistbox=black,white
-actsellistbox=black,white
+button=black,gray
+actbutton=gray,black
+actlistbox=black,gray
+actsellistbox=black,gray
 textbox=white,black 
 roottext=white,black
 emptyscale=gray,black
@@ -32,20 +32,16 @@ sellistbox=white,black"
 
 # is virtualization installed? 
 is_virtualization=false
-# is full installation?
-is_full_installation=false
-
 # Array of programs to install
 programs=()
+# dotfolders directory
+dir=~/dotfiles
+# create arrays for: folders/normal files, hidden files, and excluded characters/files
+files=(.*)
 
-## Configure installed packages
+## Configure installed packages in progress bar
 configure_installed() {
-    # dotfolders directory
-    dir=~/dotfiles
-    # create arrays for: folders/normal files, hidden files, and excluded characters/files
-    files=(.*)
-
-    # IF USER SELECTS NO THEN GO TO MENU (ELSE IS AT THE BOTTOM OF THE FUNCTIO )
+    # IF USER SELECTS NO THEN GO TO MENU (ELSE IS AT THE BOTTOM OF THE FUNCTION)
 	if whiptail --title "Warming" --yesno "Do you want to configure dotfiles?" 7 50; then
         # theme
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
@@ -61,7 +57,7 @@ configure_installed() {
             echo "$gauge"
 
             # make dotfiles
-            echo "Searching $dir directory..."
+            echo "Searching $dir directory..." &> /dev/null
             cd $dir
             # seach for all files in dir
             files+=($(find . -maxdepth 1 -type d -name '.*'))
@@ -69,7 +65,7 @@ configure_installed() {
             files+=($(find . -maxdepth 1 -type f -name '.*'))
             files+=($(find . -maxdepth 1 -type f \! -name '.*'))
 
-            echo "Files in $dir: ${files[@]}"
+            echo "Files in $dir: ${files[@]}" &> /dev/null
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
@@ -86,11 +82,11 @@ configure_installed() {
 
             # Move any dotfile "listed" (present) in dir to olddir and move a file from this
             # repo to program's directory e.g. ~/.config
-            echo "Moving dotfiles from $dir to homedir..."
-            echo "DON'T PANIC IF THERE ARE ERRORS!"
+            echo "Moving dotfiles from $dir to homedir..." &> /dev/null
+            echo "DON'T PANIC IF THERE ARE ERRORS!" &> /dev/null
             # hidden files/folders
             for file in ${files[@]}; do
-                echo "Moving $file to homedir..."
+                echo "Moving $file to homedir..." &> /dev/null
                 cp -Rf $dir/$file ~/$file
             done
             echo "done"
@@ -126,8 +122,8 @@ configure_installed() {
 
             # check if pacman -Q name begins with name of ly
             # and enable its service if it is
-            echo "Proceeding to check if login manager is installed..."
-            pacman -Q ly | grep -q "^ly" && sudo systemctl enable ly && echo "Ly installed."
+            echo "Proceeding to check if login manager is installed..." &> /dev/null
+            pacman -Q ly | grep -q "^ly" && sudo systemctl enable ly && echo "Ly installed." &> /dev/null
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
@@ -135,7 +131,7 @@ configure_installed() {
             echo "$gauge"
 
             # start gamemode
-            systemctl --user enable gamemoded && systemctl --user start gamemoded
+            systemctl --user enable gamemoded && systemctl --user start gamemoded &> /dev/null
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
@@ -159,10 +155,10 @@ Do you want to do it now?" 10 80
                     sudo systemctl enable libvirtd
                     sudo systemctl restart libvirtd
                 else
-                    echo "libvirt is not installed"
+                    echo "libvirt is not installed" &> /dev/null
                 fi
                 else
-                    echo "Virtualization is not configured right now."
+                    echo "Virtualization is not configured right now." &> /dev/null
             fi
         )
 
