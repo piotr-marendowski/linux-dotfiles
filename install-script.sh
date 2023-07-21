@@ -43,10 +43,9 @@ configure_installed() {
     # dotfolders directory
     dir=~/.dotfiles
     # create arrays for: folders/normal files, hidden files, and excluded characters/files
-    folders=(*)
     files=(.*)
     exclude=(. ..)
-    exclude_files=(assets whiptail-script.sh README.md LICENSE .git)
+    exclude_files=(assets install-script.sh README.md LICENSE .git)
 
     # IF USER SELECTS NO THEN GO TO MENU (ELSE IS AT THE BOTTOM OF THE FUNCTIO )
 	if whiptail --title "Warming" --yesno "Do you want to configure dotfiles?" 7 50; then
@@ -74,15 +73,9 @@ configure_installed() {
         # exclude not-dotfolders/not-dotfiles
         for del in ${exclude_files[@]}
         do
-            folders=("${folders[@]/$del}")
-        done
-
-        for del in ${exclude_files[@]}
-        do
             files=("${files[@]/$del}")
         done
 
-        echo "Folders/files in $dir: ${folders[@]}"
         echo "Hidden files in $dir: ${files[@]}"
 
         mkdir -p ~/.config
@@ -99,6 +92,13 @@ configure_installed() {
             cp -Rf $dir/$file ~/$file
         done
         echo "done"
+
+        # Configure Suckless' software
+        cd ~/.config/st/
+        sudo make install
+
+        cd ~/.config/dmenu/
+        sudo make install
 
         # check if pacman -Q name begins with name of ly
         # and enable its service if it is
