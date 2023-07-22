@@ -88,7 +88,7 @@ configure_installed() {
                 echo "Moving $file to homedir..." &> /dev/null
                 cp -Rf $dir/$file ~/$file &> /dev/null
             done
-            echo "done"
+            echo "done" &> /dev/null
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
@@ -113,6 +113,10 @@ configure_installed() {
 
             cd ~/.config/dmenu/ &> /dev/null
             sudo make install &> /dev/null
+
+            cd ~/.config/dwm/ &> /dev/null
+            sudo make install &> /dev/null
+
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
