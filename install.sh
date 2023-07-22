@@ -97,7 +97,7 @@ configure_installed() {
 
             # delete unnecessary items
             rm -r ~/assets &> /dev/null
-            rm -r ~/install-script.sh &> /dev/null
+            rm -r ~/install.sh &> /dev/null
             rm -r ~/LICENSE &> /dev/null
             rm -r ~/README.md &> /dev/null
             rm -r ~/.config/.config/ &> /dev/null

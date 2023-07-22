@@ -10,7 +10,7 @@ Installation only requires git to clone this repository with DWM branch.
 
 ```
 git clone --single-branch --branch dwm https://github.com/piotr-marendowski/dotfiles.git
-dotfiles/install-script.sh
+./dotfiles/install.sh
 ```
 
 ## Used programs/packages
