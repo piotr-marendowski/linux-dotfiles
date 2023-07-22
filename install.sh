@@ -174,7 +174,7 @@ add_programs() {
     programs+=( "pipewire" "pipewire-audio" "pipewire-alsa" "pipewire-jack" "pipewire-pulse" )
 
     # gui
-    programs+=( "xorg" "xorg-xinit" "dwm" "ly" "qt" "redshift" "picom-jonaburg-git" "ttf-jetbrains-mono-nerd" "lxappearance" )
+    programs+=( "xorg" "xorg-xinit" "ly" "qt" "redshift" "picom-jonaburg-git" "ttf-jetbrains-mono-nerd" "lxappearance" )
 
     # gaming
 	whiptail --title "Warming" --yesno "Before installing and configuring system for \
