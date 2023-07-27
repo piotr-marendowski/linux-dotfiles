@@ -172,10 +172,10 @@ Do you want to do it now?" 10 80
 # EDIT FOR YOURSELF! won't describe every program because don't care :)
 add_programs() {
     # utilities
-	programs+=( "vieb" "sioyek" "flameshot" "htim" "polkit" "gnome-polkit" "zip" "unzip" "tar" "ncdu" "libreoffice-fresh" "wget" "curl" "ripgrep" "python-pip" "meson" "ninja" "neovim" "lazygit" "zsh" "zsh-completions" "zsh-syntax-highlighting" )
+	programs+=( "vieb" "sioyek" "htim" "polkit" "gnome-polkit" "zip" "unzip" "tar" "ncdu" "libreoffice-fresh" "wget" "curl" "python-pip" "meson" "ninja" "zsh" "zsh-completions" "zsh-syntax-highlighting" )
 
     # other
-	programs+=( "discord-screenaudio" "mellowplayer" "gimp" "ttf-ms-fonts" )
+	programs+=( "discord-screenaudio" "mellowplayer" "gimp" "ttf-ms-fonts" "flameshot" "neovim" "lazygit" "ripgrep" )
 
     # sound - pipewire
     # programs+=( "pipewire" "pipewire-audio" "pipewire-alsa" "pipewire-jack" "pipewire-pulse" )
