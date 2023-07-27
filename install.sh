@@ -116,7 +116,6 @@ configure_installed() {
 
             cd ~/.config/dwm/ &> /dev/null
             sudo make install &> /dev/null
-
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
@@ -170,15 +169,20 @@ Do you want to do it now?" 10 80
     fi
 }
 
+# EDIT FOR YOURSELF! won't describe every program because don't care :)
 add_programs() {
-    # core
-	programs+=( "vieb" "sioyek" "flameshot" "gimp" "htop" "discord-screenaudio" "mellowplayer" "polkit" "gnome-polkit" "zip" "unzip" "tar" "ncdu" "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" "libreoffice-fresh" "ttf-ms-fonts" "wget" "curl" "ripgrep" "python-pip" "meson" "ninja" "neovim" "lazygit" )
+    # utilities
+	programs+=( "vieb" "sioyek" "flameshot" "htim" "polkit" "gnome-polkit" "zip" "unzip" "tar" "ncdu" "libreoffice-fresh" "wget" "curl" "ripgrep" "python-pip" "meson" "ninja" "neovim" "lazygit" "zsh" "zsh-completions" "zsh-syntax-highlighting" )
+
+    # other
+	programs+=( "discord-screenaudio" "mellowplayer" "gimp" "ttf-ms-fonts" )
 
     # sound - pipewire
-    programs+=( "pipewire" "pipewire-audio" "pipewire-alsa" "pipewire-jack" "pipewire-pulse" )
+    # programs+=( "pipewire" "pipewire-audio" "pipewire-alsa" "pipewire-jack" "pipewire-pulse" )
+    programs+=( "pipewire" "pipewire-audio" "pipewire-alsa" )
 
     # gui
-    programs+=( "xorg" "xorg-xinit" "ly" "qt" "redshift" "picom-jonaburg-git" "ttf-jetbrains-mono-nerd" "lxappearance" )
+    programs+=( "xorg" "xorg-xinit" "ly" "redshift" "picom-jonaburg-git" "ttf-jetbrains-mono-nerd" "lxappearance" )
 
     # gaming
 	whiptail --title "Warming" --yesno "Before installing and configuring system for \
@@ -204,6 +208,9 @@ Do you want to do it now?" 9 80
             echo "done"
         fi
     done
+
+    # android
+	# programs+=( "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" )
 
 	# programs+=( "steam" "lutris" "wine-staging" "nvidia-utils" "nvidia-settings" "nvidia-settings" "vulkan-icd-loader" "dxvk-bin" "opencl-nvidia" "libvdpau" "libxnvctrl" "lib32-nvidia-utils" "lib32-opencl-nvidia" "lib32-vulkan-icd-loader" "proton-ge-custom-bin" "mangohud-git" "goverlay-bin" "gwe" "protonup-qt-bin" "gamemode" )
 
