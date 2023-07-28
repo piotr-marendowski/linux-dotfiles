@@ -41,8 +41,14 @@ files=(.*)              # files array
 ## Configure installed packages in progress bar
 configure_installed() {
     # IF USER SELECTS NO THEN GO TO MENU (ELSE IS AT THE BOTTOM OF THE FUNCTION)
-	if whiptail --title "Warming" --yesno "Do you want to configure dotfiles?" 7 50; then
-        # theme
+	if whiptail --title "Warming" --yesno "Do you want to configure dotfiles?" 7 38; then
+
+        # Make zsh default shell
+	    whiptail --title "Shell" --yesno "Do you want to make zsh default shell?" 7 42
+        if [ $? -eq 0 ]; then
+            sudo chsh -s /bin/zsh
+        fi
+        
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
             gauge=$((100 * (1 + 1) / 8))
@@ -209,7 +215,7 @@ Do you want to do it now?" 9 80
         fi
     done
 
-    # android
+    # android support
 	# programs+=( "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" )
 
 	# programs+=( "steam" "lutris" "wine-staging" "nvidia-utils" "nvidia-settings" "nvidia-settings" "vulkan-icd-loader" "dxvk-bin" "opencl-nvidia" "libvdpau" "libxnvctrl" "lib32-nvidia-utils" "lib32-opencl-nvidia" "lib32-vulkan-icd-loader" "proton-ge-custom-bin" "mangohud-git" "goverlay-bin" "gwe" "protonup-qt-bin" "gamemode" )
