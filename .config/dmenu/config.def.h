@@ -19,7 +19,7 @@ static const char *colors[SchemeLast][2] = {
 	[SchemeOutHighlight] = { "#ffc978", "#00ffff" },
 };
 /* -l option; if nonzero, dmenu uses vertical list with given number of lines */
-static unsigned int lines      = 10;
+static unsigned int lines      = 0;
 
 /*
  * Characters not considered part of a word while deleting words
@@ -28,4 +28,4 @@ static unsigned int lines      = 10;
 static const char worddelimiters[] = " ";
 
 /* Size of the window border */
-static unsigned int border_width = 3;
+static unsigned int border_width = 0;
