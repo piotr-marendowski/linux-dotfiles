@@ -53,6 +53,7 @@ return {
 				dashboard.button("f", "󰈞  Find file", ":Telescope find_files <CR>"),
 				dashboard.button("n", "  New file", ":ene <BAR> startinsert <CR>"),
 				dashboard.button("p", "󰱓  Find project", ":Telescope projects <CR>"),
+				dashboard.button("s", "  Find session", ':lua require("nvim-possession").list()<cr>'),
 				dashboard.button("r", "󰄉  Recently used files", ":Telescope oldfiles <CR>"),
 				dashboard.button("t", "󰊄  Find text", ":Telescope live_grep <CR>"),
 				dashboard.button("c", "  Configuration", ":e ~/.config/nvim/init.lua <CR>"),
@@ -64,7 +65,6 @@ return {
 			-- map("n", "<leader>af", ":Telescope find_files <CR>", "󰈞 Find file")
 			map("n", "<leader>on", ":ene <BAR> startinsert <CR>", " New file")
 			map("n", "<leader>sp", ":Telescope projects <CR>", "󰱓 Find project")
-			map("n", "<leader>su", ":Telescope oldfiles <CR>", "󰄉 Recent files")
 			-- map("n", "<leader>at", ":Telescope live_grep <CR>", "󰊄 Find text")
 			map("n", "<leader>oi", ":e ~/.config/nvim/init.lua <CR>", " init.lua")
 

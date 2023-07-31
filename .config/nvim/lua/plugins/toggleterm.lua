@@ -7,7 +7,7 @@ return {
 			require("toggleterm").setup({
 				open_mapping = [[<c-\>]],
 				shade_terminals = false,
-				direction = "horizontal",
+				direction = "float",
 				autochdir = true,
 				shell = vim.o.shell,
 			})

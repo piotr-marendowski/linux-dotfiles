@@ -15,10 +15,10 @@ return {
 				marks = {
 					-- don't display dot
 					Cursor = {
-						text = "",
+						text = " ",
+					    color = colors.terminal_black,
 					},
 
-					--[[
 					Error = { color = colors.error },
 					Warn = { color = colors.warning },
 					Info = { color = colors.info },
@@ -37,7 +37,6 @@ return {
 						text = { "-", "=" },
 						color = colors.error,
 					},
-					]]
 				},
 				excluded_filetypes = {
 					"NvimTree",

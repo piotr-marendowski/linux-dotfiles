@@ -6,17 +6,25 @@ return {
 			-- use tokyonight colors
 			local colors = require("tokyonight.colors").setup()
 
-			codewindow.setup({
+        codewindow.setup({
 				auto_enable = false, -- autostart on every buffer opening
-				window_border = "", -- no border
 				exclude_filetypes = { "NvimTree", "alpha" },
 				minimap_width = 10,
+				window_border = "", -- no border
+                screen_bounds = "background", -- vs-code like shadow
+                show_cursor = false,
 			})
 			codewindow.apply_default_keybinds()
 
 			-- Minimap colors
 			vim.api.nvim_set_hl(0, "CodewindowBackground", { fg = colors.dark3 })
 			vim.api.nvim_set_hl(0, "CodewindowUnderline", { fg = colors.fg })
+			vim.api.nvim_set_hl(0, "CodewindowBorder", { fg = colors.dark3 })
+			vim.api.nvim_set_hl(0, "CodewindowBoundsBackground", { fg = colors.fg_dark })
+			vim.api.nvim_set_hl(0, "CodewindowWarn", { fg = colors.dark3 })
+			vim.api.nvim_set_hl(0, "CodewindowError", { fg = colors.dark3 })
+			vim.api.nvim_set_hl(0, "CodewindowAddition", { fg = colors.dark3 })
+			vim.api.nvim_set_hl(0, "CodewindowDeletion", { fg = colors.dark3 })
 
             -- Unmap default mappings
 			local map = require("keys").map
@@ -26,14 +34,14 @@ return {
 			map("n", "<leader>mo", "<Nop>", "")
 
 			-- Toggle minimap
-			require("keys").map({ "n", "v" }, "<leader>om", function()
+			require("keys").map({ "n", "v" }, "<leader>tm", function()
 				codewindow.toggle_minimap()
-			end, " Minimap " )
+			end, " Minimap")
 
 			-- Toggle minimap and auto focus on it
-			require("keys").map({ "n", "v" }, "<leader>oo", function()
+			require("keys").map({ "n", "v" }, "<leader>tf", function()
 				codewindow.toggle_focus()
-			end, " Minimap (focus)")
+			end, " Minimap (focus)  ")
 		end,
 	},
 }

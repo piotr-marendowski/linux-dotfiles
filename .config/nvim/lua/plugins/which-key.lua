@@ -9,20 +9,20 @@ return {
 			wk.setup({
 				layout = {
 					height = { min = 1, max = 100 },
-					width = { min = 3, max = 50 },
-					spacing = 3, -- spacing between columns
-					align = "right", -- align columns left, center or right
+					width = { min = 1, max = 100 },
+					spacing = 2, -- spacing between columns
+					align = "center", -- align columns left, center or right
 				},
 				icons = {
-					breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
-					separator = " ", -- symbol used between a key and it's label
+					breadcrumb = "", -- symbol used in the command line area that shows your active key combo
+					separator = "", -- symbol used between a key and it's label
 					group = "", -- symbol prepended to a group
 				},
 				window = {
-					border = "none", -- none, single, double, shadow
-					position = "bottom", -- bottom, top
-					margin = { 1, 0, 1, 105 }, -- extra window margin [top, right, bottom, left]. When between 0 and 1, will be treated as a percentage of the screen size.
+					border = "single", -- none, single, double, shadow
+					position = "top", -- bottom, top
 					padding = { 1, 1, 1, 1 }, -- extra window padding [top, right, bottom, left]
+                    margin = { 14, 55, 0, 55 }, -- extra window margin [top, right, bottom, left]. When between 0 and 1, will be treated as a percentage of the screen size.
 					winblend = 0, -- value between 0-100 0 for fully opaque and 100 for fully transparent
 				},
 			})
@@ -30,10 +30,10 @@ return {
 			wk.register({
 				["<leader>"] = {
 					c = {
-						name = " Code actions",
+						name = " Code related",
 					},
 					b = {
-						name = " Debugging",
+						name = " Debugging        ",
 						a = { "<cmd>TroubleToggle<cr>", " Toggle Trouble" },
 					},
 					g = { name = " Git" },
@@ -41,7 +41,7 @@ return {
 						name = " Search",
 						b = {
 							name = " Debugging",
-							b = { "<cmd>Telescope dap list_breakpoints<cr>", " Breakpoints" },
+							b = { "<cmd>Telescope dap list_breakpoints<cr>", " Breakpoints     " },
 							c = { "<cmd>Telescope dap commands<cr>", " Commands" },
 							f = { "<cmd>Telescope dap variables<cr>", " Frames" },
 							v = { "<cmd>Telescope dap frames<cr>", "󰫧 Variables" },
@@ -50,8 +50,17 @@ return {
 					},
 					o = {
 						name = "󰮰 Other actions",
-						l = { "<cmd>Lazy<cr>", "󱒋 Lazy" },
+						l = { "<cmd>Lazy<cr>", "󱒋 Lazy             " },
 						a = { "<cmd>NvimTreeClose | Alpha<cr>", " Alpha" },
+					},
+					m = {
+						name = " Marks",
+					},
+					t = {
+						name = "  Toggle",
+					},
+					p = {
+						name = " Sessions",
 					},
 				},
 			})

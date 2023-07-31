@@ -32,8 +32,15 @@ return {
 					show_buffer_close_icons = false,
 					show_close_icon = false,
 					show_tab_indicators = true,
+                    diagnostics = "nvim_lsp",
 				}
 			})
+            -- Navigate buffers
+			local map = require("keys").map
+            map("n", "<S-l>", "<cmd>BufferLineCycleNext<CR>", "Next buffer")
+            map("n", "<S-h>", "<cmd>BufferLineCyclePrev<CR>", "Previous buffer")
+            map("n", "<A-l>", "<cmd>BufferLineMoveNext<CR>", "Move next buffer")
+            map("n", "<A-h>", "<cmd>BufferLineMovePrev<CR>", "Move previous buffer")
 		end,
 	},
 }

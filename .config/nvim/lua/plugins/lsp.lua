@@ -6,12 +6,20 @@ return {
 			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
 			{
-                "j-hui/fidget.nvim",
-                branch = "legacy"
-            },
+				"j-hui/fidget.nvim",
+				branch = "legacy",
+			},
 			"folke/neodev.nvim",
 			"RRethy/vim-illuminate",
 			"hrsh7th/cmp-nvim-lsp",
+			{
+				"SmiteshP/nvim-navbuddy",
+				dependencies = {
+					"SmiteshP/nvim-navic",
+					"MunifTanjim/nui.nvim",
+				},
+				opts = { lsp = { auto_attach = true } },
+			},
 		},
 		config = function()
 			-- Set up Mason before anything else
@@ -65,7 +73,7 @@ return {
 			local on_attach = function(client, bufnr)
 				local lsp_map = require("keys").lsp_map
 
-				-- lsp_map("<leader>cc", vim.lsp.buf.rename, bufnr, "󰑕 Rename symbol")
+				-- lsp_map("<leader>cr", vim.lsp.buf.rename, bufnr, "󰑕 Rename symbol")
 				lsp_map("<leader>ca", vim.lsp.buf.code_action, bufnr, " Code action")
 				lsp_map("<leader>cd", vim.lsp.buf.type_definition, bufnr, "󰡱 Type definition")
 				lsp_map("<leader>cs", require("telescope.builtin").lsp_document_symbols, bufnr, " Document symbols")
@@ -77,11 +85,11 @@ return {
 				lsp_map("gD", vim.lsp.buf.declaration, bufnr, "Goto Declaration")
 
 				-- Create a command `:Format` local to the LSP buffer
-				--[[ vim.api.nvim_buf_create_user_command(bufnr, "Format", function(_)
+				vim.api.nvim_buf_create_user_command(bufnr, "Format", function(_)
 					vim.lsp.buf.format()
 				end, { desc = "Format current buffer with LSP" })
 
-				lsp_map("<leader>of", "<cmd>Format<cr>", bufnr, " Format") ]]
+				lsp_map("<leader>of", "<cmd>Format<cr>", bufnr, " Format")
 
 				-- Attach and configure vim-illuminate
 				require("illuminate").on_attach(client)
