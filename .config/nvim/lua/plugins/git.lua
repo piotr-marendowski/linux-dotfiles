@@ -31,13 +31,5 @@ return {
 			})
 		end,
 	},
-	{
-		"kdheepak/lazygit.nvim",
-		-- optional for floating window border decoration
-		dependencies = { "nvim-lua/plenary.nvim" },
-		config = function()
-			local map = require("keys").map
-			map("n", "<leader>gl", "<cmd>LazyGit<cr>", " Open Lazygit")
-		end,
-	},
+    -- Lazygit is in toggleterm.lua
 }

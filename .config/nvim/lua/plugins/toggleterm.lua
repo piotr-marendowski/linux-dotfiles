@@ -46,7 +46,8 @@ return {
 				lazygit:toggle()
 			end
 
-			vim.api.nvim_set_keymap("n", "<leader>g", "<cmd>lua LAZYGIT_TOGGLE()<CR>", {noremap = true, silent = true})
+			local map = require("keys").map
+			map("n", "<leader>og", "<cmd>lua LAZYGIT_TOGGLE()<CR>", " Lazygit")
 		end,
 	},
 }

@@ -36,7 +36,6 @@ return {
 						name = " Debugging        ",
 						a = { "<cmd>TroubleToggle<cr>", " Toggle Trouble" },
 					},
-					g = { name = " Git" },
 					s = {
 						name = " Search",
 						b = {
