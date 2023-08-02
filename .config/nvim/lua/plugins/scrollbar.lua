@@ -13,36 +13,28 @@ return {
 					blend = 0,
 				},
 				marks = {
-					-- don't display dot
-					Cursor = {
-						text = " ",
-					    color = colors.terminal_black,
-					},
-
-					Error = { color = colors.error },
-					Warn = { color = colors.warning },
-					Info = { color = colors.info },
-					Hint = { color = colors.hint },
-					Misc = { color = colors.purple },
-
-					GitAdd = {
-						text = { "-", "=" },
-						color = colors.green,
-					},
-					GitChange = {
-						text = { "-", "=" },
-						color = colors.orange,
-					},
-					GitDelete = {
-						text = { "-", "=" },
-						color = colors.error,
-					},
+                    --colors
+                    -- get default colors for them
+					Error = { text = { "|", "=" }},
+					Warn = { text = { "|", "=" }},
+					Info = { text = { "|", "=" }},
+					Hint = { text = { "|", "=" }},
+					Misc = { text = { "|", "=" }},
+					GitAdd = { text = "|" },
+					GitChange = { text = "|" },
+					GitDelete = { text = "|" },
 				},
 				excluded_filetypes = {
 					"NvimTree",
 					"alpha",
 					"lazygit",
 				},
+                handlers = {
+					-- don't display cursor with dot
+                    cursor = false,
+                    gitsigns = true,    -- Requires gitsigns
+                    search = false,     -- Requires hlslens
+                }
 			})
 		end,
 	},
