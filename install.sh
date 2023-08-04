@@ -188,7 +188,7 @@ Do you want to do it now?" 10 80
 add_programs() {
     # utilities
     # second browser because of some compatibility issues with vieb
-	programs+=( "firefox" "vieb" "sioyek" "htim" "polkit" "gnome-polkit" "zip" "unzip" "tar" "ncdu" "libreoffice-fresh" "wget" "curl" "python-pip" "meson" "ninja" "zsh" "zsh-completions" "zsh-syntax-highlighting" "git-delta" )
+	programs+=( "firefox" "vieb-bin" "sioyek" "htim" "polkit" "gnome-polkit" "zip" "unzip" "tar" "ncdu" "libreoffice-fresh" "wget" "curl" "python-pip" "meson" "ninja" "zsh" "zsh-completions" "zsh-syntax-highlighting" "git-delta" )
 
     # other
 	programs+=( "discord-screenaudio" "mellowplayer" "gimp" "ttf-ms-fonts" "flameshot" "neovim" "lazygit" "ripgrep" )
