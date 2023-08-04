@@ -123,7 +123,8 @@ configure_installed() {
             cd ~/.config/dwm/ &> /dev/null
             sudo make install &> /dev/null
 
-            sudo mkdir /usr/share/xsessions/
+            sudo mkdir /usr/share/xsessions/ &> /dev/null
+            sudo touch /usr/share/xsessions/dwm.desktop &> /dev/null
             echo "[Desktop Entry]" > /usr/share/xsessions/dwm.desktop &> /dev/null
             echo "Encoding=UTF-8" >> /usr/share/xsessions/dwm.desktop &> /dev/null
             echo "Name=dwm" >> /usr/share/xsessions/dwm.desktop &> /dev/null
@@ -225,7 +226,7 @@ Do you want to do it now?" 9 80
         fi
     done
 
-    # android support
+    # make android phones connect and transfer files
 	# programs+=( "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" )
 
 	# programs+=( "steam" "lutris" "wine-staging" "nvidia-utils" "nvidia-settings" "nvidia-settings" "vulkan-icd-loader" "dxvk-bin" "opencl-nvidia" "libvdpau" "libxnvctrl" "lib32-nvidia-utils" "lib32-opencl-nvidia" "lib32-vulkan-icd-loader" "proton-ge-custom-bin" "mangohud-git" "goverlay-bin" "gwe" "protonup-qt-bin" "gamemode" )
