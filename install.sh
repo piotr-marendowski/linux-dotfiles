@@ -122,6 +122,15 @@ configure_installed() {
 
             cd ~/.config/dwm/ &> /dev/null
             sudo make install &> /dev/null
+
+            sudo mkdir /usr/share/xsessions/
+            echo "[Desktop Entry]" > /usr/share/xsessions/dwm.desktop &> /dev/null
+            echo "Encoding=UTF-8" >> /usr/share/xsessions/dwm.desktop &> /dev/null
+            echo "Name=dwm" >> /usr/share/xsessions/dwm.desktop &> /dev/null
+            echo "Comment=Dynamic window manager" >> /usr/share/xsessions/dwm.desktop &> /dev/null
+            echo "Exec=dwm" >> /usr/share/xsessions/dwm.desktop &> /dev/null
+            echo "Icon=dwm" >> /usr/share/xsessions/dwm.desktop &> /dev/null
+            echo "Type=XSession" >> /usr/share/xsessions/dwm.desktop &> /dev/null
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
@@ -178,7 +187,8 @@ Do you want to do it now?" 10 80
 # EDIT FOR YOURSELF! won't describe every program because don't care :)
 add_programs() {
     # utilities
-	programs+=( "vieb" "sioyek" "htim" "polkit" "gnome-polkit" "zip" "unzip" "tar" "ncdu" "libreoffice-fresh" "wget" "curl" "python-pip" "meson" "ninja" "zsh" "zsh-completions" "zsh-syntax-highlighting" "git-delta" )
+    # second browser because of some compatibility issues with vieb
+	programs+=( "firefox" "vieb" "sioyek" "htim" "polkit" "gnome-polkit" "zip" "unzip" "tar" "ncdu" "libreoffice-fresh" "wget" "curl" "python-pip" "meson" "ninja" "zsh" "zsh-completions" "zsh-syntax-highlighting" "git-delta" )
 
     # other
 	programs+=( "discord-screenaudio" "mellowplayer" "gimp" "ttf-ms-fonts" "flameshot" "neovim" "lazygit" "ripgrep" )
@@ -203,7 +213,7 @@ Do you want to do it now?" 9 80
         programs+=($CHOICE)
         if [ "$CHOICE" == "gwe" ] ; then
             echo "Installing GreenWithEnvy"
-            cd ~/Downloads
+            cd ~/downloads
             git clone --recurse-submodules -j4 https://gitlab.com/leinardi/gwe.git
             cd gwe
             git checkout release
@@ -226,7 +236,7 @@ Do you want to do it now?" 9 80
 }
 
 install() {
-    mkdir -p ~/Downloads
+    mkdir -p ~/downloads
 
 	whiptail --title "Warming" --yesno "Do you want to begin installation?" 7 45
 	
@@ -236,11 +246,11 @@ install() {
 		if ! command -v paru &> /dev/null; then
             echo "Paru could not be found"
             whiptail --title "Information" --msgbox "This will take a few minutes. If it'll be stuck on Arming ConditionNeedsUpdate \
-then reboot and restart install script in dotfiles folder." 9 60
+then reboot system." 9 60
             echo "Proceeding to install Paru AUR helper..."
             clear
             sudo pacman -S --noconfirm --needed base-devel
-            cd ~/Downloads
+            cd ~/downloads
             git clone https://aur.archlinux.org/paru.git
             cd paru
             makepkg -si --noconfirm
