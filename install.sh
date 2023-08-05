@@ -125,13 +125,13 @@ configure_installed() {
 
             sudo mkdir /usr/share/xsessions/ &> /dev/null
             sudo touch /usr/share/xsessions/dwm.desktop &> /dev/null
-            echo "[Desktop Entry]" > /usr/share/xsessions/dwm.desktop &> /dev/null
-            echo "Encoding=UTF-8" >> /usr/share/xsessions/dwm.desktop &> /dev/null
-            echo "Name=dwm" >> /usr/share/xsessions/dwm.desktop &> /dev/null
-            echo "Comment=Dynamic window manager" >> /usr/share/xsessions/dwm.desktop &> /dev/null
-            echo "Exec=dwm" >> /usr/share/xsessions/dwm.desktop &> /dev/null
-            echo "Icon=dwm" >> /usr/share/xsessions/dwm.desktop &> /dev/null
-            echo "Type=XSession" >> /usr/share/xsessions/dwm.desktop &> /dev/null
+            echo "[Desktop Entry]" > /usr/share/xsessions/dwm.desktop
+            echo "Encoding=UTF-8" >> /usr/share/xsessions/dwm.desktop
+            echo "Name=dwm" >> /usr/share/xsessions/dwm.desktop
+            echo "Comment=Dynamic window manager" >> /usr/share/xsessions/dwm.desktop
+            echo "Exec=dwm" >> /usr/share/xsessions/dwm.desktop
+            echo "Icon=dwm" >> /usr/share/xsessions/dwm.desktop
+            echo "Type=XSession" >> /usr/share/xsessions/dwm.desktop
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
@@ -149,7 +149,7 @@ configure_installed() {
             echo "$gauge"
 
             # start gamemode
-            systemctl --user enable gamemoded && systemctl --user start gamemoded &> /dev/null
+            # systemctl --user enable gamemoded && systemctl --user start gamemoded &> /dev/null
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
