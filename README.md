@@ -31,4 +31,4 @@ mv dotfiles .dotfiles
 - [or Pipewire (sound)](https://pipewire.org)
 - [Neovim (code editor)](https://neovim.io/)
 
-### While this is the base "OG" branch, the updated and focused on the [IvoryOS](https://github.com/piotr-marendowski/ivoryos) is the [DWM branch](https://github.com/piotr-marendowski/dotfiles/tree/dwm).
+### While this is the base branch, and used by me for a while, the updated and focused on integration with the [IvoryOS](https://github.com/piotr-marendowski/ivoryos) is the [DWM branch](https://github.com/piotr-marendowski/dotfiles/tree/dwm).
