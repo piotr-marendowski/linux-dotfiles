@@ -197,6 +197,9 @@ add_programs() {
     # gui
     programs+=( "xorg" "xorg-xinit" "ly" "redshift" "picom-jonaburg-git" "ttf-jetbrains-mono-nerd" "lxappearance" )
 
+        # make android phones connect and transfer files
+	# programs+=( "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" )
+
     # gaming
 	whiptail --title "Warming" --yesno "Before installing and configuring system for \
 gaming, first you need to enable multilib in pacman.conf in order to install 32-bit drivers. \
@@ -206,30 +209,16 @@ Do you want to do it now?" 9 80
 		sudo nvim /etc/pacman.conf
 	fi
 
-    for CHOICE in $CHOICES; do
-        programs+=($CHOICE)
-        if [ "$CHOICE" == "gwe" ] ; then
-            echo "Installing GreenWithEnvy"
-            cd ~/downloads
-            git clone --recurse-submodules -j4 https://gitlab.com/leinardi/gwe.git
-            cd gwe
-            git checkout release
-            sudo -H pip3 install -r requirements.txt
-            meson . build --prefix /usr
-            ninja -v -C build
-            sudo ninja -v -C build install
-            echo "done"
-        fi
-    done
-
-    # make android phones connect and transfer files
-	# programs+=( "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" )
-
-	# programs+=( "steam" "lutris" "wine-staging" "nvidia-utils" "nvidia-settings" "nvidia-settings" "vulkan-icd-loader" "dxvk-bin" "opencl-nvidia" "libvdpau" "libxnvctrl" "lib32-nvidia-utils" "lib32-opencl-nvidia" "lib32-vulkan-icd-loader" "proton-ge-custom-bin" "mangohud-git" "goverlay-bin" "gwe" "protonup-qt-bin" "gamemode" )
+	# programs+=( "steam" "lutris" "wine-staging" "nvidia-dkms" "nvidia-utils-dkms" "vulkan-icd-loader" "dxvk-bin" "opencl-nvidia" "libvdpau" "libxnvctrl" "lib32-nvidia-utils" "lib32-opencl-nvidia" "lib32-vulkan-icd-loader" "proton-ge-custom-bin" "mangohud-git" "goverlay-bin" "gwe" "protonup-qt-bin" "gamemode" )
+    # nvidia-settings
 
     # virtualization
     # programs+=( "qemu" "libvirt" "virt-manager" "virt-viewer" "dnsmasq" "vde2" "bridge-utils" "openbsd-netcat" "libguestfs" )
     # is_virtualization=true
+    
+    for CHOICE in $CHOICES; do
+        programs+=($CHOICE)
+    done
 }
 
 install() {
