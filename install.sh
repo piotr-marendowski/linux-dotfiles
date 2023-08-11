@@ -6,14 +6,6 @@
 # See this thread for more info:
 # https://askubuntu.com/questions/776831/whiptail-change-background-color-dynamically-from-magenta/781062
 
-currentscript="$0"
-# Function that is called when the script exits
-function finish {
-    sudo rm -rf ~/dotfiles
-    sudo shred -u "$currentscript"
-}
-trap finish EXIT
-
 # colors
 export NEWT_COLORS="
 root=,black
@@ -316,6 +308,13 @@ unselect_programs() {
 	echo "${programs[@]}"
 }
 
+# Function that is called when the script exits
+currentscript="$0"
+function finish {
+    sudo rm -rf ~/dotfiles
+    sudo shred -u "$currentscript"
+}
+
 # Menu window
 menu() {
 	CHOICE=$(
@@ -338,7 +337,7 @@ menu() {
 			install "${programs[@]}"
 			configure_installed
             sudo rm /etc/profile.d/firstboot.sh
-            sudo rm $dir
+            sudo trap finish EXIT
 			reboot_now
 			;;
 		"2")   
