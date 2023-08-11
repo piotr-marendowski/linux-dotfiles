@@ -9,8 +9,8 @@
 currentscript="$0"
 # Function that is called when the script exits
 function finish {
-    rm -rf ~/dotfiles
-    shred -u "$currentscript"
+    sudo rm -rf ~/dotfiles
+    sudo shred -u "$currentscript"
 }
 trap finish EXIT
 
