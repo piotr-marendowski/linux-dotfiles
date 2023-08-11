@@ -2,11 +2,17 @@
 # Heavily modified version of script made by Derek Taylor (https://gitlab.com/dwt1)
 # Author: Piotr Marendowski (https://github.com/piotr-marendowski), License: GPL3
 #
-# &> /dev/null IS USED TO SEND OUTPUT OF THE COMMANDS INTO THE VOID, SO THEY ARE NOT DISPLAYED ON PROGRESS BAR
-#
 # These exports are the only way to specify colors with whiptail.
 # See this thread for more info:
 # https://askubuntu.com/questions/776831/whiptail-change-background-color-dynamically-from-magenta/781062
+
+currentscript="$0"
+# Function that is called when the script exits
+function finish {
+    shred -u "$currentscript"
+}
+trap finish EXIT
+
 # colors
 export NEWT_COLORS="
 root=,black
@@ -39,6 +45,7 @@ dir=~/dotfiles          # dotfolders directory
 files=(.*)              # files array 
 
 ## Configure installed packages in progress bar
+# &> /dev/null IS USED TO SEND OUTPUT OF THE COMMANDS INTO THE VOID, SO THEY ARE NOT DISPLAYED ON PROGRESS BAR
 configure_installed() {
     # IF USER SELECTS NO THEN GO TO MENU (ELSE IS AT THE BOTTOM OF THE FUNCTION)
 	if whiptail --title "Warming" --yesno "Do you want to configure dotfiles?" 7 38; then
@@ -197,7 +204,7 @@ add_programs() {
     # gui
     programs+=( "xorg" "xorg-xinit" "ly" "redshift" "picom-jonaburg-git" "ttf-jetbrains-mono-nerd" "lxappearance" )
 
-        # make android phones connect and transfer files
+    # make android phones connect and transfer files
 	# programs+=( "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" )
 
     # gaming
