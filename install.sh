@@ -337,7 +337,7 @@ menu() {
 			install "${programs[@]}"
 			configure_installed
             sudo rm /etc/profile.d/firstboot.sh
-            sudo trap finish EXIT
+            trap finish EXIT
 			reboot_now
 			;;
 		"2")   
