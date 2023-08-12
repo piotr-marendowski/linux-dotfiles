@@ -107,6 +107,7 @@ configure_installed() {
             rm -r ~/LICENSE &> /dev/null
             rm -r ~/README.md &> /dev/null
             rm -r ~/.config/.config/ &> /dev/null
+            sudo rm -r ~/.git/ &> /dev/null
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
@@ -124,10 +125,10 @@ configure_installed() {
             sudo make install &> /dev/null
 
             sudo mkdir /usr/share/xsessions/ &> /dev/null
-            sudo touch /usr/share/xsessions/dwm.desktop
-            sudo printf "[Desktop Entry]\nEncoding=UTF-8\nName=dwm\nComment=DWM\nExec=dwm\nIcon=dwm\nType=XSession\n" > temp.desktop
-            sudo cat /usr/share/xsessions/dwm.desktop >> temp.desktop
-            sudo mv temp.desktop /usr/share/xsessions/dwm.desktop
+            sudo touch /usr/share/xsessions/dwm.desktop &> /dev/null
+            sudo printf "[Desktop Entry]\nEncoding=UTF-8\nName=dwm\nComment=DWM\nExec=dwm\nIcon=dwm\nType=XSession\n" > temp.desktop &> /dev/null
+            sudo cat /usr/share/xsessions/dwm.desktop >> temp.desktop &> /dev/null
+            sudo mv temp.desktop /usr/share/xsessions/dwm.desktop &> /dev/null
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
@@ -185,10 +186,10 @@ Do you want to do it now?" 10 80
 add_programs() {
     # utilities
     # second browser because of some compatibility issues with vieb
-	programs+=( "firefox" "vieb-bin" "sioyek" "htim" "polkit" "gnome-polkit" "zip" "unzip" "tar" "ncdu" "libreoffice-fresh" "wget" "curl" "python-pip" "meson" "ninja" "zsh" "zsh-completions" "zsh-syntax-highlighting" "git-delta" )
+	programs+=( "librewolf-bin" "vieb-bin" "sioyek" "htim" "polkit" "gnome-polkit" "zip" "unzip" "tar" "ncdu" "wget" "curl" "python-pip" "meson" "ninja" "zsh" "zsh-completions" "zsh-syntax-highlighting" )
 
     # other
-	programs+=( "discord-screenaudio" "mellowplayer" "gimp" "ttf-ms-fonts" "flameshot" "neovim" "lazygit" "ripgrep" )
+	programs+=( "discord-screenaudio" "mellowplayer" "gimp" "libreoffice-fresh" "ttf-ms-fonts" "flameshot" "neovim" "lazygit" "ripgrep" )
 
     # sound - pipewire
     # programs+=( "pipewire" "pipewire-audio" "pipewire-alsa" "pipewire-jack" "pipewire-pulse" )
@@ -311,7 +312,7 @@ unselect_programs() {
 # Function that is called when the script exits
 currentscript="$0"
 function finish {
-    sudo rm -rf ~/dotfiles
+    sudo rm -rf $dir
     sudo shred -u "$currentscript"
 }
 
@@ -360,7 +361,7 @@ menu() {
 }
 
 ### PROGRAM EXECUTION
-sudo pacman --noconfirm -Syu
+sudo pacman --noconfirm -Syu &> /dev/null
 
 # Navigation
 whiptail --title "Navigation" --msgbox "Navigate lists using arrow keys. Select options with space. \
