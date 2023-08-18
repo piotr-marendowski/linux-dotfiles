@@ -60,7 +60,7 @@
 
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
-enum { SchemeNorm, SchemeSel, SchemeStatus, SchemeTagsSel, SchemeTagsNorm, SchemeInfoSel, SchemeInfoNorm }; /* color schemes */
+enum { SchemeNorm, SchemeSel, SchemeHov, SchemeHid }; /* color schemes */
 enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
        NetWMWindowTypeDialog, NetClientList, NetLast }; /* EWMH atoms */
@@ -762,16 +762,16 @@ drawbar(Monitor *m)
 		if(!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
 			continue;
 		w = bh;
-		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeTagsSel : SchemeTagsNorm]);
+		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
 		drw_text(drw, x, 0, bh, bh, 0, "", urg & 1 << i);
  		if (occ & 1 << i)
-			drw_rect(drw, x+boxw, boxw, w-boxw*3, w-boxw*3,
+			drw_rect(drw, x+boxw,boxw, w-boxw*2, w-boxw*2,
  				m == selmon && selmon->sel && selmon->sel->tags & 1 << i,
  				urg & 1 << i);
 		x += w;
 	}
 	w = TEXTW(m->ltsymbol);
-	drw_setscheme(drw, scheme[SchemeTagsNorm]);
+	drw_setscheme(drw, scheme[SchemeNorm]);
 	x = drw_text(drw, x, 0, w, bh, lrpad / 2, m->ltsymbol, 0);
 
 	if ((w = m->ww - tw - x) > bh) {
@@ -782,13 +782,13 @@ drawbar(Monitor *m)
 				if (!ISVISIBLE(c))
 					continue;
 				if (m->hov == c)
-					scm = SchemeSel;
+					scm = SchemeHov;
 				else if (m->sel == c)
-					scm = SchemeInfoSel;
+					scm = SchemeSel;
 				else if (HIDDEN(c))
-					scm = SchemeInfoNorm;
+					scm = SchemeHid;
 				else
-					scm = SchemeInfoNorm; 
+					scm = SchemeNorm;
 				drw_setscheme(drw, scheme[scm]);
 
 				if (remainder >= 0) {
@@ -801,7 +801,7 @@ drawbar(Monitor *m)
 				x += tabw;
 			}
 		} else {
-			drw_setscheme(drw, scheme[SchemeInfoNorm]);
+			drw_setscheme(drw, scheme[SchemeNorm]);
 			drw_rect(drw, x, 0, w, bh, 1, 1);
 		}
 	}
@@ -1309,7 +1309,7 @@ motionnotify(XEvent *e)
 						XSetWindowBorder(dpy, selmon->hov->win, scheme[SchemeSel][ColBorder].pixel);
 				}
 				selmon->hov = c;
-				XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColBorder].pixel);
+				XSetWindowBorder(dpy, c->win, scheme[SchemeHov][ColBorder].pixel);
 			}
 		}
 		drawbar(m);

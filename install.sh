@@ -185,8 +185,8 @@ Do you want to do it now?" 10 80
 # EDIT FOR YOURSELF! won't describe every program because don't care :)
 add_programs() {
     # utilities
-    # second browser because of some compatibility issues with vieb
-	programs+=( "librewolf-bin" "vieb-bin" "sioyek" "htim" "polkit" "gnome-polkit" "zip" "unzip" "tar" "ncdu" "wget" "curl" "python-pip" "meson" "ninja" "zsh" "zsh-completions" "zsh-syntax-highlighting" "zsh-autosuggestions" )
+    # two browsers :3 	
+    programs+=( "librewolf-bin" "vieb-bin" "sioyek" "htim" "polkit" "gnome-polkit" "zip" "unzip" "tar" "ncdu" "wget" "curl" "python-pip" "meson" "ninja" "zsh" "zsh-completions" "zsh-syntax-highlighting" "zsh-autosuggestions" )
 
     # other
 	programs+=( "discord-screenaudio" "mellowplayer" "gimp" "libreoffice-fresh" "ttf-ms-fonts" "flameshot" "neovim" "lazygit" "ripgrep" )
