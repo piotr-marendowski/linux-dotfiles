@@ -28,4 +28,4 @@ git clone -b dwm https://github.com/piotr-marendowski/dotfiles.git
 - [librewolf - 2nd browser](https://librewolf.net/)
 - [ranger](https://ranger.github.io/)
 
-### This branch is updated and focused on integration with the [IvoryOS](https://github.com/piotr-marendowski/ivoryos), while the [qtile branch](https://github.com/piotr-marendowski/dotfiles) is more the looking and more customizable version.
+### This branch is updated and focused on integration with the [IvoryOS](https://github.com/piotr-marendowski/ivoryos), while the [qtile branch](https://github.com/piotr-marendowski/dotfiles) is more customizable and good-looking version.
