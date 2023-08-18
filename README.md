@@ -12,13 +12,14 @@ git clone -b dwm https://github.com/piotr-marendowski/dotfiles.git
 ```
 
 ## Used programs/packages
-- [nvidia drivers](https://www.nvidia.com/en-us/drivers/unix/)
-- [paru](https://github.com/Morganamilo/paru)
 - [xorg](https://wiki.archlinux.org/title/Xorg)
 - [xorg-xinit](https://wiki.archlinux.org/title/Xinit)
 - [dwm](https://dwm.suckless.org/)
-- [ly](https://github.com/fairyglade/ly)
+- [zsh](https://zsh.sourceforge.io/)
 - [st](https://st.suckless.org/)
+- [ly](https://github.com/fairyglade/ly)
+- [paru](https://github.com/Morganamilo/paru)
+- [nvidia drivers](https://www.nvidia.com/en-us/drivers/unix/)
 - [dmenu](https://tools.suckless.org/dmenu/)
 - [htim](https://gitlab.com/thelinuxguy9/htim)
 - [flameshot](https://flameshot.org/)
