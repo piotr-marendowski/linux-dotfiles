@@ -45,7 +45,7 @@ alias ll="ls -la --color=auto"
 bindkey -v
 export KEYTIMEOUT=1
 
-# Use vim keys in tab complete menu:
+# Use vi keys in tab complete menu:
 bindkey -M menuselect 'h' vi-backward-char
 bindkey -M menuselect 'k' vi-up-line-or-history
 bindkey -M menuselect 'l' vi-forward-char
@@ -93,5 +93,6 @@ bindkey -M vicmd '^[[P' vi-delete-char
 bindkey -M vicmd '^e' edit-command-line
 bindkey -M visual '^[[P' vi-delete
 
-# Load syntax highlighting; should be last.
+# Load autosuggestions and syntax highlighting; should be last.
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
