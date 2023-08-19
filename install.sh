@@ -126,9 +126,9 @@ configure_installed() {
 
             sudo mkdir /usr/share/xsessions/ &> /dev/null
             sudo touch /usr/share/xsessions/dwm.desktop &> /dev/null
-            sudo printf "[Desktop Entry]\nEncoding=UTF-8\nName=dwm\nComment=DWM\nExec=dwm\nIcon=dwm\nType=XSession\n" > temp.desktop &> /dev/null
-            sudo cat /usr/share/xsessions/dwm.desktop >> temp.desktop &> /dev/null
-            sudo mv temp.desktop /usr/share/xsessions/dwm.desktop &> /dev/null
+            sudo printf "[Desktop Entry]\nEncoding=UTF-8\nName=dwm\nComment=DWM\nExec=dwm\nIcon=dwm\nType=XSession\n" > temp.desktop
+            sudo cat /usr/share/xsessions/dwm.desktop >> temp.desktop
+            sudo mv temp.desktop /usr/share/xsessions/dwm.desktop
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
@@ -196,7 +196,7 @@ add_programs() {
     programs+=( "pipewire" "pipewire-audio" "pipewire-alsa" )
 
     # gui
-    programs+=( "xorg" "xorg-xinit" "ly" "redshift" "picom-jonaburg-git" "ttf-jetbrains-mono-nerd" "lxappearance" )
+    programs+=( "xorg" "xorg-xinit" "ly" "redshift" "ttf-jetbrains-mono-nerd" "lxappearance" )
 
     # make android phones connect and transfer files
 	# programs+=( "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" )
@@ -250,7 +250,7 @@ then reboot system." 9 60
 
 		# Loop through the program names array and install each program using paru
 		# --noconfirm to automatically say yes to every installation
-        whiptail --title "Program Installation" --gauge "\nDon't panic if its stuck!" 7 50 0 < <(
+        whiptail --title "Program Installation" --gauge "\nDon't panic if it's stuck!" 7 50 0 < <(
             for ((i=0; i<${#programs[@]}; i++)); do
                 # Install packages and don't print output
                 paru -S --noconfirm --quiet "${programs[$i]}" &> /dev/null
