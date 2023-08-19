@@ -126,9 +126,16 @@ configure_installed() {
 
             sudo mkdir /usr/share/xsessions/ &> /dev/null
             sudo touch /usr/share/xsessions/dwm.desktop &> /dev/null
-            sudo printf "[Desktop Entry]\nEncoding=UTF-8\nName=dwm\nComment=DWM\nExec=dwm\nIcon=dwm\nType=XSession\n" > temp.desktop
-            sudo cat /usr/share/xsessions/dwm.desktop >> temp.desktop
-            sudo mv temp.desktop /usr/share/xsessions/dwm.desktop
+
+            cat <<EOF > /usr/share/xsessions/dwm.desktop
+[Desktop Entry]
+Encoding=UTF-8
+Name=Dwm
+Comment=Dynamic window manager
+Exec=/usr/local/bin/dwm
+Icon=dwm
+Type=XSession
+EOF
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
