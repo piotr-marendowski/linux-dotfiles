@@ -25,8 +25,7 @@ git clone -b dwm https://github.com/piotr-marendowski/dotfiles.git
 - [flameshot](https://flameshot.org/)
 - [pipewire](https://pipewire.org)
 - [neovim](https://neovim.io/)
-- [vieb - 1st browser](https://vieb.dev/)
-- [librewolf - 2nd browser](https://librewolf.net/)
+- [librewolf](https://librewolf.net/)
 - [ranger](https://ranger.github.io/)
 
 ### This branch is updated and focused on integration with the [IvoryOS](https://github.com/piotr-marendowski/ivoryos), while the [qtile branch](https://github.com/piotr-marendowski/dotfiles) is more customizable and good-looking version.
