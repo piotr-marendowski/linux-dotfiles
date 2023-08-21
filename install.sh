@@ -154,6 +154,9 @@ EOF
 
             # start gamemode
             # systemctl --user enable gamemoded && systemctl --user start gamemoded &> /dev/null
+
+            # set default browser to librewolf
+            xdg-settings set default-web-browser librewolf.desktop &> /dev/null
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
@@ -192,7 +195,7 @@ Do you want to do it now?" 10 80
 # EDIT FOR YOURSELF! won't describe every program because don't care :)
 add_programs() {
     # utilities
-    programs+=( "librewolf-bin" "sioyek" "htop-vim" "polkit" "gnome-polkit" "zip" "unzip" "tar" "ncdu" "wget" "curl" "python-pip" "meson" "ninja" "zsh" "zsh-completions" "zsh-syntax-highlighting" "zsh-autosuggestions" )
+    programs+=( "librewolf-bin" "sioyek" "htop-vim" "ranger" "zip" "unzip" "tar" "ncdu" "wget" "curl" "python-pip" "meson" "ninja" "zsh" "zsh-completions" "zsh-syntax-highlighting" "zsh-autosuggestions" )
 
     # other
 	programs+=( "discord-screenaudio" "mellowplayer" "gimp" "libreoffice-fresh" "ttf-ms-fonts" "flameshot" "neovim" "lazygit" "ripgrep" )
