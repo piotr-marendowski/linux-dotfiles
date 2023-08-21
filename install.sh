@@ -236,11 +236,10 @@ install() {
     mkdir -p ~/downloads
 
 	whiptail --title "Warming" --yesno "Do you want to begin installation?" 7 45
-	
 	if [ $? -eq 0 ]; then
 		echo "Installing selected programs..."
 		# Check if paru is installed
-		if ! command -v paru &> /dev/null; then
+        if [ -x "$(command -v paru)" ]; then
             echo "Paru could not be found"
             whiptail --title "Information" --msgbox "This will take a few minutes. If it'll be stuck on Arming ConditionNeedsUpdate \
 then reboot system." 9 60
@@ -269,6 +268,8 @@ then reboot system." 9 60
             done
         )
 	fi
+    else
+        menu
 }
 
 reboot_now() {
@@ -277,45 +278,6 @@ reboot_now() {
 	if [ $? -eq 0 ]; then
 		sudo reboot
 	fi
-}
-
-print_programs() {
-    whiptail --title "Programs" --msgbox --scrolltext "$(printf '%s\n' "${programs[@]}")" 20 30
-}
-
-add_manually() {
-	while true; do
-	    program=$(whiptail --ok-button "Add" --inputbox "\nEnter one program at the time:" 9 50 --title "Add a program" 3>&1 1>&2 2>&3)
-	    if [ $? = 0 ]; then
-            # Add the program name to the programs array
-            programs+=("$program")
-            else
-            # Exit the loop if the user cancels the input
-            break
-	    fi
-	done
-
-	echo "${programs[@]}"
-}
-
-unselect_programs() {
-	while true; do
-	    program=$(whiptail --ok-button "Unselect" --inputbox "\nEnter one program at the time:" 9 50 --title "Unselect a program" 3>&1 1>&2 2>&3)
-	    if [ $? = 0 ]; then
-            # Add the program name to the programs array
-            exclude+=("$program")
-            else
-            # Exit the loop if the user cancels the input
-            break
-	    fi
-	done
-
-    # unselect programs
-    for i in "${exclude[@]}"; do
-        programs=("${programs[@]/$i}")
-    done
-
-	echo "${programs[@]}"
 }
 
 # Function that is called when the script exits
@@ -328,22 +290,14 @@ function finish {
 # Menu window
 menu() {
 	CHOICE=$(
-		whiptail --title "Menu" --ok-button "Select" --cancel-button "Exit" --notags --menu "" 12 50 5 \
+		whiptail --title "Menu" --ok-button "Select" --cancel-button "Exit" --notags --menu "" 10 50 3 \
 		"1" "Full installation"  \
 		"2" "Configure dotfiles"  \
-        "3" "Unselect program(s)" \
-        "4" "Add program(s) manually" \
-		"5" "Install selected programs" 3>&2 2>&1 1>&3
+		"3" "Install selected programs" 3>&2 2>&1 1>&3
 	)
 
 	case $CHOICE in
 		"1")   
-            add_programs
-            # choose to unselect programs
-            whiptail --title "Warming" --yesno "Do you want to unselect programs?" 8 40
-            if [ $? -eq 0 ]; then
-                unselect_programs
-            fi
 			install "${programs[@]}"
 			configure_installed
             sudo rm /etc/profile.d/firstboot.sh
@@ -355,14 +309,6 @@ menu() {
 			menu
 			;;
 		"3")   
-            unselect_programs
-		 	menu
-		 	;;
-		"4")   
-            add_manually
-		 	menu
-		 	;;
-		"5")   
 			install "${programs[@]}"
             menu
 			;;
@@ -370,7 +316,7 @@ menu() {
 }
 
 ### PROGRAM EXECUTION
-sudo pacman --noconfirm -Syu &> /dev/null
+sudo pacman --noconfirm -Syu
 
 # Navigation
 whiptail --title "Navigation" --msgbox "Navigate lists using arrow keys. Select options with space. \
