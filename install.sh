@@ -184,9 +184,9 @@ Do you want to do it now?" 10 80
                     echo "Virtualization is not configured right now." &> /dev/null
             fi
         )
-    fi
     else
         menu
+    fi
 }
 
 # EDIT FOR YOURSELF! won't describe every program because don't care :)
