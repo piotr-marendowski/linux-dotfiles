@@ -236,10 +236,10 @@ install() {
 	if [ $? -eq 0 ]; then
 		echo "Installing selected programs..."
 		# Check if paru is installed
-        if [ -x "$(command -v paru)" ]; then
+        if ! command -v paru &> /dev/null
+        then
             echo "Paru could not be found"
-            whiptail --title "Information" --msgbox "This will take a few minutes. If it'll be stuck on Arming ConditionNeedsUpdate \
-then reboot system." 9 60
+            whiptail --title "Information" --msgbox "This will take a few minutes." 9 45
             echo "Proceeding to install Paru AUR helper..."
             clear
             sudo pacman -S --noconfirm --needed base-devel
