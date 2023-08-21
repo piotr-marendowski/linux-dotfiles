@@ -264,9 +264,9 @@ then reboot system." 9 60
                 echo "$gauge"
             done
         )
-	fi
     else
         menu
+	fi
 }
 
 reboot_now() {
