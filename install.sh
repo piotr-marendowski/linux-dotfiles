@@ -202,7 +202,7 @@ add_programs() {
     programs+=( "pipewire" "pipewire-audio" "pipewire-alsa" )
 
     # gui
-    programs+=( "xorg" "xorg-xinit" "ly" "redshift" "ttf-jetbrains-mono-nerd" "lxappearance" )
+    programs+=( "xorg" "xorg-xinit" "ly" "redshift" "ttf-jetbrains-mono-nerd" "lxappearance" "nitrogen" )
 
     # make android phones connect and transfer files
 	# programs+=( "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" )
@@ -232,41 +232,37 @@ Do you want to do it now?" 9 80
 install() {
     mkdir -p ~/downloads
 
-	whiptail --title "Warming" --yesno "Do you want to begin installation?" 7 45
-	if [ $? -eq 0 ]; then
-		echo "Installing selected programs..."
-		# Check if paru is installed
-        if ! command -v paru &> /dev/null
-        then
-            echo "Paru could not be found"
-            whiptail --title "Information" --msgbox "This will take a few minutes." 9 45
-            echo "Proceeding to install Paru AUR helper..."
-            clear
-            sudo pacman -S --noconfirm --needed base-devel
-            cd ~/downloads
-            git clone https://aur.archlinux.org/paru.git
-            cd paru
-            makepkg -si --noconfirm
+    echo "Installing selected programs..."
+    # Check if paru is installed
+    if ! command -v paru &> /dev/null
+    then
+        echo "Paru could not be found"
+        whiptail --title "Information" --msgbox "This will take a few minutes." 9 45
+        echo "Proceeding to install Paru AUR helper..."
+        clear
+        sudo pacman -S --noconfirm --needed base-devel
+        cd ~/downloads
+        git clone https://aur.archlinux.org/paru.git
+        cd paru
+        makepkg -si --noconfirm
 
-            cd ..
-            rm -r paru
-            echo "done"
-		fi
+        cd ../
+        sudo rm -r paru
+        echo "done"
+    fi
 
-		# Loop through the program names array and install each program using paru
-		# --noconfirm to automatically say yes to every installation
-        whiptail --title "Program Installation" --gauge "\nDon't panic if it's stuck!" 7 50 0 < <(
-            for ((i=0; i<${#programs[@]}; i++)); do
-                # Install packages and don't print output
-                paru -S --noconfirm --quiet "${programs[$i]}" &> /dev/null
-                # Update the gauge
-                gauge=$((100 * (i + 1) / ${#programs[@]}))
-                echo "$gauge"
-            done
-        )
-    else
-        menu
-	fi
+    # Loop through the program names array and install each program using paru
+    # --noconfirm to automatically say yes to every installation
+    # whiptail --title "Program Installation" --gauge "\nDon't panic if it's stuck!" 7 50 0 < <(
+        for i in "${programs[@]}"
+        do
+            # Install packages and don't print output
+            paru -S --noconfirm --quiet $i #&> /dev/null
+            # Update the gauge
+            # gauge=$((100 * (i + 1) / ${#programs[@]}))
+            # echo "$gauge"
+        done
+    # )
 }
 
 reboot_now() {
@@ -295,7 +291,7 @@ menu() {
 
 	case $CHOICE in
 		"1")   
-			install "${programs[@]}"
+			install
 			configure_installed
             sudo rm /etc/profile.d/firstboot.sh
             trap finish EXIT
@@ -306,7 +302,7 @@ menu() {
 			menu
 			;;
 		"3")   
-			install "${programs[@]}"
+			install
             menu
 			;;
 	esac
