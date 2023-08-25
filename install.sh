@@ -283,10 +283,9 @@ function finish {
 # Menu window
 menu() {
 	CHOICE=$(
-		whiptail --title "Menu" --ok-button "Select" --cancel-button "Exit" --notags --menu "" 10 50 3 \
-		"1" "Full installation"  \
-		"2" "Configure dotfiles"  \
-		"3" "Install selected programs" 3>&2 2>&1 1>&3
+		whiptail --title "Menu" --ok-button "Select" --cancel-button "Exit" --notags --menu "\n" 10 50 2 \
+		"1" "IvoryOS full installation"  \
+		"2" "Configure dotfiles only" 3>&2 2>&1 1>&3
 	)
 
 	case $CHOICE in
@@ -300,10 +299,6 @@ menu() {
 		"2")   
 			configure_installed
 			menu
-			;;
-		"3")   
-			install
-            menu
 			;;
 	esac
 }
