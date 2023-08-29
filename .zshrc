@@ -1,5 +1,5 @@
 # Set variables
-user_name=whoami
+user_name=$(whoami)
 export PATH="/home/$user_name/.local/bin:/usr/local/bin:/usr/bin:$PATH"
 
 # Enable colors and change prompt:

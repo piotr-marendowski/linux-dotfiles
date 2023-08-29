@@ -158,8 +158,7 @@ Type=XSession\n" | sudo tee /usr/share/xsessions/dwm.desktop
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
-            gauge=$((100 * (8 + 1) / 8))
-            echo "$gauge"
+            gauge=$((100 * (8 + 1) / 8)) echo "$gauge"
 
             # virtualization
             if [ "$is_virtualization" = true ]; then
@@ -234,7 +233,7 @@ install() {
 
     echo "Installing selected programs..."
     # Check if paru is installed
-    if ! command -v paru &> /dev/null
+    if ! type -v paru &> /dev/null
     then
         echo "Paru could not be found"
         whiptail --title "Information" --msgbox "This will take a few minutes." 9 45
