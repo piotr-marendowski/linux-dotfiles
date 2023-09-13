@@ -194,7 +194,7 @@ add_programs() {
     programs+=( "librewolf-bin" "sioyek" "htop-vim" "ranger" "zip" "unzip" "tar" "ncdu" "wget" "curl" "python-pip" "meson" "ninja" "zsh" "zsh-completions" "zsh-syntax-highlighting" "zsh-autosuggestions" )
 
     # other
-	programs+=( "discord-screenaudio" "mellowplayer" "gimp" "libreoffice-fresh" "ttf-ms-fonts" "flameshot" "neovim" "lazygit" "ripgrep" )
+	programs+=( "discord-screenaudio" "gimp" "libreoffice-fresh" "ttf-ms-fonts" "flameshot" "neovim" "lazygit" "ripgrep" )
 
     # sound - pipewire
     # programs+=( "pipewire" "pipewire-audio" "pipewire-alsa" "pipewire-jack" "pipewire-pulse" )
@@ -231,12 +231,17 @@ Do you want to do it now?" 9 80
 install() {
     mkdir -p ~/downloads
 
+    add_programs
+
     echo "Installing selected programs..."
     # Check if paru is installed
-    if ! type -v paru &> /dev/null
-    then
+    package="paru";
+    check="$(sudo pacman -Qs --color always "${package}" | grep "local" | grep "${package} ")";
+    if [ -n "${check}" ] ; then
+        echo "${package} is installed";
+    elif [ -z "${check}" ] ; then
         echo "Paru could not be found"
-        whiptail --title "Information" --msgbox "This will take a few minutes." 9 45
+        whiptail --title "Information" --msgbox "This will take a few minutes." 7 34
         echo "Proceeding to install Paru AUR helper..."
         clear
         sudo pacman -S --noconfirm --needed base-devel
@@ -248,20 +253,20 @@ install() {
         cd ../
         sudo rm -r paru
         echo "done"
-    fi
+    fi;
 
     # Loop through the program names array and install each program using paru
     # --noconfirm to automatically say yes to every installation
-    # whiptail --title "Program Installation" --gauge "\nDon't panic if it's stuck!" 7 50 0 < <(
+    whiptail --title "Program Installation" --gauge "\nDon't panic if it's stuck!" 7 50 0 < <(
         for i in "${programs[@]}"
         do
             # Install packages and don't print output
             paru -S --noconfirm --quiet $i #&> /dev/null
             # Update the gauge
-            # gauge=$((100 * (i + 1) / ${#programs[@]}))
-            # echo "$gauge"
+            gauge=$((100 * (i + 1) / ${#programs[@]}))
+            echo "$gauge"
         done
-    # )
+    )
 }
 
 reboot_now() {
@@ -290,10 +295,10 @@ menu() {
 	case $CHOICE in
 		"1")   
 			install
-			configure_installed
-            sudo rm /etc/profile.d/firstboot.sh
-            trap finish EXIT
-			reboot_now
+			# configure_installed
+            # sudo rm /etc/profile.d/firstboot.sh
+            # trap finish EXIT
+			# reboot_now
 			;;
 		"2")   
 			configure_installed
