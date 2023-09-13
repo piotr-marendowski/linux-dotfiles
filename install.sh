@@ -257,16 +257,16 @@ install() {
 
     # Loop through the program names array and install each program using paru
     # --noconfirm to automatically say yes to every installation
-    #whiptail --title "Program Installation" --gauge "\nDon't panic if it's stuck!" 7 50 0 < <(
+    whiptail --title "Program Installation" --gauge "\nDon't panic if it's stuck!" 7 50 0 < <(
         for i in "${programs[@]}"
         do
             # Install packages and don't print output
             paru -S --noconfirm --quiet $i #&> /dev/null
             # Update the gauge
-            #gauge=$((100 * (i + 1) / ${#programs[@]}))
-            #echo "$gauge"
+            gauge=$((100 * (i + 1) / ${#programs[@]}))
+            echo "$gauge"
         done
-    #)
+    )
 }
 
 reboot_now() {
