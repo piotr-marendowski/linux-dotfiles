@@ -261,7 +261,7 @@ install() {
         for i in "${programs[@]}"
         do
             # Install packages and don't print output
-            paru -S --noconfirm --quiet $i #&> /dev/null
+            paru -S --noconfirm --quiet $i &> /dev/null
             # Update the gauge
             gauge=$((100 * (i + 1) / ${#programs[@]}))
             echo "$gauge"
