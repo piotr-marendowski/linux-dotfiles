@@ -129,7 +129,7 @@ configure_installed() {
 
             printf "[Desktop Entry]
 Encoding=UTF-8
-Name=Dwm
+Name=dwm
 Comment=Dynamic window manager
 Exec=/usr/local/bin/dwm
 Icon=dwm
