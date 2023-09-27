@@ -14,22 +14,24 @@ git clone -b dwm https://github.com/piotr-marendowski/dotfiles.git
 ## Troubleshooting
 If installation of paru will be stuck on <code>Arming ConditionNeedsUpdate</code> then reboot the system and start installation again.
 
-## Folder tree
-~
+### Tree
+<pre>
+/
 ├── .config
-│   ├── dmenu
-│   ├── dwm
-│   ├── MangoHud
-│   ├── nvim
-│   │   ├── README and init.lua
-│   │   └── lua
-│   │       ├── plugins
-│   │       └── options
-│   ├── scripts
-│   └── st
+│   ├── dmenu
+│   ├── dwm
+│   ├── MangoHud
+│   ├── nvim
+│   │   ├── README and init.lua
+│   │   └── lua
+│   │       ├── plugins
+│   │       └── options
+│   ├── scripts
+│   └── st
 ├── .gitconfig
 ├── .xprofile - startup apps
 └── .zshrc
+</pre>
 
 ## Used programs/packages
 - [xorg](https://wiki.archlinux.org/title/Xorg)

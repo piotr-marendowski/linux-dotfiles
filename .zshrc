@@ -22,8 +22,10 @@ PROMPT='%B%{$fg[blue]%}%n%{$fg[yellow]%}${vcs_info_msg_0_} %{$fg[magenta]%}%~%b 
 setopt autocd		# Automatically cd into typed directory.
 stty stop undef		# Disable ctrl-s to freeze terminal.
 setopt interactive_comments
+
 export VISUAL=nvim
 export EDITOR=nvim
+export QT_STYLE_OVERRIDE=kvantum    # qt theme
 
 # History in cache directory:
 HISTSIZE=5000

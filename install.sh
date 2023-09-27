@@ -77,8 +77,8 @@ configure_installed() {
             gauge=$((100 * (3 + 1) / 8))
             echo "$gauge"
 
-            mkdir -p ~/documents &> /dev/null
-            mkdir -p ~/games &> /dev/null
+            mkdir -p ~/Documents &> /dev/null
+            mkdir -p ~/Games &> /dev/null
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
@@ -155,6 +155,9 @@ Type=XSession\n" | sudo tee /usr/share/xsessions/dwm.desktop
 
             # set default browser to librewolf
             xdg-settings set default-web-browser librewolf.desktop &> /dev/null
+            # make ranger display devicons NERD FONT NEEDED!
+            git clone https://github.com/alexanderjeurissen/ranger_devicons ~/.config/ranger/plugins/ranger_devicons &> /dev/null
+            echo "default_linemode devicons" >> $HOME/.config/ranger/rc.conf &> /dev/null
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
@@ -191,7 +194,7 @@ Do you want to do it now?" 10 80
 # EDIT FOR YOURSELF! won't describe every program because don't care :)
 add_programs() {
     # utilities
-    programs+=( "librewolf-bin" "sioyek" "htop-vim" "ranger" "zip" "unzip" "tar" "ncdu" "wget" "curl" "python-pip" "meson" "ninja" "zsh" "zsh-completions" "zsh-syntax-highlighting" "zsh-autosuggestions" )
+    programs+=( "librewolf-bin" "sioyek" "htop-vim" "ranger" "zip" "unzip" "tar" "ncdu" "wget" "curl" "python-pip" "meson" "ninja" "zsh" "zsh-completions" "zsh-syntax-highlighting" "zsh-autosuggestions" "fzf" "xclip" )
 
     # other
 	programs+=( "discord-screenaudio" "gimp" "libreoffice-fresh" "ttf-ms-fonts" "flameshot" "neovim" "lazygit" "ripgrep" )
@@ -201,7 +204,7 @@ add_programs() {
     programs+=( "pipewire" "pipewire-audio" "pipewire-alsa" )
 
     # gui
-    programs+=( "xorg" "xorg-xinit" "ly" "redshift" "ttf-jetbrains-mono-nerd" "lxappearance" "nitrogen" )
+    programs+=( "xorg" "xorg-xinit" "ly" "redshift" "ttf-jetbrains-mono-nerd" "lxappearance" "nitrogen" "qt5ct-kde" "kvantum" )
 
     # make android phones connect and transfer files
 	# programs+=( "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" )
@@ -229,7 +232,7 @@ Do you want to do it now?" 9 80
 }
 
 install() {
-    mkdir -p ~/downloads
+    mkdir -p ~/Downloads
 
     add_programs
 
@@ -245,7 +248,7 @@ install() {
         echo "Proceeding to install Paru AUR helper..."
         clear
         sudo pacman -S --noconfirm --needed base-devel
-        cd ~/downloads
+        cd ~/Downloads
         git clone https://aur.archlinux.org/paru.git
         cd paru
         makepkg -si --noconfirm
