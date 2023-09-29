@@ -1,9 +1,6 @@
-# Set variables
-user_name=$(whoami)
-export PATH="/home/$user_name/.local/bin:/usr/local/bin:/usr/bin:$PATH"
-
 # Enable colors and change prompt:
-autoload -U colors && colors	# Load colors
+# Load colors
+autoload -U colors && colors
 
 # Display git branch
 # Enable colors and change prompt
@@ -19,13 +16,18 @@ setopt PROMPT_SUBST
 
 PROMPT='%B%{$fg[blue]%}%n%{$fg[yellow]%}${vcs_info_msg_0_} %{$fg[magenta]%}%~%b '
 
+## ENV VARS
 setopt autocd		# Automatically cd into typed directory.
 stty stop undef		# Disable ctrl-s to freeze terminal.
 setopt interactive_comments
-
 export VISUAL=nvim
 export EDITOR=nvim
-export QT_STYLE_OVERRIDE=kvantum    # qt theme
+user_name=$(whoami)
+export PATH="/home/$user_name/.local/bin:/usr/local/bin:/usr/bin:/home/$(whoami)/.local/share/gem/ruby/3.0.0/bin:$PATH"
+
+## ALIASES
+alias ll="ls -la --color=auto"
+alias nnn="nnn -dH"
 
 # History in cache directory:
 HISTSIZE=5000
@@ -39,9 +41,6 @@ zstyle ':completion:*' menu select
 zmodload zsh/complist
 compinit
 _comp_options+=(globdots)		# Include hidden files.
-
-# Aliases
-alias ll="ls -la --color=auto"
 
 # vi mode
 bindkey -v
@@ -70,20 +69,14 @@ zle -N zle-line-init
 echo -ne '\e[5 q' # Use beam shape cursor on startup.
 preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
-# Use ranger to switch directories and bind it to ctrl-o
-rangercd () {
-    tmp="$(mktemp)"
-    ranger --choosedir="$tmp" "$@"
-    if [ -f "$tmp" ]; then
-        dir="$(cat "$tmp")"
-        rm -f "$tmp"
-        [ --datadir "$dir" ] && [ "$dir" != "$(pwd)" ] && cd "$dir"                                               
-    fi
-}
-bindkey -s '^o' 'rangercd\n'
+## KEYBINDINGS
+# nnn file manager on ctrl-o
+bindkey -s '^e' 'nnn -d\n'
 
-bindkey -s '^a' '^ubc -lq\n'
+# Calculator on ctrl-c
+bindkey -s '^c' '^ubc -lq\n'
 
+# Fzf on ctrl-c
 bindkey -s '^f' '^ucd "$(dirname "$(fzf)")"\n'
 
 bindkey '^[[P' delete-char

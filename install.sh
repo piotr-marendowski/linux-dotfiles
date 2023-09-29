@@ -155,9 +155,6 @@ Type=XSession\n" | sudo tee /usr/share/xsessions/dwm.desktop
 
             # set default browser to librewolf
             xdg-settings set default-web-browser librewolf.desktop &> /dev/null
-            # make ranger display devicons NERD FONT NEEDED!
-            git clone https://github.com/alexanderjeurissen/ranger_devicons ~/.config/ranger/plugins/ranger_devicons &> /dev/null
-            echo "default_linemode devicons" >> $HOME/.config/ranger/rc.conf &> /dev/null
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
@@ -194,7 +191,7 @@ Do you want to do it now?" 10 80
 # EDIT FOR YOURSELF! won't describe every program because don't care :)
 add_programs() {
     # utilities
-    programs+=( "librewolf-bin" "sioyek" "htop-vim" "ranger" "zip" "unzip" "tar" "ncdu" "wget" "curl" "python-pip" "meson" "ninja" "zsh" "zsh-completions" "zsh-syntax-highlighting" "zsh-autosuggestions" "fzf" "xclip" )
+    programs+=( "librewolf-bin" "sioyek" "htop-vim" "nnn-nerd" "zip" "unzip" "tar" "ncdu" "wget" "curl" "python-pip" "meson" "ninja" "zsh" "zsh-completions" "zsh-syntax-highlighting" "zsh-autosuggestions" "fzf" "xclip" )
 
     # other
 	programs+=( "discord-screenaudio" "gimp" "libreoffice-fresh" "ttf-ms-fonts" "flameshot" "neovim" "lazygit" "ripgrep" )
