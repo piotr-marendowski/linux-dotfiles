@@ -16,7 +16,6 @@ If installation of paru will be stuck on <code>Arming ConditionNeedsUpdate</code
 
 ### Tree
 <pre>
-/
 ├── .config
 │   ├── dmenu
 │   ├── dwm

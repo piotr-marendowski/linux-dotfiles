@@ -1,4 +1,5 @@
 /* See LICENSE file for copyright and license details. */
+#include <X11/XF86keysym.h>
 
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
@@ -28,7 +29,6 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
 	{ "discord-screenaudio",  NULL,       NULL,       1 << 1,       0,           -1 },
 	{ "Spotify",  NULL,       NULL,       1 << 1,       0,           -1 },
 };
@@ -59,6 +59,8 @@ static const Layout layouts[] = {
 
 /* commands */
 static const char *termcmd[]  = { "st", NULL };
+static const char *reboot[]  = { "reboot", NULL };
+static const char *shutdown[]  = { "shutdown", "now", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -67,9 +69,13 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_n,      spawn,          SHCMD("st -e nvim") },
 	{ MODKEY,                       XK_u,      spawn,          SHCMD("~/.config/scripts/killprocess.sh") },
-	{ ShiftMask,                    XK_Delete, spawn,          SHCMD("shutdown now") },
-	{ ShiftMask,                    XK_Print,  spawn,          SHCMD("reboot") },
+	{ ShiftMask,                    XK_Delete, spawn,          {.v = shutdown } },
+	{ ShiftMask,                    XK_Print,  spawn,          {.v = reboot } },
 	{ 0,                            XK_Print,  spawn,          SHCMD("flameshot gui") },
+	{ MODKEY,                       XK_e,      spawn,          SHCMD("st -e nnn") },
+    { 0,         XF86XK_AudioRaiseVolume,      spawn,          SHCMD("pactl set-sink-volume @DEFAULT_SINK@ +5%") },
+    { 0,         XF86XK_AudioLowerVolume,      spawn,          SHCMD("pactl set-sink-volume @DEFAULT_SINK@ -5%") }, 
+    { 0,                XF86XK_AudioMute,      spawn,          SHCMD("pactl set-sink-mute @DEFAULT_SINK@ toggle") }, 
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
