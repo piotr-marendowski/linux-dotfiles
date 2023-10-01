@@ -27,14 +27,13 @@ return {
             require("mason-lspconfig").setup({
                 ensure_installed = {
                     "lua_ls",
-                    "pylsp",
                     "clangd",
                 },
                 automatic_installation = true,
             })
 
             -- Quick access via keymap
-            require("keys").map("n", "<leader>os", "<cmd>Mason<cr>", "󰏗 Mason")
+            require("keys").map("n", "<leader>om", "<cmd>Mason<cr>", "󰏗 Mason")
 
             -- Neodev setup before LSP config
             require("neodev").setup()
@@ -87,7 +86,7 @@ return {
 
                 -- Create a command `:Format` local to the LSP buffer
                 vim.api.nvim_buf_create_user_command(bufnr, "Format", function(_)
-                    vim.lsp.buf.format()
+                    vim.lsp.buf.format({ formatting_options = { tabSize = 4 } })
                 end, { desc = "Format current buffer with LSP" })
 
                 lsp_map("<leader>cf", "<cmd>Format<cr>", bufnr, " Format")
@@ -152,9 +151,20 @@ return {
                 },
             })
 
+            -- C
             require("lspconfig")["clangd"].setup({
                 on_attach = on_attach,
-                capabilities = { offsetEncoding = "utf-8" },
+                capabilities = { capabilities, offsetEncoding = "utf-8" },
+            })
+
+            -- Java
+            require("lspconfig")["jdtls"].setup({
+                cmd = { "jdtls" },
+                on_attach = on_attach,
+                capabilities = { capabilities, offsetEncoding = "utf-8" },
+                root_dir = function(fname)
+                    return require("lspconfig").util.root_pattern("pom.xml", "gradle.build", ".git")(fname) or vim.fn.getcwd()
+                end,
             })
 
             local function setup_lsp_diags()
@@ -188,8 +198,6 @@ return {
                 sources = {
                     null_ls.builtins.formatting.stylua,
                     null_ls.builtins.formatting.clang_format,
-                    null_ls.builtins.formatting.black,
-                    null_ls.builtins.formatting.isort,
                 },
             })
         end,

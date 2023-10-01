@@ -15,17 +15,16 @@ return {
 				marks = {
                     --colors
                     -- get default colors for them
-					Error = { text = { "|", "=" }},
-					Warn = { text = { "|", "=" }},
-					Info = { text = { "|", "=" }},
-					Hint = { text = { "|", "=" }},
-					Misc = { text = { "|", "=" }},
-					GitAdd = { text = "|" },
-					GitChange = { text = "|" },
-					GitDelete = { text = "|" },
+					Error = { text = { "-", "=" }},
+					Warn = { text = { "-", "=" }},
+					Info = { text = { "-", "=" }},
+					Hint = { text = { "-", "=" }},
+					Misc = { text = { "-", "=" }},
+					GitAdd = { text = "-" },
+					GitChange = { text = "-" },
+					GitDelete = { text = "-" },
 				},
 				excluded_filetypes = {
-					"NvimTree",
 					"alpha",
 					"lazygit",
 				},

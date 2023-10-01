@@ -4,7 +4,23 @@ return {
 		event = "VeryLazy",
 		config = function()
 			require("code_runner").setup({
+                mode = "float",
+                float = {
+                    border = "single",
+                },
 				filetype = {
+                    c = {
+                        "cd $dir &&",
+                        "gcc $fileName",
+                        "-o $fileNameWithoutExt &&",
+                        "$dir/$fileNameWithoutExt",
+                    },
+                    cpp = {
+                        "cd $dir &&",
+                        "g++ $fileName",
+                        "-o $fileNameWithoutExt &&",
+                        "$dir/$fileNameWithoutExt",
+                    },
 					java = {
 						"cd $dir &&",
 						"javac $fileName &&",
@@ -31,18 +47,17 @@ return {
 			})
 
 			local map = require("keys").map
-			map("n", "<leader>cr", "<cmd>RunCode<cr>", " Run code")
-			map("n", "<leader>ce", "<cmd>RunCode c89<cr>", " Run code (C89)")
+			map("n", "<leader>r", "<cmd>RunCode<cr>", " Run code")
 
 			-- Run code and specify which one preset to use
 			function RunCodePrompt()
-				local input = vim.fn.input("Enter code to run: ")
+				local input = vim.fn.input("Enter name: ")
 				if input ~= "" then
 					vim.cmd(":RunCode " .. input)
 				end
 			end
 
-			map("n", "<leader>ci", "<cmd>:lua RunCodePrompt()<cr>", " Run code (input)")
+			map("n", "<leader>ci", "<cmd>:lua RunCodePrompt()<cr>", " Run (input)")
 		end,
 	},
 }

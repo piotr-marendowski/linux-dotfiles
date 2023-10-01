@@ -8,6 +8,8 @@ return {
 			-- Fuzzy Finder Algorithm which requires local dependencies to be built. Only load if `make` is available
 			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make", cond = vim.fn.executable("make") == 1 },
 			"debugloop/telescope-undo.nvim",
+            -- Override vim.ui.select()
+            "nvim-telescope/telescope-ui-select.nvim",
 		},
 		config = function()
 			require("telescope").setup({
@@ -48,8 +50,12 @@ return {
 			pcall(require("telescope").load_extension, "fzf")
 			-- Telescope-undo
 			require("telescope").load_extension("undo")
+            require("telescope").load_extension("ui-select")
 
 			local map = require("keys").map
+			map("n", "<leader>on", ":ene <BAR> startinsert <CR>", " New file")
+			map("n", "<leader>sp", ":Telescope projects <CR>", "󰱓 Find project")
+			map("n", "<leader>oi", ":e ~/.config/nvim/init.lua <CR>", " init.lua")
 			map("n", "<leader>sr", require("telescope.builtin").oldfiles, " Recently opened")
 			map("n", "<leader>so", require("telescope.builtin").buffers, "󱃢 Open buffers")
 			map("n", "<leader>ss", function()
@@ -59,15 +65,12 @@ return {
 					previewer = false,
 				}))
 			end, " Search in buffer")
-
 			map("n", "<leader>sf", require("telescope.builtin").find_files, " Files")
 			map("n", "<leader>sh", require("telescope.builtin").help_tags, "󰋖 Help")
 			map("n", "<leader>sw", require("telescope.builtin").grep_string, " Current word")
 			map("n", "<leader>sg", require("telescope.builtin").live_grep, "󰮗 Grep")
 			map("n", "<leader>sd", require("telescope.builtin").diagnostics, " Diagnostics")
-
 			map("n", "<leader>sk", require("telescope.builtin").keymaps, "󰌌 Keymaps")
-
 			map("n", "<leader>su", ':lua require("telescope").extensions.undo.undo()<cr>', " Undo history")
 		end,
 	},

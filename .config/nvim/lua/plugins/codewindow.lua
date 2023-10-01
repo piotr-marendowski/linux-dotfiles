@@ -8,7 +8,7 @@ return {
 
         codewindow.setup({
 				auto_enable = false, -- autostart on every buffer opening
-				exclude_filetypes = { "NvimTree", "alpha" },
+				exclude_filetypes = { "alpha" },
 				minimap_width = 10,
 				window_border = "", -- no border
                 screen_bounds = "background", -- vs-code like shadow
@@ -34,12 +34,12 @@ return {
 			map("n", "<leader>mo", "<Nop>", "")
 
 			-- Toggle minimap
-			require("keys").map({ "n", "v" }, "<leader>tm", function()
+			require("keys").map({ "n", "v" }, "<leader>m", function()
 				codewindow.toggle_minimap()
 			end, " Minimap")
 
 			-- Toggle minimap and auto focus on it
-			require("keys").map({ "n", "v" }, "<leader>tf", function()
+			require("keys").map({ "n", "v" }, "<leader>of", function()
 				codewindow.toggle_focus()
 			end, " Minimap (focus)  ")
 		end,

@@ -31,12 +31,14 @@ return {
             })
         end,
     },
-    -- Show colors
+    -- Show colors (toggle)/color picker
     {
-        "norcalli/nvim-colorizer.lua",
+        "uga-rosa/ccc.nvim",
         event = "VeryLazy",
         config = function()
-            require("colorizer").setup()
+            local map = require("keys").map
+            map("n", "<leader>oc", "<cmd>CccPick<cr>", " Color picker")
+            map("n", "<leader>ot", "<cmd>CccHighlighterToggle<cr>", " Toggle colors")
         end,
     },
     -- Better glance at matched information
@@ -46,6 +48,7 @@ return {
         event = "VeryLazy",
         config = function()
             require("hlslens").setup()
+
             local map = require("keys").map
             map("n", "<C-_>", "<cmd>nohlsearch<cr>", " Stop matching")
         end,
@@ -53,26 +56,29 @@ return {
     -- Autopairs
     {
         "windwp/nvim-autopairs",
+        event = "VeryLazy",
         config = function()
             require("nvim-autopairs").setup()
         end,
     },
-    -- ident lines
+    -- better buffer closing
+    {
+        "famiu/bufdelete.nvim",
+        event = "BufEnter",
+    },
+    -- Ident lines
     {
         "lukas-reineke/indent-blankline.nvim",
-
-        config = function()
-            require("indent_blankline").setup({
-                space_char_blankline = " ",
-                show_current_context = true,
-                show_current_context_start = false,
-            })
-        end,
+        main = "ibl",
+        opts = {
+            -- disable v.2 context highlighting
+            scope = { enabled = false },
+        },
     },
-    "famiu/bufdelete.nvim", -- better buffer closing
-    -- projects and autochdir in toggleterm
+    -- Projects and autochdir in toggleterm
     {
         "ahmedkhalf/project.nvim",
+        event = "VeryLazy",
         config = function()
             require("project_nvim").setup({
                 sync_root_with_cwd = true,
@@ -86,9 +92,10 @@ return {
             require("telescope").load_extension("projects")
         end,
     },
-    -- smooth scrolling
+    -- Smooth scrolling
     {
         "declancm/cinnamon.nvim",
+        event = "VeryLazy",
         config = function()
             require("cinnamon").setup({
                 extra_keymaps = true,
@@ -104,7 +111,7 @@ return {
 
             -- Then assign it (and works, I'm so smart I know)
             -- Exit without saving
-            map("n", "<C-f>", "<cmd>NvimTreeClose | q!<cr>", "")
+            map("n", "<C-f>", "<cmd>q!<cr>", "")
         end,
     },
     -- Autosave
@@ -123,17 +130,20 @@ return {
     {
         "folke/zen-mode.nvim",
         event = "VeryLazy",
-        dependencies = {
-            "folke/twilight.nvim",
-            config = function()
-                local map = require("keys").map
-                map("n", "<leader>tt", "<cmd>Twilight<cr>", " Twilight")
-            end,
+        opts = {
+            window = {
+                width = .70; -- 70% of the screen
+            },
+            options = {
+                signcolumn = "no",
+            },
+            plugins = {
+                gitsigns = { enabled = false },
+            },
         },
-        opts = {},
         config = function()
             local map = require("keys").map
-            map("n", "<leader>tz", "<cmd>ZenMode<cr>", "󰰶 ZenMode")
+            map("n", "<leader>z", "<cmd>ZenMode<cr>", "󰰶 ZenMode")
         end,
     },
     -- Automatically open files at the place of the last edit
@@ -161,24 +171,24 @@ return {
     -- Overrides the delete operations to actually just delete and not affect the current yank
     {
         "gbprod/cutlass.nvim",
+        event = "VeryLazy",
         opts = {
             cut_key = "t",
         },
     },
     -- Latex previewer
-    -- NEEDS meta-group-texlive-most (AUR) PACKAGE!
-    -- If you get error: rubber-info: command not found then don't install rubber,
-    -- just look for errors in code, because rubber is not necessary
-    {
-        "frabjous/knap",
-        event = "VeryLazy",
-        config = function()
-            local map = require("keys").map
-            map("n", "<leader>ox", function()
-                require("knap").toggle_autopreviewing()
-            end, " Latex")
-        end,
-    },
+    -- NEEDS `meta-group-texlive-most` (AUR) PACKAGE!
+    -- and `rubber` for error messages
+    -- {
+    --     "frabjous/knap",
+    --     event = "VeryLazy",
+    --     config = function()
+    --         local map = require("keys").map
+    --         map("n", "<leader>ox", function()
+    --             require("knap").toggle_autopreviewing()
+    --         end, " Latex")
+    --     end,
+    -- },
     -- Marks
     {
         "chentoast/marks.nvim",
@@ -243,6 +253,7 @@ return {
     -- gp.. => goto preview
     {
         "rmagatti/goto-preview",
+        event = "VeryLazy",
         config = function()
             require("goto-preview").setup({
                 default_mappings = true,
@@ -252,6 +263,7 @@ return {
     -- Ranger-like item navigation
     {
         "SmiteshP/nvim-navbuddy",
+        event = "VeryLazy",
         dependencies = {
             "neovim/nvim-lspconfig",
             "SmiteshP/nvim-navic",
@@ -272,21 +284,13 @@ return {
             map("n", "<leader>cn", ':lua require("nvim-navbuddy").open()<cr>', "󰪏 Navbuddy")
         end,
     },
-    -- Delete all buffers except opened
-    {
-        "numtostr/BufOnly.nvim",
-        config = function()
-            local map = require("keys").map
-            map("n", "<leader>ob", "<cmd>BufOnly<cr>", " Delete buffers")
-        end,
-    },
-    -- Send buffers into early retirement by automatically closing them after x minutes of inactivity
+    -- Send buffers into early retirement by automatically closing
+    -- them after x minutes of inactivity
     {
         "chrisgrieser/nvim-early-retirement",
-        event = "VeryLazy",
         config = function()
             require("early-retirement").setup({
-                retirementAgeMins = 5,
+                retirementAgeMins = 10,
             })
         end,
     },
@@ -298,31 +302,65 @@ return {
             require("numb").setup()
         end,
     },
-    -- Sessions
-    {
-        "gennaro-tedesco/nvim-possession",
-        dependencies = {
-            "ibhagwan/fzf-lua",
-        },
-        config = function()
-            require("nvim-possession").setup()
-
-            local map = require("keys").map
-            map("n", "<leader>pl", ':lua require("nvim-possession").list()<cr>', " List sessions")
-            map("n", "<leader>pn", ':lua require("nvim-possession").new()<cr>', " New session")
-            map("n", "<leader>pu", ':lua require("nvim-possession").update()<cr>', "󰚰 Update sessions")
-            map("n", "<leader>pd", ':lua require("nvim-possession").delete()<cr>', "󰺝 Delete")
-        end,
-    },
     -- Fast jumping to any text on the screen
     {
         "phaazon/hop.nvim",
+        event = "VeryLazy",
         branch = "v2", -- optional but strongly recommended
         config = function()
-            -- you can configure Hop the way you like here; see :h hop-config
             require("hop").setup({ keys = "etovxqpdygfblzhckisuran" })
 
             vim.keymap.set("", "f", "<cmd>HopWord<cr>", { remap = true })
         end,
+    },
+    -- nnn file manager
+    {
+        "luukvbaal/nnn.nvim",
+        event = "VeryLazy",
+        config = function()
+            require("nnn").setup({
+                picker = {
+                    cmd = "nnn -edH",
+                    style = {
+                        -- percentage relative to terminal size when < 1, absolute otherwise
+                        width = 90,
+                        height = 0.6,
+                        xoffset = 0.5,
+                        yoffset = 0.5,
+                        -- border decoration for example "rounded"(:h nvim_open_win)
+                        border = "single"
+                    },
+                }
+            })
+
+            -- run in floating window with cwd
+            local map = require("keys").map
+            map("n", "<leader>e", '<cmd>NnnPicker %:p:h<cr>', " File manager")
+        end
+    },
+    -- Smart column
+    {
+        "m4xshen/smartcolumn.nvim",
+        event = "BufEnter",
+        opts = {
+            colorcolumn = "100",
+            disabled_filetypes = { "lazy", "mason", "help", "alpha", "help", "text", "markdown" }
+        }
+    },
+    -- Pomodoro timer
+    {
+        "dbinagi/nomodoro",
+        config = function()
+            require('nomodoro').setup({
+                work_time = 25,
+                break_time = 5,
+                texts = {
+                    status_icon = " ",
+                },
+            })
+            local map = require("keys").map
+            map("n", "<leader>ii", '<cmd>NomoWork<cr>', "󱫠 Start Timer")
+            map("n", "<leader>ib", '<cmd>NomoStop<cr>', "󱫨 Stop Timer")
+        end
     },
 }

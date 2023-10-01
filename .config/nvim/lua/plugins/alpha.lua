@@ -1,13 +1,16 @@
 return {
 	{
 		"goolord/alpha-nvim",
+		dependencies = "nvim-tree/nvim-web-devicons",
+        event = "VimEnter",
 		config = function()
 			-- hide bufferline in alpha
 			vim.cmd("autocmd User AlphaReady set showtabline=0 | autocmd BufUnload <buffer> set showtabline=2")
 
-			local alpha = require('alpha')
+			local alpha = require("alpha")
 			local dashboard = require("alpha.themes.dashboard")
 
+			-- on startup choose one of them
 			local header_one = {
 				[[                                                  ]],
 				[[                                                  ]],
@@ -17,7 +20,7 @@ return {
 				[[██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║]],
 				[[██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║]],
 				[[██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║]],
-			    [[╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝]],
+				[[╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝]],
 				[[            The worst editor out there!           ]],
 				[[                                                  ]],
 				[[                                                  ]],
@@ -33,40 +36,30 @@ return {
 				[[██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║]],
 				[[██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║]],
 				[[██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║]],
-			    [[╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝]],
+				[[╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝]],
 				[[            The best editor out there!            ]],
 				[[                                                  ]],
 				[[                                                  ]],
 				[[                                                  ]],
 			}
 
-			local headers = {header_one, header_two}
-
+			local headers = { header_one, header_two }
 			local function header_chars()
-			  math.randomseed(os.time())
-			  return headers[math.random(#headers)]
+				math.randomseed(os.time())
+				return headers[math.random(#headers)]
 			end
-
 			dashboard.section.header.val = header_chars()
 
+            -- buttons
 			dashboard.section.buttons.val = {
 				dashboard.button("f", "󰈞  Find file", ":Telescope find_files <CR>"),
 				dashboard.button("n", "  New file", ":ene <BAR> startinsert <CR>"),
-				dashboard.button("p", "󰱓  Find project", ":Telescope projects <CR>"),
-				dashboard.button("s", "  Find session", ':lua require("nvim-possession").list()<cr>'),
-				dashboard.button("r", "󰄉  Recently used files", ":Telescope oldfiles <CR>"),
-				dashboard.button("t", "󰊄  Find text", ":Telescope live_grep <CR>"),
+				dashboard.button("r", "󰄉  Recent files", ":Telescope oldfiles <CR>"),
+				dashboard.button("p", "󰱓  Projects", ":Telescope projects <CR>"),
+				dashboard.button("s", "  Sessions", '<cmd>SessionManager load_session<cr>'),
 				dashboard.button("c", "  Configuration", ":e ~/.config/nvim/init.lua <CR>"),
-				dashboard.button("q", "󰗼  Quit Neovim", ":qa<CR>"),
+				dashboard.button("q", "󰗼  Quit Neovim", ":qa!<CR>"),
 			}
-
-			-- map these onto which-key
-			local map = require("keys").map
-			-- map("n", "<leader>af", ":Telescope find_files <CR>", "󰈞 Find file")
-			map("n", "<leader>on", ":ene <BAR> startinsert <CR>", " New file")
-			map("n", "<leader>sp", ":Telescope projects <CR>", "󰱓 Find project")
-			-- map("n", "<leader>at", ":Telescope live_grep <CR>", "󰊄 Find text")
-			map("n", "<leader>oi", ":e ~/.config/nvim/init.lua <CR>", " init.lua")
 
 			dashboard.section.header.opts.hl = "Include"
 			dashboard.section.buttons.opts.hl = "Keyword"
@@ -76,15 +69,15 @@ return {
 
 			-- display number of plugins and their loading time
 			vim.api.nvim_create_autocmd("User", {
-			pattern = "LazyVimStarted",
-			callback = function()
-			  local stats = require("lazy").stats()
-			  local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
-			  local plugins = "⚡Neovim loaded " .. stats.count .. " plugins in " .. ms .. "ms"
-			  local footer = plugins .. "\n"
-			  dashboard.section.footer.val = footer
-			  pcall(vim.cmd.AlphaRedraw)
-			end,
+				pattern = "LazyVimStarted",
+				callback = function()
+					local stats = require("lazy").stats()
+					local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
+					local plugins = "⚡Neovim loaded " .. stats.count .. " plugins in " .. ms .. "ms"
+					local footer = plugins .. "\n"
+					dashboard.section.footer.val = footer
+					pcall(vim.cmd.AlphaRedraw)
+				end,
 			})
 
 			-- color footer
@@ -102,14 +95,11 @@ return {
 					local fallback_on_empty = fallback_name == "" and fallback_ft == ""
 
 					if fallback_on_empty then
-						vim.cmd("NvimTreeClose")
 						vim.cmd("Alpha")
 						vim.cmd(event.buf .. "bwipeout")
 					end
 				end,
 			})
 		end,
-		dependencies = "nvim-tree/nvim-web-devicons",
 	},
 }
-

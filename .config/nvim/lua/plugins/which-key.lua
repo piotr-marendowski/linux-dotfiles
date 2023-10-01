@@ -1,4 +1,3 @@
--- had to add Trouble manually because didn't show up
 return {
 	{
 		"folke/which-key.nvim",
@@ -10,7 +9,7 @@ return {
 				layout = {
 					height = { min = 1, max = 100 },
 					width = { min = 1, max = 100 },
-					spacing = 2, -- spacing between columns
+					spacing = 1, -- spacing between columns
 					align = "center", -- align columns left, center or right
 				},
 				icons = {
@@ -20,27 +19,27 @@ return {
 				},
 				window = {
 					border = "single", -- none, single, double, shadow
-					position = "top", -- bottom, top
+					position = "bottom", -- bottom, top
 					padding = { 1, 1, 1, 1 }, -- extra window padding [top, right, bottom, left]
-                    margin = { 14, 55, 0, 55 }, -- extra window margin [top, right, bottom, left]. When between 0 and 1, will be treated as a percentage of the screen size.
+                    margin = { 0, 0, 0, 0 }, -- extra window margin [top, right, bottom, left]. When between 0 and 1, will be treated as a percentage of the screen size.
 					winblend = 0, -- value between 0-100 0 for fully opaque and 100 for fully transparent
 				},
 			})
 			-- most of the options have keybindings in their respecting files, some don't have them and are here
 			wk.register({
 				["<leader>"] = {
+					t = { "<cmd>TroubleToggle<cr>", " Trouble" },
 					c = {
-						name = " Code related",
+						name = " Code",
 					},
-					b = {
-						name = " Debugging        ",
-						a = { "<cmd>TroubleToggle<cr>", " Toggle Trouble" },
+					d = {
+						name = " Debugging",
 					},
 					s = {
 						name = " Search",
 						b = {
 							name = " Debugging",
-							b = { "<cmd>Telescope dap list_breakpoints<cr>", " Breakpoints     " },
+							b = { "<cmd>Telescope dap list_breakpoints<cr>", " Breakpoints" },
 							c = { "<cmd>Telescope dap commands<cr>", " Commands" },
 							f = { "<cmd>Telescope dap variables<cr>", " Frames" },
 							v = { "<cmd>Telescope dap frames<cr>", "󰫧 Variables" },
@@ -48,18 +47,23 @@ return {
 						},
 					},
 					o = {
-						name = "󰮰 Other actions",
-						l = { "<cmd>Lazy<cr>", "󱒋 Lazy             " },
-						a = { "<cmd>NvimTreeClose | Alpha<cr>", " Alpha" },
+						name = " Other",
+						l = { "<cmd>Lazy<cr>", "󱒋 Lazy" },
+						a = { "<cmd>Alpha<cr>", " Alpha" },
 					},
 					m = {
 						name = " Marks",
 					},
-					t = {
-						name = "  Toggle",
-					},
 					p = {
 						name = " Sessions",
+					},
+                    a = {
+                        name = "󰔎 Themes",
+                        d = { "<cmd>colorscheme tokyonight-day<cr>", " Tokyonight Day"},
+                        s = { "<cmd>colorscheme tokyonight-storm<cr>", " Tokyonight Storm"},
+                    },
+					i = {
+						name = " Pomodoro",
 					},
 				},
 			})

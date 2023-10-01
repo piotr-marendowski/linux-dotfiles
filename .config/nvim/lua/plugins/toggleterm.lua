@@ -47,7 +47,7 @@ return {
 			end
 
 			local map = require("keys").map
-			map("n", "<leader>og", "<cmd>lua LAZYGIT_TOGGLE()<CR>", " Lazygit")
+			map("n", "<leader>l", "<cmd>lua LAZYGIT_TOGGLE()<CR>", " Lazygit")
 		end,
 	},
 }

@@ -15,15 +15,8 @@ return {
 					tab_size = 21,
 					offsets = {
 						{
-							filetype = "NvimTree",
-							text = "File Explorer",
-							text_align = "center",
-							-- separator = true,
-							padding = 1,
-						},
-						{
 							filetype = "Alpha",
-							text = "File Explorer",
+							text = " ",
 							text_align = "center",
 							-- separator = true,
 							padding = 1,
@@ -36,7 +29,7 @@ return {
 					diagnostics_indicator = function(count, level, diagnostics_dict, context)
 						local s = ""
 						for e, n in pairs(diagnostics_dict) do
-							local sym = e == "error" and " " or (e == "warning" and " " or "")
+							local sym = e == "error" and " " or (e == "warning" and " " or " ")
 							s = s .. n .. sym
 						end
 						return s
@@ -49,6 +42,8 @@ return {
 			map("n", "<S-h>", "<cmd>BufferLineCyclePrev<CR>", "Previous buffer")
 			map("n", "<A-l>", "<cmd>BufferLineMoveNext<CR>", "Move next buffer")
 			map("n", "<A-h>", "<cmd>BufferLineMovePrev<CR>", "Move previous buffer")
+            -- Fake ctrl + tab buffer switching ==> bind only tab
+			map("n", "<Tab>", "<cmd>b#<CR>", "Alt tab")
 		end,
 	},
 }

@@ -1,5 +1,4 @@
 -- License: GPL v.3 NERD-FONT WITH ICONS IS REQUIRED TO VIEW ICONS!
-
 -- Load options
 require("options")
 
@@ -25,8 +24,6 @@ end
 
 -- Load plugins and make border boxy
 require("lazy").setup("plugins", {
-	ui = {
-		border = "single",
-	},
+	ui = { border = "single" },
 })
 
