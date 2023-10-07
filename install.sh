@@ -124,6 +124,9 @@ configure_installed() {
             cd ~/.config/dwm/ &> /dev/null
             sudo make install &> /dev/null
 
+            cd ~/.config/nnn/ &> /dev/null
+            sudo make install &> /dev/null
+
             sudo mkdir /usr/share/xsessions/ &> /dev/null
             sudo touch /usr/share/xsessions/dwm.desktop &> /dev/null
 
@@ -163,8 +166,8 @@ Type=XSession\n" | sudo tee /usr/share/xsessions/dwm.desktop
             # virtualization
             if [ "$is_virtualization" = true ]; then
 
-                whiptail --title "VIRTUALIZATION: Warming" --yesno "You need to ensure that these are set to: \
-unix_sock_group = \"libvirt\", unix_sock_ro_perms = \"0777\", and unix_sock_rw_perms = \"0770\". \
+                whiptail --title "VIRTUALIZATION: Warming" --yesno "You need to ensure that these are \
+set to: unix_sock_group = \"libvirt\", unix_sock_ro_perms = \"0777\", and unix_sock_rw_perms = \"0770\". \
 Do you want to do it now?" 10 80
                 if [ $? -eq 0 ]; then
                     sudo nvim /etc/libvirt/libvirtd.conf
@@ -191,7 +194,10 @@ Do you want to do it now?" 10 80
 # EDIT FOR YOURSELF! won't describe every program because don't care :)
 add_programs() {
     # Basic - portable
-    programs+=( "librewolf-bin" "htop-vim" "nnn-nerd" "zsh" "zsh-completions" "zsh-syntax-highlighting" "zsh-autosuggestions" "xclip" )
+    programs+=( "librewolf-bin" "htop-vim" "xclip" )
+
+    # zsh
+    programs+=( "zsh" "zsh-completions" "zsh-syntax-highlighting" "zsh-autosuggestions" "xclip" )
 
     # Neovim
     programs+=( "neovim" "curl" "python-pip" "meson" "ninja" "lazygit" "ripgrep" )
