@@ -20,14 +20,20 @@ PROMPT='%B%{$fg[blue]%}%n%{$fg[yellow]%}${vcs_info_msg_0_} %{$fg[magenta]%}%~%b 
 setopt autocd		# Automatically cd into typed directory.
 stty stop undef		# Disable ctrl-s to freeze terminal.
 setopt interactive_comments
-export VISUAL=nvim
-export EDITOR=nvim
 user_name=$(whoami)
 export PATH="/home/$user_name/.local/bin:/usr/local/bin:/usr/bin:/home/$(whoami)/.local/share/gem/ruby/3.0.0/bin:$PATH"
+export VISUAL=nvim
+export EDITOR=nvim
+# nnn bookmarks
+# A string of key_char:location pairs separated by semicolons (;):
+#
+# The bookmarks are listed in the help and config screen (key ?).
+# The select bookmark key b lists all the bookmark keys set in NNN_BMS in the bookmarks prompt.
+export NNN_BMS="d:$HOME/Documents;D:$HOME/Downloads"
 
 ## ALIASES
 alias ll="ls -la --color=auto"
-alias nnn="nnn -dH"
+alias nnn="nnn -deH"
 
 # History in cache directory:
 HISTSIZE=5000
@@ -71,12 +77,9 @@ preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
 ## KEYBINDINGS
 # nnn file manager on ctrl-o
-bindkey -s '^e' 'nnn -d\n'
+bindkey -s '^o' 'nnn -deH\n'
 
-# Calculator on ctrl-c
-bindkey -s '^c' '^ubc -lq\n'
-
-# Fzf on ctrl-c
+# fzf on ctrl-c
 bindkey -s '^f' '^ucd "$(dirname "$(fzf)")"\n'
 
 bindkey '^[[P' delete-char
@@ -91,3 +94,4 @@ bindkey -M visual '^[[P' vi-delete
 # Load autosuggestions and syntax highlighting; should be last.
 source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
+

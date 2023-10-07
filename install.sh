@@ -190,30 +190,36 @@ Do you want to do it now?" 10 80
 
 # EDIT FOR YOURSELF! won't describe every program because don't care :)
 add_programs() {
-    # utilities
-    programs+=( "librewolf-bin" "sioyek" "htop-vim" "nnn-nerd" "zip" "unzip" "tar" "ncdu" "wget" "curl" "python-pip" "meson" "ninja" "zsh" "zsh-completions" "zsh-syntax-highlighting" "zsh-autosuggestions" "fzf" "xclip" )
+    # Basic - portable
+    programs+=( "librewolf-bin" "htop-vim" "nnn-nerd" "zsh" "zsh-completions" "zsh-syntax-highlighting" "zsh-autosuggestions" "xclip" )
 
-    # other
-	programs+=( "discord-screenaudio" "gimp" "libreoffice-fresh" "ttf-ms-fonts" "flameshot" "neovim" "lazygit" "ripgrep" )
+    # Neovim
+    programs+=( "neovim" "curl" "python-pip" "meson" "ninja" "lazygit" "ripgrep" )
+
+    # Additional utilities
+    programs+=( "zip" "unzip" "tar" "ncdu" "wget" "fzf" "maim" )
 
     # sound - pipewire
     # programs+=( "pipewire" "pipewire-audio" "pipewire-alsa" "pipewire-jack" "pipewire-pulse" )
-    programs+=( "pipewire" "pipewire-audio" "pipewire-alsa" )
+    programs+=( "pipewire" "pipewire-audio" "pipewire-alsa" "pipewire-pulse" )
 
     # gui
-    programs+=( "xorg" "xorg-xinit" "ly" "redshift" "ttf-jetbrains-mono-nerd" "lxappearance" "nitrogen" "qt5ct-kde" "kvantum" )
+    programs+=( "xorg" "xorg-xinit" "ly" "redshift" "ttf-jetbrains-mono-nerd" "lxappearance" "nitrogen" )
+
+    # Other
+	programs+=( "discord-screenaudio" "gimp" "libreoffice-fresh" "ttf-ms-fonts" )
 
     # make android phones connect and transfer files
 	# programs+=( "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" )
 
     # gaming
-	whiptail --title "Warming" --yesno "Before installing and configuring system for \
-gaming, first you need to enable multilib in pacman.conf in order to install 32-bit drivers. \
-Do you want to do it now?" 9 80
+	#whiptail --title "Warming" --yesno "Before installing and configuring system for \
+# gaming, first you need to enable multilib in pacman.conf in order to install 32-bit drivers. \
+# Do you want to do it now?" 9 80
 	
-	if [ $? -eq 0 ]; then
-		sudo nvim /etc/pacman.conf
-	fi
+	# if [ $? -eq 0 ]; then
+	#	 sudo nvim /etc/pacman.conf
+	# fi
 
 	# programs+=( "steam" "lutris" "wine-staging" "nvidia-dkms" "nvidia-utils-dkms" "vulkan-icd-loader" "dxvk-bin" "opencl-nvidia" "libvdpau" "libxnvctrl" "lib32-nvidia-utils" "lib32-opencl-nvidia" "lib32-vulkan-icd-loader" "proton-ge-custom-bin" "mangohud-git" "goverlay-bin" "gwe" "protonup-qt-bin" "gamemode" )
     #
