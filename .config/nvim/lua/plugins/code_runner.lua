@@ -5,9 +5,7 @@ return {
 		config = function()
 			require("code_runner").setup({
                 mode = "float",
-                float = {
-                    border = "single",
-                },
+                float = { border = "single" },
 				filetype = {
                     c = {
                         "cd $dir &&",
@@ -27,7 +25,6 @@ return {
 						"java $fileNameWithoutExt",
 					},
 					python = "python3 -u",
-					typescript = "deno run",
 					rust = {
 						"cd $dir &&",
 						"rustc $fileName &&",
@@ -60,4 +57,12 @@ return {
 			map("n", "<leader>ci", "<cmd>:lua RunCodePrompt()<cr>", " Run (input)")
 		end,
 	},
+    {
+        "folke/trouble.nvim",
+        event = "VeryLazy",
+        dependencies = { "nvim-tree/nvim-web-devicons" },
+        config = function()
+            require("trouble").setup()
+        end,
+    },
 }

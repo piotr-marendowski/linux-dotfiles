@@ -13,17 +13,18 @@ return {
 			})
 
 			function _G.set_terminal_keymaps()
-				local opts = {buffer = 0}
-				vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
-				vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts)
-				vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
-				vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
-				vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
-				vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
-				vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
+				local opts = { buffer = 0 }
+				vim.keymap.set("t", "<esc>", [[<C-\><C-n>]], opts)
+				vim.keymap.set("t", "jk", [[<C-\><C-n>]], opts)
+				vim.keymap.set("t", "<C-h>", [[<Cmd>wincmd h<CR>]], opts)
+				vim.keymap.set("t", "<C-j>", [[<Cmd>wincmd j<CR>]], opts)
+				vim.keymap.set("t", "<C-k>", [[<Cmd>wincmd k<CR>]], opts)
+				vim.keymap.set("t", "<C-l>", [[<Cmd>wincmd l<CR>]], opts)
+				vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], opts)
 			end
+
 			-- if you only want these mappings for toggle term use term://toggleterm instead
-			vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
+			vim.cmd("autocmd! TermOpen term://* lua set_terminal_keymaps()")
 
 			-- lazygit integration
 			local Terminal = require("toggleterm.terminal").Terminal
@@ -34,7 +35,13 @@ return {
 				-- function to run on opening the terminal
 				on_open = function(term)
 					vim.cmd("startinsert!")
-					vim.api.nvim_buf_set_keymap(term.bufnr, "n", "q", "<cmd>close<CR>", {noremap = true, silent = true})
+					vim.api.nvim_buf_set_keymap(
+						term.bufnr,
+						"n",
+						"q",
+						"<cmd>close<CR>",
+						{ noremap = true, silent = true }
+					)
 				end,
 				-- function to run on closing the terminal
 				on_close = function()
@@ -42,13 +49,78 @@ return {
 				end,
 			})
 
-			function LAZYGIT_TOGGLE()
+			-- auto cwd for lazygit
+			vim.cmd("autocmd! TermOpen term://* lua set_terminal_keymaps()")
+			local cur_cwd = vim.fn.getcwd()
+
+			function _LAZYGIT_TOGGLE()
+				-- cwd is the root of project. if cwd is changed, change the git.
+				local cwd = vim.fn.getcwd()
+				if cwd ~= cur_cwd then
+					cur_cwd = cwd
+					lazygit:close()
+					lazygit = Terminal:new({ cmd = "lazygit", direction = "float" })
+				end
 				lazygit:toggle()
 			end
 
+			-- auto cwd in terminal for projects
+			vim.api.nvim_create_autocmd({ "DirChanged" }, {
+				pattern = { "window", "global" },
+				callback = function()
+					if Terminal:is_open() then
+						Terminal:send(string.format("cd %s", vim.fn.getcwd()), true)
+					end
+				end,
+			})
+
+			-- auto cwd in terminal for everything
+			vim.cmd("autocmd BufEnter * silent! lcd %:p:h")
+
 			local map = require("keys").map
-			map("n", "<leader>l", "<cmd>lua LAZYGIT_TOGGLE()<CR>", " Lazygit")
+			map("n", "<leader>l", "<cmd>lua _LAZYGIT_TOGGLE()<CR>", " Lazygit")
+		end,
+	},
+	-- Open nvim files from terminal in editor
+	{
+		"willothy/flatten.nvim",
+		opts = function()
+			---@type Terminal?
+			local saved_terminal
+
+			return {
+				window = {
+					open = "alternate",
+				},
+				callbacks = {
+					should_block = function(argv)
+						return vim.tbl_contains(argv, "-b")
+					end,
+					pre_open = function()
+						local term = require("toggleterm.terminal")
+						local termid = term.get_focused_id()
+						saved_terminal = term.get(termid)
+					end,
+					post_open = function(bufnr, winnr, ft, is_blocking)
+						if is_blocking and saved_terminal then
+							-- Hide the terminal while it's blocking
+							saved_terminal:close()
+						else
+							-- If it's a normal file, just switch to its window
+							vim.api.nvim_set_current_win(winnr)
+						end
+					end,
+					block_end = function()
+						-- After blocking ends (for a git commit, etc), reopen the terminal
+						vim.schedule(function()
+							if saved_terminal then
+								saved_terminal:open()
+								saved_terminal = nil
+							end
+						end)
+					end,
+				},
+			}
 		end,
 	},
 }
-

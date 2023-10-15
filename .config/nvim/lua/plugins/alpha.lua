@@ -2,7 +2,7 @@ return {
 	{
 		"goolord/alpha-nvim",
 		dependencies = "nvim-tree/nvim-web-devicons",
-        event = "VimEnter",
+		event = "VimEnter",
 		config = function()
 			-- hide bufferline in alpha
 			vim.cmd("autocmd User AlphaReady set showtabline=0 | autocmd BufUnload <buffer> set showtabline=2")
@@ -26,7 +26,6 @@ return {
 				[[                                                  ]],
 				[[                                                  ]],
 			}
-
 			local header_two = {
 				[[                                                  ]],
 				[[                                                  ]],
@@ -50,15 +49,40 @@ return {
 			end
 			dashboard.section.header.val = header_chars()
 
-            -- buttons
+			-- buttons
 			dashboard.section.buttons.val = {
 				dashboard.button("f", "󰈞  Find file", ":Telescope find_files <CR>"),
 				dashboard.button("n", "  New file", ":ene <BAR> startinsert <CR>"),
 				dashboard.button("r", "󰄉  Recent files", ":Telescope oldfiles <CR>"),
 				dashboard.button("p", "󰱓  Projects", ":Telescope projects <CR>"),
-				dashboard.button("s", "  Sessions", '<cmd>SessionManager load_session<cr>'),
+				dashboard.button("s", "  Sessions", ":Telescope possession list<cr>"),
 				dashboard.button("c", "  Configuration", ":e ~/.config/nvim/init.lua <CR>"),
-				dashboard.button("q", "󰗼  Quit Neovim", ":qa!<CR>"),
+				dashboard.button("q", "󰗼  Quit", ":qa!<CR>"),
+                -- Sessions
+				(function()
+					local group = { type = "group", opts = { spacing = 0 } }
+					group.val = {
+						{
+							type = "text",
+							val = "Sessions",
+							opts = {
+								position = "center",
+							},
+						},
+					}
+					local path = vim.fn.stdpath("data") .. "/possession"
+					local files = vim.split(vim.fn.glob(path .. "/*.json"), "\n")
+					for i, file in pairs(files) do
+						local basename = vim.fs.basename(file):gsub("%.json", "")
+						local button = dashboard.button(
+							tostring(i),
+							"󰑐  " .. basename,
+							"<cmd>PossessionLoad " .. basename .. "<cr>"
+						)
+						table.insert(group.val, button)
+					end
+					return group
+				end)(),
 			}
 
 			dashboard.section.header.opts.hl = "Include"

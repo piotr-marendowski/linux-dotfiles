@@ -7,7 +7,10 @@ return {
 			"hrsh7th/cmp-nvim-lua",
 			"hrsh7th/cmp-buffer",
 			"hrsh7th/cmp-path",
-			"L3MON4D3/LuaSnip",
+			{
+                "L3MON4D3/LuaSnip",
+                dependencies = { "rafamadriz/friendly-snippets" },
+            },
 			"saadparwaiz1/cmp_luasnip",
 			"rafamadriz/friendly-snippets",
 		},
@@ -19,36 +22,40 @@ return {
 				'confirm_done',
 				cmp_autopairs.on_confirm_done()
 			)
-			local luasnip = require("luasnip")
+            local luasnip = require("luasnip")
 
-			require("luasnip/loaders/from_vscode").lazy_load()
+            -- make html and javascript snippets in php
+            luasnip.filetype_extend("php", {"html", "javascript"})
+
+            require("luasnip/loaders/from_vscode").lazy_load()
 
 			local kind_icons = {
 				Text = "󰊄",
-				Method = "m",
+				Method = "󰡱",
 				Function = "󰡱",
 				Constructor = "",
 				Field = "",
 				Variable = "󰫧",
-				Class = "",
+				Class = "󱃢",
 				Interface = "",
 				Module = "",
 				Property = "",
 				Unit = "",
-				Value = "v",
-				Enum = "",
+				Value = "x",
+				Enum = "",
 				Keyword = "",
 				Snippet = "",
 				Color = "󰌁",
 				File = "󰈔",
 				Reference = "",
 				Folder = "󰉋",
-				EnumMember = "",
-				Constant = "",
+				EnumMember = "",
+				Constant = "c",
 				Struct = "",
 				Event = "",
-				Operator = "o",
+				Operator = "",
 				TypeParameter = "",
+                Codeium = "",
 			}
 
 			cmp.setup({
@@ -91,10 +98,11 @@ return {
 						-- Kind icons
 						vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
 						vim_item.menu = ({
-							nvim_lsp = "[LSP]",
-							luasnip = "[Snippet]",
-							buffer = "[Buffer]",
-							path = "[Path]",
+							nvim_lsp = "LSP",
+							luasnip = "Snippet",
+							buffer = "Buffer",
+							path = "Path",
+                            codeium = "AI",
 						})[entry.source.name]
 						return vim_item
 					end,
@@ -104,6 +112,22 @@ return {
 					{ name = "luasnip" },
 					{ name = "buffer" },
 					{ name = "path" },
+                    { name = "codeium" },
+				},
+			})
+		end,
+	},
+	{
+		"jose-elias-alvarez/null-ls.nvim",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+		},
+		config = function()
+			local null_ls = require("null-ls")
+			null_ls.setup({
+				sources = {
+					null_ls.builtins.formatting.stylua,
+					null_ls.builtins.formatting.clang_format,
 				},
 			})
 		end,

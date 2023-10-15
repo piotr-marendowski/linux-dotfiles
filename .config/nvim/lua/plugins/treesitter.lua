@@ -5,7 +5,10 @@ return {
 	require("nvim-treesitter.install").update({ with_sync = true })
     local rainbow = require 'ts-rainbow'
 
-    require("nvim-treesitter.configs").setup ({
+    require("nvim-treesitter.configs").setup({
+        enable = true, -- false will disable the whole extension
+        disable = { 'help' }, -- list of language that will be disabled
+
         rainbow = {
             query = {
                'rainbow-parens'

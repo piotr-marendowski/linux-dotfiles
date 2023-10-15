@@ -5,21 +5,20 @@ return {
 		branch = "0.1.x",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
-			-- Fuzzy Finder Algorithm which requires local dependencies to be built. Only load if `make` is available
-			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make", cond = vim.fn.executable("make") == 1 },
+			-- Fuzzy Finder Algorithm which requires local dependencies to be built.
+			-- Only load if `make` is available
+			{
+				"nvim-telescope/telescope-fzf-native.nvim",
+				build = "make",
+				cond = vim.fn.executable("make") == 1,
+			},
 			"debugloop/telescope-undo.nvim",
-            -- Override vim.ui.select()
-            "nvim-telescope/telescope-ui-select.nvim",
+			-- Override vim.ui.select()
+			"nvim-telescope/telescope-ui-select.nvim",
 		},
 		config = function()
 			require("telescope").setup({
 				defaults = {
-					mappings = {
-						i = {
-							["<C-u>"] = true,
-							["<C-d>"] = true,
-						},
-					},
 					borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
 					layout_config = {
 						anchor = "center",
@@ -48,22 +47,23 @@ return {
 
 			-- Enable telescope fzf native, if installed
 			pcall(require("telescope").load_extension, "fzf")
-			-- Telescope-undo
-			require("telescope").load_extension("undo")
-            require("telescope").load_extension("ui-select")
+			require("telescope").load_extension("undo") -- Telescope-undo
+			require("telescope").load_extension("ui-select")
+            require('telescope').load_extension('possession')
 
 			local map = require("keys").map
 			map("n", "<leader>on", ":ene <BAR> startinsert <CR>", " New file")
-			map("n", "<leader>sp", ":Telescope projects <CR>", "󰱓 Find project")
+			map("n", "<leader>sp", ":Telescope projects <CR>", "󰱓 Projects")
 			map("n", "<leader>oi", ":e ~/.config/nvim/init.lua <CR>", " init.lua")
 			map("n", "<leader>sr", require("telescope.builtin").oldfiles, " Recently opened")
 			map("n", "<leader>so", require("telescope.builtin").buffers, "󱃢 Open buffers")
 			map("n", "<leader>ss", function()
 				-- You can pass additional configuration to telescope to change theme, layout, etc.
-				require("telescope.builtin").current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
-					winblend = 10,
-					previewer = false,
-				}))
+				require("telescope.builtin").current_buffer_fuzzy_find(require("telescope.themes")
+					--continue
+					.get_ivy({
+						previewer = false,
+					}))
 			end, " Search in buffer")
 			map("n", "<leader>sf", require("telescope.builtin").find_files, " Files")
 			map("n", "<leader>sh", require("telescope.builtin").help_tags, "󰋖 Help")

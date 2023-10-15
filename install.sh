@@ -200,14 +200,13 @@ add_programs() {
     programs+=( "zsh" "zsh-completions" "zsh-syntax-highlighting" "zsh-autosuggestions" "xclip" )
 
     # Neovim
-    programs+=( "neovim" "curl" "python-pip" "meson" "ninja" "lazygit" "ripgrep" )
+    programs+=( "neovim" "curl" "python-pip" "meson" "ninja" "lazygit" "ripgrep" "npm" )
 
     # Additional utilities
-    programs+=( "zip" "unzip" "tar" "ncdu" "wget" "fzf" "maim" )
+    programs+=( "zip" "unzip" "tar" "ncdu" "fzf" "maim" )
 
     # sound - pipewire
-    # programs+=( "pipewire" "pipewire-audio" "pipewire-alsa" "pipewire-jack" "pipewire-pulse" )
-    programs+=( "pipewire" "pipewire-audio" "pipewire-alsa" "pipewire-pulse" )
+    programs+=( "pipewire" "pipewire-audio" "pipewire-alsa" )
 
     # gui
     programs+=( "xorg" "xorg-xinit" "ly" "redshift" "ttf-jetbrains-mono-nerd" "lxappearance" "nitrogen" )

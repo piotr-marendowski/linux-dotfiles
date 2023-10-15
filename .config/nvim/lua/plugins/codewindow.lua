@@ -1,4 +1,4 @@
--- minimap
+-- Codewindow
 return {
 	{
 		"gorbit99/codewindow.nvim", config = function()

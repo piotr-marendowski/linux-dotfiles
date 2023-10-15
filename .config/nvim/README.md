@@ -20,7 +20,8 @@
 - Ctrl + Left Arrow → Resize window to left
 - Ctrl + Right Arrow → Resize window to right
 - IN VISUAL MODE t → Cut
-- m → Set mark (input)
+- z + c → Close fold
+- z + o → Open fold
 - z + a → Toggle fold
 - WHEN ON FOLDED LINE h → Preview fold
 - WHEN ON FOLDED LINE l → Open fold
