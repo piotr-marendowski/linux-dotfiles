@@ -1,11 +1,14 @@
 #!/bin/sh
-# run commands in dmenu
-# by adding ! at the end
+# en:es hello -> translate hello to spanish (using https://github.com/soimort/translate-shell/)
+# date! -> open terminal with date
+# librewolf~ -> kill librewolf
 
-termcmd="st -e" 
 cmd="$(dmenu_path | dmenu -p "Run >" $@)" 
 case $cmd in 
-	*\! ) ${termcmd} "$(printf "%s" "${cmd}" | cut -d'!' -f1)";; 
-	* ) ${cmd} ;; 
+    *:* ) gawk -f <(curl -Ls --compressed https://git.io/translate) ${cmd} | sed -n '3,4p' | sed 's/.*m\(.*\)\[.*/\1/' | dmenu;;
+    *\! ) cmd=$(printf "%s" "${cmd}" | cut -d'!' -f1);
+          st -e sh -c "${cmd};exec $SHELL";; 
+    *~ )  cmd=$(printf "%s" "${cmd}" | cut -d'~' -f1); kill -9 $(pgrep -f ${cmd});;
+	* )   ${cmd} ;; 
 esac
-exit
+
