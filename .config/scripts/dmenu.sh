@@ -3,7 +3,7 @@
 # date! -> open terminal with date
 # librewolf~ -> kill librewolf
 
-cmd="$(dmenu_path | dmenu -p "Run >" $@)" 
+cmd="$(dmenu_path | dmenu -p ">" $@)" 
 case $cmd in 
     *:* ) gawk -f <(curl -Ls --compressed https://git.io/translate) ${cmd} | sed -n '3,4p' | sed 's/.*m\(.*\)\[.*/\1/' | dmenu;;
     *\! ) cmd=$(printf "%s" "${cmd}" | cut -d'!' -f1);
