@@ -2,7 +2,6 @@
 ### Neovim configure focused on being a fully fledged IDE.
 
 # Keybindings
-### Not included in Which-key:
 - Ctrl + f → Close window
 - Shift + h → Move to the left buffer
 - Shift + l → Move to the right buffer
@@ -25,10 +24,12 @@
 - z + a → Toggle fold
 - WHEN ON FOLDED LINE h → Preview fold
 - WHEN ON FOLDED LINE l → Open fold
+- g... → Goto
 - gp... → Goto previews
 - IN VISUAL MODE gb → Toggle block comment
 - IN VISUAL MODE gc → Toggle line comment
-- gcc → Toggle comment on this line
+- gcc → Toggle line comment on this line
+- gbc → Toggle block comment on this line
 - f → Hop to word
 
 Deleting is overrided so that it doesn't copy deleted contents.

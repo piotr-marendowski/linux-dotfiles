@@ -35,8 +35,8 @@ fi
 # configure monitors (1st full hd, 2nd to right 1280x1024 4:3)
 xrandr --output DVI-D-0 --mode 1280x1024 --pos 1920x210 --rotate normal --output HDMI-0 --off --output DP-0 --primary --mode 1920x1080 --pos 0x0 --rotate normal --output DP-1 --off &
 xsetroot -name "$(date +"%F")"  # dwm status
-nitrogen --restore &            # wallpaper
+# set wallpaper for 2 monitors
+feh --bg-center ~/.config/wallpaper.jpg --bg-center ~/.config/wallpaper.jpg &
 redshift -P -O 3500 &           # night light
 librewolf &
 st -e nvim &
-discord-screenaudio &

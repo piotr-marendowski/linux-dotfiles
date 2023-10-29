@@ -5,7 +5,7 @@ return {
         event = "VeryLazy",
         config = function()
             require("llm").setup({
-                api_token = "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",
+                api_token = "",
                 accept_keymap = "<A-j>",
                 dismiss_keymap = "<i>",
 
@@ -23,9 +23,9 @@ return {
                 },
                 enable_suggestions_on_startup = false,
 
-                lsp = {
-                    bin_path = vim.api.nvim_call_function("stdpath", { "data" }) .. "/mason/bin/llm-ls",
-                },
+                -- lsp = {
+                --     bin_path = vim.api.nvim_call_function("stdpath", { "data" }) .. "/mason/bin/llm-ls",
+                -- },
             })
             local map = require("keys").map
             map("n", "<leader>ou", "<cmd>LLMToggleAutoSuggest<cr>", " Toggle autosuggestions")

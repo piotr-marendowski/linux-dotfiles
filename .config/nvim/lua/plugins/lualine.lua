@@ -1,15 +1,14 @@
--- Lualine with Tokyo Night theme
 return {
 	"nvim-lualine/lualine.nvim",
 	config = function()
+        -- Display session name
 		local function session_name()
-			return "󰑐 " .. (require("possession.session").session_name or "")
+			return ("󰑐 " .. require("possession.session").session_name) or ""
 		end
-
 		require("lualine").setup({
 			options = {
 				disabled_filetypes = { "alpha" },
-				theme = "tokyonight",
+				-- theme = "tokyonight",
 				icons_enabled = true,
 				component_separators = { left = "", right = "" },
 				section_separators = { left = "", right = "" },
@@ -17,7 +16,8 @@ return {
 			},
 			sections = {
 				lualine_c = {},
-				lualine_x = { session_name },
+				lualine_x = {},
+				lualine_y = { session_name, "progress" },
 			},
 		})
 	end,

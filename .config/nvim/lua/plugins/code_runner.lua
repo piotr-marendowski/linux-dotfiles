@@ -24,20 +24,16 @@ return {
 						"javac $fileName &&",
 						"java $fileNameWithoutExt",
 					},
+                    -- needs java-openjfx
+					javafx = {
+						"cd $dir &&",
+						"javac --module-path /usr/lib/jvm/java-17-openjdk/lib/javafx.base.jar:/usr/lib/jvm/java-17-openjdk/lib/javafx.controls.jar:/usr/lib/jvm/java-17-openjdk/lib/javafx.graphics.jar --add-modules=javafx.controls,javafx.base,javafx.graphics $fileName &&",
+						"java --module-path /usr/lib/jvm/java-17-openjdk/lib/javafx.base.jar:/usr/lib/jvm/java-17-openjdk/lib/javafx.controls.jar:/usr/lib/jvm/java-17-openjdk/lib/javafx.graphics.jar --add-modules=javafx.controls,javafx.base,javafx.graphics $fileNameWithoutExt &&",
+					},
 					python = "python3 -u",
 					rust = {
 						"cd $dir &&",
 						"rustc $fileName &&",
-						"$dir/$fileNameWithoutExt",
-					},
-					c89 = {
-						"cd $dir &&",
-						"gcc $fileName -o $fileNameWithoutExt -std=c89 &&",
-						"$dir/$fileNameWithoutExt",
-					},
-					c99 = {
-						"cd $dir &&",
-						"gcc $fileName -o $fileNameWithoutExt -std=c99 &&",
 						"$dir/$fileNameWithoutExt",
 					},
 				},
@@ -63,6 +59,9 @@ return {
         dependencies = { "nvim-tree/nvim-web-devicons" },
         config = function()
             require("trouble").setup()
+
+			local map = require("keys").map
+			map("n", "<leader>ct", "<cmd>TroubleToggle<cr>", " Trouble")
         end,
     },
 }

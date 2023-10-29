@@ -101,6 +101,9 @@ configure_installed() {
             gauge=$((100 * (4 + 1) / 8))
             echo "$gauge"
 
+            # move wallpaper to ~/.config
+            mv ~/dotfiles/assets/wallpaper.jpg ~/.config/ &> /dev/null
+
             # delete unnecessary items
             rm -r ~/assets &> /dev/null
             rm -r ~/install.sh &> /dev/null
@@ -193,23 +196,23 @@ Do you want to do it now?" 10 80
 
 # EDIT FOR YOURSELF! won't describe every program because don't care :)
 add_programs() {
-    # Basic - portable
-    programs+=( "librewolf-bin" "htop-vim" "xclip" )
+    # Basic
+    programs+=( "librewolf-bin" "bashtop" "xclip" )
 
     # zsh
     programs+=( "zsh" "zsh-completions" "zsh-syntax-highlighting" "zsh-autosuggestions" "xclip" )
 
     # Neovim
-    programs+=( "neovim" "curl" "python-pip" "meson" "ninja" "lazygit" "ripgrep" "npm" )
+    programs+=( "neovim" "curl" "python-pip" "meson" "ninja" "lazygit" "npm" )
 
     # Additional utilities
-    programs+=( "zip" "unzip" "tar" "ncdu" "fzf" "maim" )
+    programs+=( "zip" "unzip" "tar" "ncdu" "fzf" "maim" "feh")
 
     # sound - pipewire
     programs+=( "pipewire" "pipewire-audio" "pipewire-alsa" )
 
     # gui
-    programs+=( "xorg" "xorg-xinit" "ly" "redshift" "ttf-jetbrains-mono-nerd" "lxappearance" "nitrogen" )
+    programs+=( "xorg" "xorg-xinit" "ly" "redshift" "ttf-jetbrains-mono-nerd" "lxappearance" )
 
     # Other
 	programs+=( "discord-screenaudio" "gimp" "libreoffice-fresh" "ttf-ms-fonts" )

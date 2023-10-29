@@ -58,7 +58,7 @@ return {
 
 				lsp_map("<leader>cr", vim.lsp.buf.rename, bufnr, "󰑕 Rename symbol")
 				lsp_map("<leader>ca", vim.lsp.buf.code_action, bufnr, " Code action")
-				lsp_map("<leader>cd", vim.lsp.buf.type_definition, bufnr, "󰡱 Type definition")
+				lsp_map("ga", vim.lsp.buf.type_definition, bufnr, "󰡱 Type definition")
 				-- lsp_map("<leader>cs", require("telescope.builtin").lsp_document_symbols,
                 --    bufnr, " Document symbols")
 

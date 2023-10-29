@@ -8,11 +8,11 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "JetBrainsMono Nerd Font:size=12" };
 static const char dmenufont[]       = "JetBrainsMono Nerd Font:size=12";
-static const char col_gray1[]       = "#1e2132";
-static const char col_gray2[]       = "#7aa2f7";
-static const char col_gray3[]       = "#a9b1d6";
-static const char col_gray4[]       = "#a9b1d6";
-static const char col_cyan[]        = "#24283b";
+static const char col_gray1[]       = "#222327";
+static const char col_gray2[]       = "#7f8490";
+static const char col_gray3[]       = "#7f8490";
+static const char col_gray4[]       = "#7f8490";
+static const char col_cyan[]        = "#2c2e34";
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
 	[SchemeNorm] = { col_gray3, col_cyan, col_cyan },
@@ -21,7 +21,6 @@ static const char *colors[][3]      = {
 
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-static const char *defaulttagapps[] = { "st", NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -61,18 +60,21 @@ static const Layout layouts[] = {
 static const char *termcmd[]  = { "st", NULL };
 static const char *reboot[]  = { "reboot", NULL };
 static const char *shutdown[]  = { "shutdown", "now", NULL };
+static const char *librewolf[]  = { "librewolf", NULL };
+static const char *nnn[]  = { "st", "-e", "nnn", "-deH", NULL };
+static const char *nvim[]  = { "st", "-e", "nvim", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
     /* had to run them by SHCMD because they didn't want to run otherwise */
 	{ MODKEY,                       XK_s,      spawn,          SHCMD("~/.config/scripts/dmenu.sh") },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
-	{ MODKEY,                       XK_n,      spawn,          SHCMD("st -e nvim") },
-	{ MODKEY,                       XK_u,      spawn,          SHCMD("~/.config/scripts/killprocess.sh") },
+	{ MODKEY,                       XK_n,      spawn,          {.v = nvim } }, 
+	{ MODKEY,                       XK_x,      spawn,          {.v = librewolf } },
 	{ ShiftMask,                    XK_Delete, spawn,          {.v = shutdown } },
 	{ ShiftMask,                    XK_Print,  spawn,          {.v = reboot } },
 	{ 0,                            XK_Print,  spawn,          SHCMD("maim -us | xclip -selection clipboard -t image/png") },
-	{ MODKEY,                       XK_e,      spawn,          SHCMD("st -e nnn -deH") },
+	{ MODKEY,                       XK_e,      spawn,          {.v = nnn } }, 
     { 0,         XF86XK_AudioRaiseVolume,      spawn,          SHCMD("pactl set-sink-volume @DEFAULT_SINK@ +5%") },
     { 0,         XF86XK_AudioLowerVolume,      spawn,          SHCMD("pactl set-sink-volume @DEFAULT_SINK@ -5%") }, 
     { 0,                XF86XK_AudioMute,      spawn,          SHCMD("pactl set-sink-mute @DEFAULT_SINK@ toggle") }, 

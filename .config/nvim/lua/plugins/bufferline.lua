@@ -3,7 +3,6 @@ return {
 		"akinsho/bufferline.nvim",
 		dependencies = {
             "nvim-tree/nvim-web-devicons",
-            "RRethy/vim-illuminate",
         },
 		config = function()
 			local bufferline = require("bufferline")

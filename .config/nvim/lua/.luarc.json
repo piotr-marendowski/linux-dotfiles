@@ -14,6 +14,14 @@
         "/home/mike/.local/share/nvim/lazy/tokyonight.nvim/lua",
         "/home/mike/.local/share/nvim/lazy/lazy.nvim/lua",
         "/home/mike/.config/nvim/lua",
+        "${3rd}/luv/library",
+        "${3rd}/luv/library",
+        "${3rd}/luv/library",
+        "${3rd}/luv/library",
+        "${3rd}/luv/library",
+        "${3rd}/luv/library",
+        "${3rd}/luv/library",
+        "${3rd}/luv/library",
         "${3rd}/luv/library"
     ]
 }

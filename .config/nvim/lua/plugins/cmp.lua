@@ -93,17 +93,18 @@ return {
 					end, { "i", "s" }),
 				}),
 				formatting = {
-					fields = { "kind", "abbr", "menu" },
+                    -- disable names
+					fields = { "kind", "abbr" --[[, "menu" ]] },
 					format = function(entry, vim_item)
 						-- Kind icons
 						vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
-						vim_item.menu = ({
-							nvim_lsp = "LSP",
-							luasnip = "Snippet",
-							buffer = "Buffer",
-							path = "Path",
-                            codeium = "AI",
-						})[entry.source.name]
+						--[[ vim_item.menu = ({
+							nvim_lsp = "[LSP]",
+							luasnip = "[Snippet]",
+							buffer = "[Buffer]",
+							path = "[Path]",
+                            codeium = "[AI]",
+						})[entry.source.name] ]]
 						return vim_item
 					end,
 				},
@@ -130,6 +131,32 @@ return {
 					null_ls.builtins.formatting.clang_format,
 				},
 			})
+		end,
+	},
+	-- Completion to commands
+	{
+		"gelguy/wilder.nvim",
+		config = function()
+			local wilder = require("wilder")
+
+			wilder.setup({ modes = { ":" } })
+
+			wilder.set_option(
+				"renderer",
+				wilder.popupmenu_renderer({
+					highlighter = wilder.basic_highlighter(),
+					max_height = "20%",
+					max_width = "20%",
+
+					highlights = {
+						accent = wilder.make_hl(
+							"WilderAccent",
+							"Pmenu",
+							{ { a = 1 }, { a = 1 }, { foreground = "#f4468f" } }
+						),
+					},
+				})
+			)
 		end,
 	},
 }

@@ -84,6 +84,8 @@ return {
 	-- Open nvim files from terminal in editor
 	{
 		"willothy/flatten.nvim",
+		lazy = false,
+		priority = 1001,
 		opts = function()
 			---@type Terminal?
 			local saved_terminal

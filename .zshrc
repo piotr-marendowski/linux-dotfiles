@@ -36,9 +36,9 @@ alias ll="ls -la --color=auto"
 alias nnn="nnn -deH"
 
 # History in cache directory:
-HISTSIZE=5000
-SAVEHIST=5000
-HISTFILE="$HOME/.zsh_history"
+HISTSIZE=1000
+SAVEHIST=1000
+HISTFILE=${XDG_CACHE_HOME:-"$HOME/.cache"}/.zsh_history
 setopt appendhistory
 
 # Basic auto/tab complete:

@@ -38,6 +38,7 @@ local options = {
     foldenable = true,
     foldmethod = "expr",
     foldexpr = "nvim_treesitter#foldexpr()",
+    hidden = false,
 }
 -- Append them in order to work
 vim.opt.shortmess:append("c")
