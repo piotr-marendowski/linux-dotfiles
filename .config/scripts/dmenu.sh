@@ -79,3 +79,4 @@ esac
 
 # delete empty lines if user aborts choosing
 sed -i '/^\s*$/d' "$hist"
+
