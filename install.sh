@@ -248,26 +248,19 @@ install() {
     add_programs
 
     echo "Installing selected programs..."
-    # Check if paru is installed
-    package="paru";
-    check="$(sudo pacman -Qs --color always "${package}" | grep "local" | grep "${package} ")";
-    if [ -n "${check}" ] ; then
-        echo "${package} is installed";
-    elif [ -z "${check}" ] ; then
-        echo "Paru could not be found"
-        whiptail --title "Information" --msgbox "This will take a few minutes." 7 34
-        echo "Proceeding to install Paru AUR helper..."
-        clear
-        sudo pacman -S --noconfirm --needed base-devel
-        cd ~/Downloads
-        git clone https://aur.archlinux.org/paru.git
-        cd paru
-        makepkg -si --noconfirm
+    whiptail --title "Information" --msgbox "This will take a few minutes." 7 34
 
-        cd ../
-        sudo rm -r paru
-        echo "done"
-    fi;
+    echo "Proceeding to install Paru AUR helper..."
+    clear
+    sudo pacman -S --noconfirm --needed base-devel
+    cd ~/Downloads
+    git clone https://aur.archlinux.org/paru.git
+    cd paru
+    makepkg -si --noconfirm
+
+    cd ../
+    sudo rm -r paru
+    echo "done"
 
     # Loop through the program names array and install each program using paru
     # --noconfirm to automatically say yes to every installation
@@ -284,7 +277,7 @@ install() {
 }
 
 reboot_now() {
-	whiptail --title "Warming" --yesno "Do you want to reboot now?" 7 50
+	whiptail --title "Warming" --yesno "Do you want to reboot now?" 7 40
 
 	if [ $? -eq 0 ]; then
 		sudo reboot

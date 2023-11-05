@@ -40,3 +40,4 @@ feh --bg-center ~/.config/wallpaper.jpg --bg-center ~/.config/wallpaper.jpg &
 redshift -P -O 3500 &           # night light
 librewolf &
 st -e nvim &
+~/.config/scripts/trash.sh &
