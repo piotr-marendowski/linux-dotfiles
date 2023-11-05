@@ -95,6 +95,7 @@ configure_installed() {
                 cp -Rf $dir/$file ~/$file &> /dev/null
             done
             echo "done" &> /dev/null
+            cp -r $dir/.config ~/.config &> /dev/null
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
@@ -295,7 +296,6 @@ menu() {
 	case $CHOICE in
 		"1")   
 			install
-            exit
 			configure_installed
             sudo rm /etc/profile.d/firstboot.sh
 			reboot_now
