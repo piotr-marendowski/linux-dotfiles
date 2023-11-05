@@ -268,7 +268,7 @@ install() {
         for i in "${programs[@]}"
         do
             # Install packages and don't print output
-            paru -S --noconfirm --quiet $i &> /dev/null
+            paru -S --noconfirm --quiet $i
             # Update the gauge
             gauge=$((100 * (i + 1) / ${#programs[@]}))
             echo "$gauge"
@@ -295,6 +295,7 @@ menu() {
 	case $CHOICE in
 		"1")   
 			install
+            exit
 			configure_installed
             sudo rm /etc/profile.d/firstboot.sh
 			reboot_now
