@@ -46,7 +46,7 @@ static const Layout layouts[] = {
 };
 
 /* key definitions */
-#define MODKEY Mod4Mask
+#define MODKEY Mod1Mask
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
@@ -61,7 +61,7 @@ static const char *termcmd[]  = { "st", NULL };
 static const char *reboot[]  = { "reboot", NULL };
 static const char *shutdown[]  = { "shutdown", "now", NULL };
 static const char *librewolf[]  = { "librewolf", NULL };
-static const char *nnn[]  = { "st", "-e", "nnn", "-deH", NULL };
+static const char *fff[]  = { "st", "-e", "fff", NULL };
 static const char *nvim[]  = { "st", "-e", "nvim", NULL };
 
 static const Key keys[] = {
@@ -74,7 +74,7 @@ static const Key keys[] = {
 	{ ShiftMask,                    XK_Delete, spawn,          {.v = shutdown } },
 	{ ShiftMask,                    XK_Print,  spawn,          {.v = reboot } },
 	{ 0,                            XK_Print,  spawn,          SHCMD("maim -us | xclip -selection clipboard -t image/png") },
-	{ MODKEY,                       XK_e,      spawn,          {.v = nnn } }, 
+	{ MODKEY,                       XK_e,      spawn,          {.v = fff } }, 
     { 0,         XF86XK_AudioRaiseVolume,      spawn,          SHCMD("pactl set-sink-volume @DEFAULT_SINK@ +5%") },
     { 0,         XF86XK_AudioLowerVolume,      spawn,          SHCMD("pactl set-sink-volume @DEFAULT_SINK@ -5%") }, 
     { 0,                XF86XK_AudioMute,      spawn,          SHCMD("pactl set-sink-mute @DEFAULT_SINK@ toggle") }, 

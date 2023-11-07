@@ -216,7 +216,7 @@ add_programs() {
     programs+=( "xorg" "xorg-xinit" "ly" "redshift" "ttf-jetbrains-mono-nerd" "lxappearance" )
 
     # Other
-	programs+=( "discord-screenaudio" "gimp" "libreoffice-fresh" "ttf-ms-fonts" )
+	# programs+=( "discord-screenaudio" "gimp" "libreoffice-fresh" "ttf-ms-fonts" )
 
     # make android phones connect and transfer files
 	# programs+=( "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" )
@@ -245,36 +245,18 @@ add_programs() {
 
 install() {
     mkdir -p ~/Downloads
-
     add_programs
 
-    echo "Installing selected programs..."
     whiptail --title "Information" --msgbox "This will take a few minutes." 7 34
 
-    echo "Proceeding to install Paru AUR helper..."
-    clear
-    sudo pacman -S --noconfirm --needed base-devel
-    cd ~/Downloads
-    git clone https://aur.archlinux.org/paru.git
-    cd paru
-    makepkg -si --noconfirm
-
-    cd ../
-    sudo rm -r paru
-    echo "done"
+    # Install yeet pacman wrapper + AUR helper
+    curl https://raw.githubusercontent.com/gamemaker1/yeet/develop/assets/package/install | zsh
 
     # Loop through the program names array and install each program using paru
     # --noconfirm to automatically say yes to every installation
-    whiptail --title "Program Installation" --gauge "\nDon't panic if it's stuck!" 7 50 0 < <(
-        for i in "${programs[@]}"
-        do
-            # Install packages and don't print output
-            paru -S --noconfirm --quiet $i
-            # Update the gauge
-            gauge=$((100 * (i + 1) / ${#programs[@]}))
-            echo "$gauge"
-        done
-    )
+    # Install packages and don't print output
+    yeet -S "${programs[@]}" 
+    # Update the gauge
 }
 
 reboot_now() {
