@@ -250,7 +250,15 @@ install() {
     whiptail --title "Information" --msgbox "This will take a few minutes." 7 34
 
     # Install yeet pacman wrapper + AUR helper
-    curl https://raw.githubusercontent.com/gamemaker1/yeet/develop/assets/package/install | zsh
+    mkdir -p ~/.cache/yeet/build/
+    cd ~/.cache/yeet/build/
+    git clone https://aur.archlinux.org/package-query.git
+    git clone https://aur.archlinux.org/yeet.git
+    cd package-query
+    makepkg -sfcCi
+    cd yeet
+    makepkg -sfcCi
+    cd ~
 
     # Loop through the program names array and install each program using paru
     # --noconfirm to automatically say yes to every installation
