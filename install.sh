@@ -31,11 +31,11 @@ disentry=white,white
 actsellistbox=black,white
 sellistbox=white,black"
 
-is_virtualization=false # is virtualization enabled? 
-programs=()             # Array of programs to install
-exclude=()              # programs to unselect
-dir=~/dotfiles          # dotfolders directory
-files=(.*)              # files array 
+is_virtualization=false         # is virtualization enabled? 
+programs=()                     # Array of programs to install
+exclude=()                      # programs to unselect
+dir=~/Downloads/dotfiles        # dotfolders directory
+files=(.*)                      # files array 
 
 ## Configure installed packages in progress bar
 # &> /dev/null IS USED TO SEND OUTPUT OF THE COMMANDS INTO THE VOID, SO THEY ARE NOT DISPLAYED ON PROGRESS BAR
@@ -54,13 +54,6 @@ configure_installed() {
             gauge=$((100 * (1 + 1) / 8))
             echo "$gauge"
 
-            doas cp -r $dir/assets/TokyoNight /usr/share/themes/ &> /dev/null
-        )
-        whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
-            # Update the gauge
-            gauge=$((100 * (2 + 1) / 8))
-            echo "$gauge"
-
             # make dotfiles
             echo "Searching $dir directory..." &> /dev/null
             cd $dir
@@ -74,15 +67,7 @@ configure_installed() {
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
-            gauge=$((100 * (3 + 1) / 8))
-            echo "$gauge"
-
-            mkdir -p ~/Documents &> /dev/null
-            mkdir -p ~/Games &> /dev/null
-        )
-        whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
-            # Update the gauge
-            gauge=$((100 * (3 + 1) / 8))
+            gauge=$((100 * (2 + 1) / 8))
             echo "$gauge"
 
             # Move any dotfile "listed" (present) in dir to olddir and move a file from this
@@ -95,11 +80,12 @@ configure_installed() {
                 cp -Rf $dir/$file ~/$file &> /dev/null
             done
             echo "done" &> /dev/null
-            cp -r $dir/.config ~/.config &> /dev/null
+            cp -r $dir/.config ~ &> /dev/null
+            cp $dir/.zshrc ~ &> /dev/null
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
-            gauge=$((100 * (4 + 1) / 8))
+            gauge=$((100 * (3 + 1) / 8))
             echo "$gauge"
 
             # install fff file manager
@@ -109,7 +95,7 @@ configure_installed() {
             doas make install
 
             # move wallpaper to ~/.config
-            mv ~/dotfiles/assets/wallpaper.jpg ~/.config/ &> /dev/null
+            mv $dir/assets/wallpaper.jpg ~/.config/ &> /dev/null
 
             # delete unnecessary items
             rm -r ~/assets &> /dev/null
@@ -121,7 +107,7 @@ configure_installed() {
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
-            gauge=$((100 * (5 + 1) / 8))
+            gauge=$((100 * (4 + 1) / 8))
             echo "$gauge"
 
             # Configure Suckless' software
@@ -147,7 +133,7 @@ Type=XSession\n" | doas tee /usr/share/xsessions/dwm.desktop
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
-            gauge=$((100 * (6 + 1) / 8))
+            gauge=$((100 * (5 + 1) / 8))
             echo "$gauge"
 
             # check if pacman -Q name begins with name of ly
@@ -157,7 +143,7 @@ Type=XSession\n" | doas tee /usr/share/xsessions/dwm.desktop
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
-            gauge=$((100 * (7 + 1) / 8))
+            gauge=$((100 * (6 + 1) / 8))
             echo "$gauge"
 
             # start gamemode
@@ -168,7 +154,7 @@ Type=XSession\n" | doas tee /usr/share/xsessions/dwm.desktop
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
-            gauge=$((100 * (8 + 1) / 8)) echo "$gauge"
+            gauge=$((100 * (7 + 1) / 8)) echo "$gauge"
 
             # virtualization
             if [ "$is_virtualization" = true ]; then
