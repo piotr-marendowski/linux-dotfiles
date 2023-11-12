@@ -1,6 +1,6 @@
 return {
     {
-        "jedrzejboczar/possession.nvim",
+        "piotr-marendowski/possession.nvim",
         dependencies = { "nvim-lua/plenary.nvim" },
         config = function()
             require("possession").setup({
@@ -11,6 +11,7 @@ return {
                     delete_hidden_buffers = false,
                 },
                 telescope = {
+                    previewer = nil,
                 }
             })
 

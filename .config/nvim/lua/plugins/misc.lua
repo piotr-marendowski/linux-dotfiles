@@ -34,7 +34,7 @@ return {
     {
         "NvChad/nvim-colorizer.lua",
         config = function()
-            require "colorizer".setup({
+            require("colorizer").setup({
                 user_default_options = {
                     names = false, -- "Name" codes like Blue or blue
                     RRGGBBAA = true, -- #RRGGBBAA hex codes
@@ -142,15 +142,19 @@ return {
     {
         "folke/zen-mode.nvim",
         event = "VeryLazy",
-        opts = {
-            options = {
-                signcolumn = "no",
-            },
-            plugins = {
-                gitsigns = { enabled = false },
-            },
-        },
         config = function()
+            require("zen-mode").setup({
+                window = {
+                    width = 110,
+                },
+                options = {
+                    signcolumn = "no",
+                },
+                plugins = {
+                    gitsigns = { enabled = true },
+                },
+            })
+
             local map = require("keys").map
             map("n", "<leader>z", "<cmd>ZenMode<cr>", "󰰶 ZenMode")
         end,
@@ -182,6 +186,9 @@ return {
         event = "VeryLazy",
         opts = {
             cut_key = "t",
+            registers = {
+                change = "_",
+           },
         },
     },
     -- Latex previewer
@@ -228,9 +235,8 @@ return {
     },
     -- Fast jumping to any text on the screen
     {
-        "phaazon/hop.nvim",
+        "smoka7/hop.nvim",
         event = "VeryLazy",
-        branch = "v2", -- optional but strongly recommended
         config = function()
             require("hop").setup({ keys = "etovxqpdygfblzhckisuran" })
 

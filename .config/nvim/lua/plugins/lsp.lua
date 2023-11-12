@@ -26,7 +26,7 @@ return {
 			require("neodev").setup()
 
 			-- Set up cool signs for diagnostics
-			local signs = { Error = "", Warn = "", Hint = "", Info = "" }
+            local signs = { Error = "-", Warn = "-", Hint = "-", Info = "-" }
 			for type, icon in pairs(signs) do
 				local hl = "DiagnosticSign" .. type
 				vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
@@ -146,10 +146,6 @@ return {
 				cmd = { "jdtls" },
 				on_attach = on_attach,
 				capabilities = { capabilities, offsetEncoding = "utf-8" },
-				root_dir = function(fname)
-					return require("lspconfig").util.root_pattern("pom.xml", "gradle.build", ".git")(fname)
-						or vim.fn.getcwd()
-				end,
 			})
 
 			local function setup_lsp_diags()
