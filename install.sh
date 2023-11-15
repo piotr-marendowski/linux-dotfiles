@@ -196,7 +196,7 @@ add_programs() {
     programs+=( "neovim" "python-pip" "meson" "lazygit" )
 
     # Additional utilities
-    programs+=( "atool" "zip" "unzip" "tar" "ncdu" "fzf" "maim" "feh" )
+    programs+=( "atool" "zip" "unzip" "tar" "ncdu" "fzf" "maim" "feh" "ntfs-3g" )
 
     # sound - pipewire
     # programs+=( "pipewire" "pipewire-audio" "pipewire-alsa" )
@@ -253,15 +253,15 @@ install() {
 
     # Install packages
     export NO_CONFIRM=true
-    whiptail --title "Program Installation" --gauge "\nDon't panic if it's stuck!" 7 50 0 < <(
+    # whiptail --title "Program Installation" --gauge "\nDon't panic if it's stuck!" 7 50 0 < <(
         for i in "${programs[@]}"
         do
             yeet -S $i 
             # Update the gauge
-            gauge=$((100 * (i + 1) / ${#programs[@]}))
-            echo "$gauge"
+            # gauge=$((100 * (i + 1) / ${#programs[@]}))
+            # echo "$gauge"
         done
-    )
+    # )
 }
 
 reboot_now() {
