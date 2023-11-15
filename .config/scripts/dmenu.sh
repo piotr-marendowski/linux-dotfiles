@@ -6,7 +6,7 @@
 cachedir=${XDG_CACHE_HOME:-"$HOME/.cache"}
 cache=$cachedir/dmenu_run
 hist=$cachedir/dmenu_history
-histsize=10
+histsize=30
 
 # make hist file if there isn't
 if [ ! -e "$hist" ]; then
@@ -18,21 +18,11 @@ fi
 
 if stest -dqr -n "$cache" $PATH; then
 	stest -flx $PATH | sort -u | tee "$cache"
-else
-	cat "$cache"
 fi
 
 # display dmenu with history and then rest of executables
 cmd=$(
-    awk -v histfile=$hist '
-    BEGIN {
-        while( (getline < histfile) > 0 ) {
-            sub("^[0-9]+\t","")
-            print
-            x[$0]=1
-        }
-    } !x[$0]++ ' "$cache" \
-    | dmenu "$@"
+    cat "$hist" "$cache" | dmenu "$@"
 )
 
 case $cmd in 

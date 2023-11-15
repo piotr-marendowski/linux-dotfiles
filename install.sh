@@ -303,4 +303,5 @@ Use Tab key to navigate between the <Ok> and <Cancel> buttons." 8 80
 
 menu
 
+clear
 exit
