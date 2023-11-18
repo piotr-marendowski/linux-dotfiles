@@ -41,9 +41,6 @@ files=(.*)                      # files array
 if command -v doas &> /dev/null
 then
     sudo_program=doas
-    # copy yeet config which includes doas
-    mkdir -p ~/.config/yeet/
-    cp $dir/.config/yeet.conf ~/.config/yeet/
 else
     sudo_program=sudo
 fi
@@ -254,6 +251,9 @@ install() {
     cd ../yeet
     makepkg -sfcCi
     cd ~
+    # copy yeet config which includes doas
+    mkdir -p ~/.config/yeet/
+    cp $dir/.config/yeet.conf ~/.config/yeet/
 
     # Install packages
     export NO_CONFIRM=true
