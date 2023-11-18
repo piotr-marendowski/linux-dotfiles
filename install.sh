@@ -136,15 +136,10 @@ Do you want to do it now?" 10 80
 
                 if systemctl status libvirtd; then
                     $sudo_program groupadd libvirt &> /dev/null
-                    local user_name=$(whoami) &> /dev/null
-                    $sudo_program usermod -aG libvirt $user_name &> /dev/null
+                    $sudo_program usermod -aG libvirt $(whoami) &> /dev/null
                     $sudo_program systemctl enable libvirtd &> /dev/null
                     $sudo_program systemctl restart libvirtd &> /dev/null
-                else
-                    echo "libvirt is not installed" &> /dev/null
                 fi
-                else
-                    echo "Virtualization is not configured right now." &> /dev/null
             fi
         )
     else
@@ -240,17 +235,19 @@ install() {
     clear
 
     # Install packages
+    $sudo_program update-desktop-database
     export XDG_DATA_DIRS="$HOME/.local/share"
     export NO_CONFIRM=true
-    # whiptail --title "Program Installation" --gauge "\nDon't panic if it's stuck!" 7 50 0 < <(
+    whiptail --title "Program Installation" --gauge "\nDon't panic if it's stuck!" 7 50 0 < <(
         for i in "${programs[@]}"
         do
+            # pipe yes because of bug in yeet
             yes '' | yeet -S $i
             # Update the gauge
-            # gauge=$((100 * (i + 1) / ${#programs[@]}))
-            # echo "$gauge"
+            gauge=$((100 * (i + 1) / ${#programs[@]}))
+            echo "$gauge"
         done
-    # )
+    )
 }
 
 reboot_now() {
