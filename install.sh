@@ -235,20 +235,38 @@ install() {
     whiptail --title "Information" --msgbox "This will take a few minutes." 7 34
     clear
 
+    export XDG_DATA_DIRS="$HOME/.local/share"
     # Install yeet pacman wrapper + AUR helper (package-query)
-    $sudo_program pacman -S yajl     # needed
-    mkdir -p ~/.cache/yeet/build/
-    cd ~/.cache/yeet/build/
-    git clone https://aur.archlinux.org/package-query.git
-    git clone https://aur.archlinux.org/yeet.git
-    cd package-query
-    makepkg -sfcCi
-    cd ../yeet
-    makepkg -sfcCi
-    cd ~
-    # edit config
-    sed -i "s/\(SUDO_BIN *= *\).*/\1\/usr\/bin\/doas/" ~/.config/yeet/yeet.conf
-    sed -i "s/\(PRINT_LOGO *= *\).*/\1false/" ~/.config/yeet/yeet.conf
+    whiptail --title "Installation" --gauge "\nInstalling yeet..." 7 50 0 < <(
+        $sudo_program pacman -S yajl --noconfirm     # needed
+        gauge=$((100 * 1 / 6))
+        echo "$gauge"
+
+        mkdir -p ~/.cache/yeet/build/
+        cd ~/.cache/yeet/build/
+        git clone https://aur.archlinux.org/package-query.git
+        gauge=$((100 * 2 / 6))
+        echo "$gauge"
+
+        git clone https://aur.archlinux.org/yeet.git
+        gauge=$((100 * 3 / 6))
+        echo "$gauge"
+
+        cd package-query
+        makepkg -sfcCi --noconfirm
+        gauge=$((100 * 4 / 6))
+        echo "$gauge"
+
+        cd ../yeet
+        makepkg -sfcCi --noconfirm
+        gauge=$((100 * 5 / 6))
+        echo "$gauge"
+
+        cd ~
+        # edit config
+        sed -i "s/\(SUDO_BIN *= *\).*/\1\/usr\/bin\/doas/" ~/.config/yeet/yeet.conf
+        sed -i "s/\(PRINT_LOGO *= *\).*/\1false/" ~/.config/yeet/yeet.conf
+    )
 
     # Install packages
     export NO_CONFIRM=true
