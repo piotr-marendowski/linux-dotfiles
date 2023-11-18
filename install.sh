@@ -201,8 +201,9 @@ install() {
     whiptail --title "Information" --msgbox "This will take a few minutes." 7 34
     clear
 
+    $sudo_program rm /var/lib/pacman/db.lck &> /dev/null
     # Install yeet pacman wrapper + AUR helper (package-query)
-    whiptail --title "Installation" --gauge "\nInstalling yeet..." 7 50 0 < <(
+    whiptail --title "Installation" --gauge "\nInstalling yeet (pacman wrapper)..." 7 50 0 < <(
         $sudo_program pacman -S yajl --noconfirm &> /dev/null
         gauge=$((100 * 1 / 6))
         echo "$gauge"
@@ -235,17 +236,16 @@ install() {
     clear
 
     # Install packages
-    $sudo_program update-desktop-database
+    $sudo_program update-desktop-database &> /dev/null
     export XDG_DATA_DIRS="$HOME/.local/share"
     export NO_CONFIRM=true
     whiptail --title "Program Installation" --gauge "\nDon't panic if it's stuck!" 7 50 0 < <(
         for i in "${programs[@]}"
         do
             # pipe yes because of bug in yeet
-            yes '' | yeet -S $i
+            yes '' | yeet -S $i &> /dev/null
             # Update the gauge
-            gauge=$((100 * (i + 1) / ${#programs[@]}))
-            echo "$gauge"
+            gauge=$((100 * i / ${#programs[@]})) && echo "$gauge"
         done
     )
 }

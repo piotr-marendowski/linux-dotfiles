@@ -15,10 +15,6 @@ git clone -b dwm https://github.com/piotr-marendowski/dotfiles.git
 ./dotfiles/install.sh
 ```
 
-## Troubleshooting
-
-If installation of paru will be stuck on <code>Arming ConditionNeedsUpdate</code> then reboot the system and start installation again.
-
 ## About this workflow
 
 Mainly following the KISS principle my workflow consists of this three main pillars:
