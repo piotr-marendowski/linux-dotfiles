@@ -112,6 +112,8 @@ Type=XSession
 EOF
 
             # make a hook for neofetch logo
+            $sudo_program printf "DISTRIB_ID="ivory"\nDISTRIB_RELEASE="rolling"\nDISTRIB_DESCRIPTION="IvoryOS"\n" > /etc/lsb-release
+            $sudo_program printf "DISTRIB_ID="ivory"\nDISTRIB_RELEASE="rolling"\nDISTRIB_DESCRIPTION="IvoryOS"\n" > /etc/ivory-release
             $sudo_program sh -c "cat >>/usr/share/libalpm/hooks/lsb-release.hook" <<-EOF
 # IvoryOS lsb-release hook for neofetch logo
 [Trigger]
