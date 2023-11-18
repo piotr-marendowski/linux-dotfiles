@@ -251,9 +251,9 @@ install() {
     cd ../yeet
     makepkg -sfcCi
     cd ~
-    # copy yeet config which includes doas
-    mkdir -p ~/.config/yeet/
-    cp $dir/.config/yeet.conf ~/.config/yeet/
+    # edit config
+    sed -i "s/\(SUDO_BIN *= *\).*/\1\/usr\/bin\/doas/" ~/.config/yeet/yeet.conf
+    sed -i "s/\(PRINT_LOGO *= *\).*/\1false/" ~/.config/yeet/yeet.conf
 
     # Install packages
     export NO_CONFIRM=true
