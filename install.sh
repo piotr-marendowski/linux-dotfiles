@@ -237,7 +237,7 @@ install() {
 
     # Install packages
     $sudo_program update-desktop-database &> /dev/null
-    export XDG_DATA_DIRS="$HOME/.local/share"
+    mkdir -p ~/.local/share/applications
     export NO_CONFIRM=true
     whiptail --title "Program Installation" --gauge "\nDon't panic if it's stuck!" 7 50 0 < <(
         for i in "${programs[@]}"
