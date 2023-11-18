@@ -37,6 +37,17 @@ exclude=()                      # programs to unselect
 dir=~/Downloads/dotfiles        # dotfolders directory
 files=(.*)                      # files array 
 
+# check for sudo program
+if command -v doas &> /dev/null
+then
+    sudo_program=doas
+    # copy yeet config which includes doas
+    mkdir -p ~/.config/yeet/
+    cp $dir/.config/yeet.conf ~/.config/yeet/
+else
+    sudo_program=sudo
+fi
+
 ## Configure installed packages in progress bar
 # &> /dev/null IS USED TO SEND OUTPUT OF THE COMMANDS INTO THE VOID, SO THEY ARE NOT DISPLAYED ON PROGRESS BAR
 configure_installed() {
@@ -46,7 +57,7 @@ configure_installed() {
         # Make zsh default shell
 	    whiptail --title "Shell" --yesno "Do you want to make zsh default shell?" 7 42
         if [ $? -eq 0 ]; then
-            doas chsh -s /bin/zsh
+            $sudo_program chsh -s /bin/zsh
         fi
         
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
@@ -80,8 +91,6 @@ configure_installed() {
                 cp -Rf $dir/$file ~/$file &> /dev/null
             done
             echo "done" &> /dev/null
-            cp -r $dir/.config ~ &> /dev/null
-            cp $dir/.zshrc ~ &> /dev/null
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
@@ -92,10 +101,10 @@ configure_installed() {
             cd ~/Downloads
             git clone https://github.com/piotr-marendowski/fff
             cd fff
-            doas make install
+            $sudo_program make install
 
             # move wallpaper to ~/.config
-            mv $dir/assets/wallpaper.jpg ~/.config/ &> /dev/null
+            cp $dir/assets/wallpaper.jpg ~/.config/ &> /dev/null
 
             # delete unnecessary items
             rm -r ~/assets &> /dev/null
@@ -103,7 +112,7 @@ configure_installed() {
             rm -r ~/LICENSE &> /dev/null
             rm -r ~/README.md &> /dev/null
             rm -r ~/.config/.config/ &> /dev/null
-            doas rm -r ~/.git/ &> /dev/null
+            $sudo_program rm -r ~/.git/ &> /dev/null
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
@@ -112,16 +121,16 @@ configure_installed() {
 
             # Configure Suckless' software
             cd ~/.config/st/ &> /dev/null
-            doas make install &> /dev/null
+            $sudo_program make install &> /dev/null
 
             cd ~/.config/dmenu/ &> /dev/null
-            doas make install &> /dev/null
+            $sudo_program make install &> /dev/null
 
             cd ~/.config/dwm/ &> /dev/null
-            doas make install &> /dev/null
+            $sudo_program make install &> /dev/null
 
-            doas mkdir /usr/share/xsessions/ &> /dev/null
-            doas touch /usr/share/xsessions/dwm.desktop &> /dev/null
+            $sudo_program mkdir /usr/share/xsessions/ &> /dev/null
+            $sudo_program touch /usr/share/xsessions/dwm.desktop &> /dev/null
 
             printf "[Desktop Entry]
 Encoding=UTF-8
@@ -129,7 +138,7 @@ Name=dwm
 Comment=Dynamic window manager
 Exec=/usr/local/bin/dwm
 Icon=dwm
-Type=XSession\n" | doas tee /usr/share/xsessions/dwm.desktop
+Type=XSession\n" > /usr/share/xsessions/dwm.desktop
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
@@ -139,15 +148,12 @@ Type=XSession\n" | doas tee /usr/share/xsessions/dwm.desktop
             # check if pacman -Q name begins with name of ly
             # and enable its service if it is
             echo "Proceeding to check if login manager is installed..." &> /dev/null
-            pacman -Q ly | grep -q "^ly" && doas systemctl enable ly && echo "Ly installed." &> /dev/null
+            pacman -Q ly | grep -q "^ly" && $sudo_program systemctl enable ly && echo "Ly installed." &> /dev/null
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
             gauge=$((100 * (6 + 1) / 8))
             echo "$gauge"
-
-            # start gamemode
-            # systemctl --user enable gamemoded && systemctl --user start gamemoded &> /dev/null
 
             # set default browser to librewolf
             xdg-settings set default-web-browser librewolf.desktop &> /dev/null
@@ -163,15 +169,15 @@ Type=XSession\n" | doas tee /usr/share/xsessions/dwm.desktop
 set to: unix_sock_group = \"libvirt\", unix_sock_ro_perms = \"0777\", and unix_sock_rw_perms = \"0770\". \
 Do you want to do it now?" 10 80
                 if [ $? -eq 0 ]; then
-                    doas nvim /etc/libvirt/libvirtd.conf
+                    $sudo_program nvim /etc/libvirt/libvirtd.conf
                 fi
 
                 if systemctl status libvirtd; then
-                    doas groupadd libvirt &> /dev/null
+                    $sudo_program groupadd libvirt &> /dev/null
                     local user_name=$(whoami) &> /dev/null
-                    doas usermod -aG libvirt $user_name &> /dev/null
-                    doas systemctl enable libvirtd &> /dev/null
-                    doas systemctl restart libvirtd &> /dev/null
+                    $sudo_program usermod -aG libvirt $user_name &> /dev/null
+                    $sudo_program systemctl enable libvirtd &> /dev/null
+                    $sudo_program systemctl restart libvirtd &> /dev/null
                 else
                     echo "libvirt is not installed" &> /dev/null
                 fi
@@ -205,32 +211,29 @@ add_programs() {
     # gui
     programs+=( "xorg-server" "xf86-video-fbdev" "ly" "redshift" "ttf-jetbrains-mono-nerd" "lxappearance" )
 
-    # Other
-	# programs+=( "discord-screenaudio" "gimp" "libreoffice-fresh" "ttf-ms-fonts" )
 
-    # make android phones connect and transfer files
-	# programs+=( "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" )
+    if whiptail --yesno "Do you want to install other things? (gaming, virtualization etc.)" 8 50; then
 
-    # gaming
-	#whiptail --title "Warming" --yesno "Before installing and configuring system for \
-# gaming, first you need to enable multilib in pacman.conf in order to install 32-bit drivers. \
-# Do you want to do it now?" 9 80
-	
-	# if [ $? -eq 0 ]; then
-	#	 doas nvim /etc/pacman.conf
-	# fi
+        # other
+        programs+=( "discord-screenaudio" "gimp" )
+        # programs+=( "libreoffice-still" "ttf-ms-fonts" )
 
-	# programs+=( "steam" "lutris" "wine-staging" "nvidia-dkms" "nvidia-utils-dkms" "vulkan-icd-loader" "dxvk-bin" "opencl-nvidia" "libvdpau" "libxnvctrl" "lib32-nvidia-utils" "lib32-opencl-nvidia" "lib32-vulkan-icd-loader" "proton-ge-custom-bin" "mangohud-git" "goverlay-bin" "gwe" "protonup-qt-bin" "gamemode" )
-    #
-    # nvidia-settings
+        # make android phones connect and transfer files
+        # programs+=( "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" )
 
-    # virtualization
-    # programs+=( "qemu" "libvirt" "virt-manager" "virt-viewer" "dnsmasq" "vde2" "bridge-utils" "openbsd-netcat" "libguestfs" )
-    # is_virtualization=true
+        # gaming
+        $sudo_program sed -i '/#[multilib]/{N;s/#\[multilib\]\n#Include = \/etc\/pacman.d\/mirrorlist/\[multilib\]\nInclude = \/etc\/pacman.d\/mirrorlist/}' /etc/pacman.conf
+
+        programs+=( "steam" "lutris" "wine-staging" "nvidia-dkms" "nvidia-utils-dkms" "vulkan-icd-loader" "dxvk-bin" "opencl-nvidia" "libvdpau" "libxnvctrl" "lib32-nvidia-utils" "lib32-opencl-nvidia" "lib32-vulkan-icd-loader" "proton-ge-custom-bin" "mangohud-git" "goverlay-bin" "gwe" "protonup-qt-bin" "gamemode" )
+        
+        # start gamemode
+        systemctl --user enable gamemoded && systemctl --user start gamemoded &> /dev/null
+        
+        # virtualization
+        programs+=( "qemu" "libvirt" "virt-manager" "virt-viewer" "dnsmasq" "vde2" "bridge-utils" "openbsd-netcat" "libguestfs" )
+        is_virtualization=true
     
-    for CHOICE in $CHOICES; do
-        programs+=($CHOICE)
-    done
+    fi
 }
 
 install() {
@@ -240,7 +243,8 @@ install() {
     whiptail --title "Information" --msgbox "This will take a few minutes." 7 34
     clear
 
-    # Install yeet pacman wrapper + AUR helper
+    # Install yeet pacman wrapper + AUR helper (package-query)
+    $sudo_program pacman -S yajl     # needed
     mkdir -p ~/.cache/yeet/build/
     cd ~/.cache/yeet/build/
     git clone https://aur.archlinux.org/package-query.git
@@ -268,7 +272,7 @@ reboot_now() {
 	whiptail --title "Warming" --yesno "Do you want to reboot now?" 7 40
 
 	if [ $? -eq 0 ]; then
-        doas reboot
+        $sudo_program reboot
 	fi
 }
 
@@ -284,7 +288,7 @@ menu() {
 		"1")   
 			install
 			configure_installed
-            doas rm /etc/profile.d/firstboot.sh
+            $sudo_program rm /etc/profile.d/firstboot.sh
 			reboot_now
 			;;
 		"2")   
@@ -295,7 +299,7 @@ menu() {
 }
 
 ### PROGRAM EXECUTION
-doas pacman --noconfirm -Syu
+$sudo_program pacman --noconfirm -Syu
 
 # Navigation
 whiptail --title "Navigation" --msgbox "Navigate lists using arrow keys. Select options with space. \
