@@ -119,7 +119,7 @@ return {
 		end,
 	},
 	{
-		"jose-elias-alvarez/null-ls.nvim",
+		"nvimtools/none-ls.nvim",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 		},
@@ -131,32 +131,6 @@ return {
 					null_ls.builtins.formatting.clang_format,
 				},
 			})
-		end,
-	},
-	-- Completion to commands
-	{
-		"gelguy/wilder.nvim",
-		config = function()
-			local wilder = require("wilder")
-
-			wilder.setup({ modes = { ":" } })
-
-			wilder.set_option(
-				"renderer",
-				wilder.popupmenu_renderer({
-					highlighter = wilder.basic_highlighter(),
-					max_height = "20%",
-					max_width = "20%",
-
-					highlights = {
-						accent = wilder.make_hl(
-							"WilderAccent",
-							"Pmenu",
-							{ { a = 1 }, { a = 1 }, { foreground = "#f4468f" } }
-						),
-					},
-				})
-			)
 		end,
 	},
 }

@@ -84,7 +84,6 @@ return {
 
 			local map = require("keys").map
 			map("n", "<leader>l", "<cmd>lua _LAZYGIT_TOGGLE()<CR>", " Lazygit")
-			map("n", "<leader>e", '<cmd>TermExec cmd="fff && exit"<CR>', " Files")
 		end,
 	},
 	-- Open nvim files from terminal in editor

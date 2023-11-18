@@ -39,6 +39,7 @@ local options = {
     foldmethod = "expr",
     foldexpr = "nvim_treesitter#foldexpr()",
     hidden = false,
+    autochdir= true,
 }
 -- Append them in order to work
 vim.opt.shortmess:append("c")

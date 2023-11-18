@@ -5,7 +5,6 @@ return {
 		dependencies = {
 			"williamboman/mason.nvim",
 			"williamboman/mason-lspconfig.nvim",
-			"folke/neodev.nvim",
 			"hrsh7th/cmp-nvim-lsp",
 		},
 		config = function()
@@ -21,9 +20,6 @@ return {
 
 			-- Quick access via keymap
 			require("keys").map("n", "<leader>om", "<cmd>Mason<cr>", "󰏗 Mason")
-
-			-- Neodev setup before LSP config
-			require("neodev").setup()
 
 			-- Set up cool signs for diagnostics
             local signs = { Error = "-", Warn = "-", Hint = "-", Info = "-" }
@@ -159,14 +155,6 @@ return {
 			end
 
 			setup_lsp_diags()
-		end,
-	},
-	{
-		"folke/neodev.nvim",
-		config = function()
-			require("neodev").setup({
-				library = { plugins = { "nvim-dap-ui" }, types = true },
-			})
 		end,
 	},
 }

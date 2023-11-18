@@ -2,7 +2,6 @@ return {
     {
         "mfussenegger/nvim-dap",
         event = "VeryLazy",
-        dependencies = { "Microsoft/vscode-cpptools" },
         config = function()
             local dap = require("dap")
 
@@ -96,7 +95,7 @@ return {
             require("nvim-dap-virtual-text").setup()
         end,
     },
-    {
+    --[[ {
         "nvim-telescope/telescope-dap.nvim",
         event = "VeryLazy",
         dependencies = {
@@ -107,5 +106,5 @@ return {
             require("telescope").load_extension("dap")
         end,
     },
-    "ldelossa/nvim-dap-projects",
+    "ldelossa/nvim-dap-projects", ]]
 }

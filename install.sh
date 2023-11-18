@@ -35,7 +35,6 @@ is_virtualization=false         # is virtualization enabled?
 programs=()                     # Array of programs to install
 exclude=()                      # programs to unselect
 dir=~/Downloads/dotfiles        # dotfolders directory
-files=(.*)                      # files array 
 
 # check for sudo program
 if command -v doas &> /dev/null
@@ -54,39 +53,19 @@ configure_installed() {
         # Make zsh default shell
 	    whiptail --title "Shell" --yesno "Do you want to make zsh default shell?" 7 42
         if [ $? -eq 0 ]; then
-            $sudo_program chsh -s /bin/zsh
+            $sudo_program chsh -s /usr/bin/zsh &> /dev/null
+            $sudo_program chsh -s /bin/zsh &> /dev/null
         fi
         
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
-            gauge=$((100 * (1 + 1) / 8))
-            echo "$gauge"
+            gauge=$((100 * 1 / 6)) && echo "$gauge"
 
-            # make dotfiles
-            echo "Searching $dir directory..." &> /dev/null
-            cd $dir
-            # seach for all files in dir
-            files+=($(find . -maxdepth 1 -type d -name '.*')) &> /dev/null
-            files+=($(find . -maxdepth 1 -type d \! -name '.*')) &> /dev/null
-            files+=($(find . -maxdepth 1 -type f -name '.*')) &> /dev/null
-            files+=($(find . -maxdepth 1 -type f \! -name '.*')) &> /dev/null
-
-            echo "Files in $dir: ${files[@]}" &> /dev/null
-        )
-        whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
-            # Update the gauge
-            gauge=$((100 * (2 + 1) / 8))
-            echo "$gauge"
-
-            # Move any dotfile "listed" (present) in dir to olddir and move a file from this
-            # repo to program's directory e.g. ~/.config
-            # hidden files/folders
+            # Move dotfiles to home
             cp -rf $dir/. ~ &> /dev/null
-        )
-        whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
-            # Update the gauge
-            gauge=$((100 * (3 + 1) / 8))
-            echo "$gauge"
+
+            ###################################################3
+            gauge=$((100 * 2 / 6)) && echo "$gauge"
 
             # install fff file manager
             cd ~/Downloads
@@ -104,11 +83,9 @@ configure_installed() {
             rm -r ~/README.md &> /dev/null
             rm -r ~/.config/.config/ &> /dev/null
             $sudo_program rm -r ~/.git/ &> /dev/null
-        )
-        whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
-            # Update the gauge
-            gauge=$((100 * (4 + 1) / 8))
-            echo "$gauge"
+
+            ###################################################3
+            gauge=$((100 * 3 / 6)) && echo "$gauge"
 
             # Configure Suckless' software
             cd ~/.config/st/ &> /dev/null
@@ -123,35 +100,29 @@ configure_installed() {
             $sudo_program mkdir /usr/share/xsessions/ &> /dev/null
             $sudo_program touch /usr/share/xsessions/dwm.desktop &> /dev/null
 
-            printf "[Desktop Entry]
+            $sudo_program sh -c "cat >>/usr/share/xsessions/dwm.desktop" <<-EOF
+[Desktop Entry]
 Encoding=UTF-8
 Name=dwm
 Comment=Dynamic window manager
 Exec=/usr/local/bin/dwm
 Icon=dwm
-Type=XSession\n" > /usr/share/xsessions/dwm.desktop
-        )
-        whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
-            # Update the gauge
-            gauge=$((100 * (5 + 1) / 8))
-            echo "$gauge"
+Type=XSession
+EOF
+
+            ###################################################3
+            gauge=$((100 * 4 / 6)) && echo "$gauge"
 
             # check if pacman -Q name begins with name of ly
             # and enable its service if it is
             echo "Proceeding to check if login manager is installed..." &> /dev/null
             pacman -Q ly | grep -q "^ly" && $sudo_program systemctl enable ly && echo "Ly installed." &> /dev/null
-        )
-        whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
-            # Update the gauge
-            gauge=$((100 * (6 + 1) / 8))
-            echo "$gauge"
 
             # set default browser to librewolf
             xdg-settings set default-web-browser librewolf.desktop &> /dev/null
-        )
-        whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
-            # Update the gauge
-            gauge=$((100 * (7 + 1) / 8)) echo "$gauge"
+
+            ###################################################3
+            gauge=$((100 * 5 / 6)) && echo "$gauge"
 
             # virtualization
             if [ "$is_virtualization" = true ]; then
@@ -235,40 +206,41 @@ install() {
     whiptail --title "Information" --msgbox "This will take a few minutes." 7 34
     clear
 
-    export XDG_DATA_DIRS="$HOME/.local/share"
     # Install yeet pacman wrapper + AUR helper (package-query)
     whiptail --title "Installation" --gauge "\nInstalling yeet..." 7 50 0 < <(
-        $sudo_program pacman -S yajl --noconfirm     # needed
+        $sudo_program pacman -S yajl --noconfirm &> /dev/null
         gauge=$((100 * 1 / 6))
         echo "$gauge"
 
         mkdir -p ~/.cache/yeet/build/
         cd ~/.cache/yeet/build/
-        git clone https://aur.archlinux.org/package-query.git
+        git clone https://aur.archlinux.org/package-query.git &> /dev/null
         gauge=$((100 * 2 / 6))
         echo "$gauge"
 
-        git clone https://aur.archlinux.org/yeet.git
+        git clone https://aur.archlinux.org/yeet.git &> /dev/null
         gauge=$((100 * 3 / 6))
         echo "$gauge"
 
         cd package-query
-        makepkg -sfcCi --noconfirm
+        makepkg -sfcCi --noconfirm &> /dev/null
         gauge=$((100 * 4 / 6))
         echo "$gauge"
 
         cd ../yeet
-        makepkg -sfcCi --noconfirm
+        makepkg -sfcCi --noconfirm &> /dev/null
         gauge=$((100 * 5 / 6))
         echo "$gauge"
 
         cd ~
         # edit config
-        sed -i "s/\(SUDO_BIN *= *\).*/\1\/usr\/bin\/doas/" ~/.config/yeet/yeet.conf
-        sed -i "s/\(PRINT_LOGO *= *\).*/\1false/" ~/.config/yeet/yeet.conf
+        sed -i "s/\(SUDO_BIN *= *\).*/\1\/usr\/bin\/doas/" ~/.config/yeet/yeet.conf &> /dev/null
+        sed -i "s/\(PRINT_LOGO *= *\).*/\1false/" ~/.config/yeet/yeet.conf &> /dev/null
     )
+    clear
 
     # Install packages
+    export XDG_DATA_DIRS="$HOME/.local/share"
     export NO_CONFIRM=true
     # whiptail --title "Program Installation" --gauge "\nDon't panic if it's stuck!" 7 50 0 < <(
         for i in "${programs[@]}"

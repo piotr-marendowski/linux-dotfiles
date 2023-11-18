@@ -89,7 +89,7 @@ return {
             hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_space_indent_level)
         end,
     },
-    -- Projects and autochdir in toggleterm
+    -- Projects
     {
         "ahmedkhalf/project.nvim",
         config = function()
@@ -100,6 +100,8 @@ return {
                     enable = true,
                     update_root = true,
                 },
+                patterns = { ".git", "Makefile" },
+                show_hidden = true,
             })
 
             require("telescope").load_extension("projects")
@@ -145,7 +147,7 @@ return {
         config = function()
             require("zen-mode").setup({
                 window = {
-                    width = 110,
+                    width = 100,
                 },
                 options = {
                     signcolumn = "no",

@@ -32,8 +32,8 @@ return {
 			local map = require("keys").map
 			map("n", "<S-l>", "<cmd>BufferLineCycleNext<CR>", "Next buffer")
 			map("n", "<S-h>", "<cmd>BufferLineCyclePrev<CR>", "Previous buffer")
-			map("n", "<A-l>", "<cmd>BufferLineMoveNext<CR>", "Move next buffer")
-			map("n", "<A-h>", "<cmd>BufferLineMovePrev<CR>", "Move previous buffer")
+			map("n", "<C-l>", "<cmd>BufferLineMoveNext<CR>", "Move next buffer")
+			map("n", "<C-h>", "<cmd>BufferLineMovePrev<CR>", "Move previous buffer")
             -- Fake ctrl + tab buffer switching ==> bind only tab
 			map("n", "<Tab>", "<cmd>b#<CR>", "Alt tab")
 		end,

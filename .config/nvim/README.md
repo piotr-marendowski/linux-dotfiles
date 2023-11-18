@@ -5,8 +5,8 @@
 - Ctrl + f → Close window
 - Shift + h → Move to the left buffer
 - Shift + l → Move to the right buffer
-- Alt + h → Move buffer to the left
-- Alt + l → Move buffer to the right
+- Ctrl + h → Move buffer to the left
+- Ctrl + l → Move buffer to the right
 - Ctrl + h → Move to the right window
 - Ctrl + j → Move to the down window
 - Ctrl + k → Move to the up window
