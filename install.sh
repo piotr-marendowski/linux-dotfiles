@@ -100,6 +100,7 @@ configure_installed() {
             $sudo_program mkdir /usr/share/xsessions/ &> /dev/null
             $sudo_program touch /usr/share/xsessions/dwm.desktop &> /dev/null
 
+            # create xsession for dwm
             $sudo_program sh -c "cat >>/usr/share/xsessions/dwm.desktop" <<-EOF
 [Desktop Entry]
 Encoding=UTF-8
@@ -108,6 +109,21 @@ Comment=Dynamic window manager
 Exec=/usr/local/bin/dwm
 Icon=dwm
 Type=XSession
+EOF
+
+            # make a hook for neofetch logo
+            $sudo_program sh -c "cat >>/usr/share/libalpm/hooks/lsb-release.hook" <<-EOF
+# IvoryOS lsb-release hook for neofetch logo
+[Trigger]
+Operation = Install
+Operation = Upgrade
+Type = Package
+Target = lsb-release
+
+[Action]
+Description = Copy /etc/ivory-release to /etc/lsb-release
+When = PostTransaction
+Exec = /bin/sh -c "rm /etc/lsb-release && cp /etc/ivory-release /etc/lsb-release"
 EOF
 
             ###################################################3
