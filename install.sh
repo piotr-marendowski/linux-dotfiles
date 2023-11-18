@@ -80,14 +80,8 @@ configure_installed() {
 
             # Move any dotfile "listed" (present) in dir to olddir and move a file from this
             # repo to program's directory e.g. ~/.config
-            echo "Moving dotfiles from $dir to homedir..." &> /dev/null
-            echo "DON'T PANIC IF THERE ARE ERRORS!" &> /dev/null
             # hidden files/folders
-            for file in ${files[@]}; do
-                echo "Moving $file to homedir..." &> /dev/null
-                cp -Rf $dir/$file ~/$file &> /dev/null
-            done
-            echo "done" &> /dev/null
+            cp -rf $dir/. ~ &> /dev/null
         )
         whiptail --title "Progress" --gauge "\nConfiguring dotfiles..." 7 50 0 < <(
             # Update the gauge
@@ -96,9 +90,9 @@ configure_installed() {
 
             # install fff file manager
             cd ~/Downloads
-            git clone https://github.com/piotr-marendowski/fff
+            git clone https://github.com/piotr-marendowski/fff &> /dev/null
             cd fff
-            $sudo_program make install
+            $sudo_program make install &> /dev/null
 
             # move wallpaper to ~/.config
             cp $dir/assets/wallpaper.jpg ~/.config/ &> /dev/null
@@ -235,6 +229,7 @@ add_programs() {
 
 install() {
     mkdir -p ~/Downloads
+    mkdir -p ~/Documents
     add_programs
 
     whiptail --title "Information" --msgbox "This will take a few minutes." 7 34
@@ -260,7 +255,7 @@ install() {
     # whiptail --title "Program Installation" --gauge "\nDon't panic if it's stuck!" 7 50 0 < <(
         for i in "${programs[@]}"
         do
-            yeet -S $i 
+            yes '' | yeet -S $i
             # Update the gauge
             # gauge=$((100 * (i + 1) / ${#programs[@]}))
             # echo "$gauge"

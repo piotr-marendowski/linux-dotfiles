@@ -28,8 +28,7 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "discord-screenaudio",  NULL,       NULL,       1 << 1,       0,           -1 },
-	{ "Spotify",  NULL,       NULL,       1 << 1,       0,           -1 },
+	{ "vencord",  NULL,       NULL,       1 << 1,       0,           -1 },
 };
 
 /* layout(s) */
@@ -68,13 +67,13 @@ static const Key keys[] = {
 	/* modifier                     key        function        argument */
     /* had to run them by SHCMD because they didn't want to run otherwise */
 	{ MODKEY,                       XK_s,      spawn,          SHCMD("~/.config/scripts/dmenu.sh") },
-	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
+	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_n,      spawn,          {.v = nvim } }, 
 	{ MODKEY,                       XK_x,      spawn,          {.v = librewolf } },
 	{ ShiftMask,                    XK_Delete, spawn,          {.v = shutdown } },
 	{ ShiftMask,                    XK_Print,  spawn,          {.v = reboot } },
 	{ 0,                            XK_Print,  spawn,          SHCMD("maim -us | xclip -selection clipboard -t image/png") },
-	{ MODKEY,                       XK_e,      spawn,          {.v = fff } }, 
+	{ MODKEY,                       XK_e,      spawn,          SHCMD("st -e fff") }, 
     { 0,         XF86XK_AudioRaiseVolume,      spawn,          SHCMD("pactl set-sink-volume @DEFAULT_SINK@ +5%") },
     { 0,         XF86XK_AudioLowerVolume,      spawn,          SHCMD("pactl set-sink-volume @DEFAULT_SINK@ -5%") }, 
     { 0,                XF86XK_AudioMute,      spawn,          SHCMD("pactl set-sink-mute @DEFAULT_SINK@ toggle") }, 
@@ -83,12 +82,12 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_a,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
-	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_i,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	{ MODKEY,                       XK_Return, zoom,           {0} },
+	{ MODKEY|ShiftMask,             XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
-	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
+	{ MODKEY,                       XK_c,      killclient,     {0} },
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
