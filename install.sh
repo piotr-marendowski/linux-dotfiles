@@ -213,37 +213,37 @@ install() {
 
     $sudo_program rm /var/lib/pacman/db.lck &> /dev/null
     # Install yeet pacman wrapper + AUR helper (package-query)
-    # whiptail --title "Installation" --gauge "\nInstalling yeet (pacman wrapper)..." 7 50 0 < <(
-    #     $sudo_program pacman -S yajl --noconfirm &> /dev/null
-    #     gauge=$((100 * 1 / 6))
-    #     echo "$gauge"
-    #
-    #     mkdir -p ~/.cache/yeet/build/
-    #     cd ~/.cache/yeet/build/
-    #     git clone https://aur.archlinux.org/package-query.git &> /dev/null
-    #     gauge=$((100 * 2 / 6))
-    #     echo "$gauge"
-    #
-    #     git clone https://aur.archlinux.org/yeet.git &> /dev/null
-    #     gauge=$((100 * 3 / 6))
-    #     echo "$gauge"
-    #
-    #     cd package-query
-    #     makepkg -sfcCi --noconfirm &> /dev/null
-    #     gauge=$((100 * 4 / 6))
-    #     echo "$gauge"
-    #
-    #     cd ../yeet
-    #     makepkg -sfcCi --noconfirm &> /dev/null
-    #     gauge=$((100 * 5 / 6))
-    #     echo "$gauge"
-    #
-    #     cd ~
-    #     # edit config
-    #     sed -i "s/\(SUDO_BIN *= *\).*/\1\/usr\/bin\/doas/" ~/.config/yeet/yeet.conf &> /dev/null
-    #     sed -i "s/\(PRINT_LOGO *= *\).*/\1false/" ~/.config/yeet/yeet.conf &> /dev/null
-    # )
-    curl https://raw.githubusercontent.com/gamemaker1/yeet/develop/assets/package/install | bash
+    whiptail --title "Installation" --gauge "\nInstalling yeet (pacman wrapper)..." 7 50 0 < <(
+        $sudo_program pacman -S yajl --noconfirm &> /dev/null
+        gauge=$((100 * 1 / 6))
+        echo "$gauge"
+
+        mkdir -p ~/.cache/yeet/build/
+        cd ~/.cache/yeet/build/
+        git clone https://aur.archlinux.org/package-query.git &> /dev/null
+        gauge=$((100 * 2 / 6))
+        echo "$gauge"
+
+        git clone https://aur.archlinux.org/yeet.git &> /dev/null
+        gauge=$((100 * 3 / 6))
+        echo "$gauge"
+
+        cd package-query
+        makepkg -sfcCi --noconfirm &> /dev/null
+        gauge=$((100 * 4 / 6))
+        echo "$gauge"
+
+        cd ../yeet
+        makepkg -sfcCi --noconfirm &> /dev/null
+        gauge=$((100 * 5 / 6))
+        echo "$gauge"
+
+        cd ~
+        # edit config
+        sed -i "s/\(SUDO_BIN *= *\).*/\1\/usr\/bin\/doas/" ~/.config/yeet/yeet.conf &> /dev/null
+        sed -i "s/\(PRINT_LOGO *= *\).*/\1false/" ~/.config/yeet/yeet.conf &> /dev/null
+    )
+    # curl https://raw.githubusercontent.com/gamemaker1/yeet/develop/assets/package/install | bash &> /dev/null
     clear
 
     # Install packages
@@ -256,17 +256,18 @@ install() {
     export NO_CONFIRM=true
 
     count=1
-    whiptail --title "Program Installation" --gauge "\nInstalling various programs..." 7 50 0 < <(
+    # whiptail --title "Program Installation" --gauge "\nInstalling various programs..." 7 50 0 < <(
         for i in "${programs[@]}"
         do
             # pipe yes because of bug in yeet
-            yes '' | yeet -S $i &> /dev/null
+            yes '' | yeet -S $i
+            #&> /dev/null
             # Update the gauge
-            count=$((count + 1))
-            gauge=$((100 * count / ${#programs[@]} + 1))
-            echo "$gauge"
+            # count=$((count + 1))
+            # gauge=$((100 * count / ${#programs[@]} + 1))
+            # echo "$gauge"
         done
-    )
+    # )
 }
 
 reboot_now() {
