@@ -116,7 +116,6 @@ EOF
 
             # check if pacman -Q name begins with name of ly
             # and enable its service if it is
-            echo "Proceeding to check if login manager is installed..." &> /dev/null
             $sudo_program pacman -Q ly | grep -q "^ly" && $sudo_program systemctl enable ly &> /dev/null
 
             # set default browser to librewolf
@@ -179,28 +178,29 @@ add_programs() {
     programs+=( "xorg-server" "xf86-video-fbdev" "ly" "redshift" "ttf-jetbrains-mono-nerd" "lxappearance" )
 
 
-    if whiptail --yesno "Do you want to install other things? (gaming, virtualization etc.)" 8 50; then
-
-        # other
-        programs+=( "discord-screenaudio" "gimp" )
-        # programs+=( "libreoffice-still" "ttf-ms-fonts" )
-
-        # make android phones connect and transfer files
-        # programs+=( "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" )
-
-        # gaming
-        $sudo_program sed -i '/#[multilib]/{N;s/#\[multilib\]\n#Include = \/etc\/pacman.d\/mirrorlist/\[multilib\]\nInclude = \/etc\/pacman.d\/mirrorlist/}' /etc/pacman.conf
-
-        programs+=( "steam" "lutris" "wine-staging" "nvidia-dkms" "nvidia-utils-dkms" "vulkan-icd-loader" "dxvk-bin" "opencl-nvidia" "libvdpau" "libxnvctrl" "lib32-nvidia-utils" "lib32-opencl-nvidia" "lib32-vulkan-icd-loader" "proton-ge-custom-bin" "mangohud-git" "goverlay-bin" "gwe" "protonup-qt-bin" "gamemode" )
-        
-        # start gamemode
-        $sudo_program systemctl --user enable gamemoded && systemctl --user start gamemoded &> /dev/null
-        
-        # virtualization
-        programs+=( "qemu" "libvirt" "virt-manager" "virt-viewer" "dnsmasq" "vde2" "bridge-utils" "openbsd-netcat" "libguestfs" )
-        is_virtualization=true
-    
-    fi
+    # if whiptail --yesno "Do you want to install other things? (gaming, virtualization etc.)" 8 50; then
+    #
+    #     # other
+    #     programs+=( "vencord-desktop-git" "gimp" )
+    #     # programs+=( "libreoffice-still" "ttf-ms-fonts" )
+    #
+    #     # make android phones connect and transfer files
+    #     # programs+=( "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" )
+    #
+    #     # gaming
+    #     $sudo_program sed -i '/#[multilib]/{N;s/#\[multilib\]\n#Include = \/etc\/pacman.d\/mirrorlist/\[multilib\]\nInclude = \/etc\/pacman.d\/mirrorlist/}' /etc/pacman.conf
+    #
+    #     programs+=( "steam" "lutris" "wine-staging" "nvidia-dkms" "nvidia-utils-dkms" "vulkan-icd-loader" "dxvk-bin" "opencl-nvidia" "libvdpau" "libxnvctrl" "lib32-nvidia-utils" "lib32-opencl-nvidia" "lib32-vulkan-icd-loader" "proton-ge-custom-bin" "mangohud-git" "goverlay-bin" "gwe" "protonup-qt-bin" "gamemode" )
+    #     
+    #     # start gamemode
+    #     $sudo_program systemctl --user enable gamemoded &> /dev/null
+    #     $sudo_program systemctl --user start gamemoded &> /dev/null
+    #     
+    #     # virtualization
+    #     programs+=( "qemu" "libvirt" "virt-manager" "virt-viewer" "dnsmasq" "vde2" "bridge-utils" "openbsd-netcat" "libguestfs" )
+    #     is_virtualization=true
+    # 
+    # fi
 }
 
 install() {
@@ -213,45 +213,46 @@ install() {
 
     $sudo_program rm /var/lib/pacman/db.lck &> /dev/null
     # Install yeet pacman wrapper + AUR helper (package-query)
-    whiptail --title "Installation" --gauge "\nInstalling yeet (pacman wrapper)..." 7 50 0 < <(
-        $sudo_program pacman -S yajl --noconfirm &> /dev/null
-        gauge=$((100 * 1 / 6))
-        echo "$gauge"
-
-        mkdir -p ~/.cache/yeet/build/
-        cd ~/.cache/yeet/build/
-        git clone https://aur.archlinux.org/package-query.git &> /dev/null
-        gauge=$((100 * 2 / 6))
-        echo "$gauge"
-
-        git clone https://aur.archlinux.org/yeet.git &> /dev/null
-        gauge=$((100 * 3 / 6))
-        echo "$gauge"
-
-        cd package-query
-        makepkg -sfcCi --noconfirm &> /dev/null
-        gauge=$((100 * 4 / 6))
-        echo "$gauge"
-
-        cd ../yeet
-        makepkg -sfcCi --noconfirm &> /dev/null
-        gauge=$((100 * 5 / 6))
-        echo "$gauge"
-
-        cd ~
-        # edit config
-        sed -i "s/\(SUDO_BIN *= *\).*/\1\/usr\/bin\/doas/" ~/.config/yeet/yeet.conf &> /dev/null
-        sed -i "s/\(PRINT_LOGO *= *\).*/\1false/" ~/.config/yeet/yeet.conf &> /dev/null
-    )
+    # whiptail --title "Installation" --gauge "\nInstalling yeet (pacman wrapper)..." 7 50 0 < <(
+    #     $sudo_program pacman -S yajl --noconfirm &> /dev/null
+    #     gauge=$((100 * 1 / 6))
+    #     echo "$gauge"
+    #
+    #     mkdir -p ~/.cache/yeet/build/
+    #     cd ~/.cache/yeet/build/
+    #     git clone https://aur.archlinux.org/package-query.git &> /dev/null
+    #     gauge=$((100 * 2 / 6))
+    #     echo "$gauge"
+    #
+    #     git clone https://aur.archlinux.org/yeet.git &> /dev/null
+    #     gauge=$((100 * 3 / 6))
+    #     echo "$gauge"
+    #
+    #     cd package-query
+    #     makepkg -sfcCi --noconfirm &> /dev/null
+    #     gauge=$((100 * 4 / 6))
+    #     echo "$gauge"
+    #
+    #     cd ../yeet
+    #     makepkg -sfcCi --noconfirm &> /dev/null
+    #     gauge=$((100 * 5 / 6))
+    #     echo "$gauge"
+    #
+    #     cd ~
+    #     # edit config
+    #     sed -i "s/\(SUDO_BIN *= *\).*/\1\/usr\/bin\/doas/" ~/.config/yeet/yeet.conf &> /dev/null
+    #     sed -i "s/\(PRINT_LOGO *= *\).*/\1false/" ~/.config/yeet/yeet.conf &> /dev/null
+    # )
+    curl https://raw.githubusercontent.com/gamemaker1/yeet/develop/assets/package/install | bash
     clear
 
     # Install packages
-    $sudo_program pacman -S --noconfirm desktop-file-utils &> /dev/null
-    $sudo_program update-desktop-database &> /dev/null
-    mkdir -p ~/.local/share/applications
-    echo export XDG_DATA_DIRS="$HOME/.local/share" >> ~/.bashrc
-    echo export XDG_DATA_DIRS="$HOME/.local/share" >> ~/.zshrc
-    export XDG_DATA_DIRS="$HOME/.local/share"
+    # $sudo_program pacman -S --noconfirm desktop-file-utils &> /dev/null
+    # $sudo_program update-desktop-database &> /dev/null
+    # mkdir -p ~/.local/share/applications
+    # echo export XDG_DATA_DIRS="$HOME/.local/share" >> ~/.bashrc
+    # echo export XDG_DATA_DIRS="$HOME/.local/share" >> ~/.zshrc
+    # export XDG_DATA_DIRS="$HOME/.local/share"
     export NO_CONFIRM=true
 
     count=1
