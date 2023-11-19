@@ -123,9 +123,9 @@ EOF
             xdg-settings set default-web-browser librewolf.desktop &> /dev/null
 
             # Update the system clock
-            timedatectl &> /dev/null
-            timedatectl set-timezone Europe/Sarajevo &> /dev/null
-            timedatectl set-ntp true &> /dev/null
+            $sudo_program timedatectl &> /dev/null
+            $sudo_program timedatectl set-timezone Europe/Sarajevo &> /dev/null
+            $sudo_program timedatectl set-ntp true &> /dev/null
 
             ###################################################3
             gauge=$((100 * 5 / 6)) && echo "$gauge"
@@ -242,19 +242,20 @@ install() {
     clear
 
     # Install packages
-    $sudo_program pacman -S desktop-file-utils
-    $sudo_program update-desktop-database #&> /dev/null
+    $sudo_program pacman -S --noconfirm desktop-file-utils &> /dev/null
+    $sudo_program update-desktop-database &> /dev/null
     mkdir -p ~/.local/share/applications
+    export XDG_DATA_DIRS="$HOME/.local/share"
     export NO_CONFIRM=true
-    #whiptail --title "Program Installation" --gauge "\nDon't panic if it's stuck!" 7 50 0 < <(
+    whiptail --title "Program Installation" --gauge "\nDon't panic if it's stuck!" 7 50 0 < <(
         for i in "${programs[@]}"
         do
             # pipe yes because of bug in yeet
-            yes '' | yeet -S $i #&> /dev/null
+            yes '' | yeet -S $i &> /dev/null
             # Update the gauge
-            #gauge=$((100 * i / ${#programs[@]})) && echo "$gauge"
+            gauge=$((100 * i / ${#programs[@]})) && echo "$gauge"
         done
-    #)
+    )
 }
 
 reboot_now() {
