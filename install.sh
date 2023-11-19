@@ -111,23 +111,6 @@ Icon=dwm
 Type=XSession
 EOF
 
-            # make a hook for neofetch logo
-            $sudo_program printf "DISTRIB_ID="ivory"\nDISTRIB_RELEASE="rolling"\nDISTRIB_DESCRIPTION="IvoryOS"\n" > /etc/lsb-release
-            $sudo_program printf "DISTRIB_ID="ivory"\nDISTRIB_RELEASE="rolling"\nDISTRIB_DESCRIPTION="IvoryOS"\n" > /etc/ivory-release
-            $sudo_program sh -c "cat >>/usr/share/libalpm/hooks/lsb-release.hook" <<-EOF
-# IvoryOS lsb-release hook for neofetch logo
-[Trigger]
-Operation = Install
-Operation = Upgrade
-Type = Package
-Target = lsb-release
-
-[Action]
-Description = Copy /etc/ivory-release to /etc/lsb-release
-When = PostTransaction
-Exec = /bin/sh -c "rm /etc/lsb-release && cp /etc/ivory-release /etc/lsb-release"
-EOF
-
             ###################################################3
             gauge=$((100 * 4 / 6)) && echo "$gauge"
 
@@ -138,6 +121,11 @@ EOF
 
             # set default browser to librewolf
             xdg-settings set default-web-browser librewolf.desktop &> /dev/null
+
+            # Update the system clock
+            timedatectl &> /dev/null
+            timedatectl set-timezone Europe/Sarajevo &> /dev/null
+            timedatectl set-ntp true &> /dev/null
 
             ###################################################3
             gauge=$((100 * 5 / 6)) && echo "$gauge"
@@ -254,18 +242,19 @@ install() {
     clear
 
     # Install packages
-    $sudo_program update-desktop-database &> /dev/null
+    $sudo_program pacman -S desktop-file-utils
+    $sudo_program update-desktop-database #&> /dev/null
     mkdir -p ~/.local/share/applications
     export NO_CONFIRM=true
-    whiptail --title "Program Installation" --gauge "\nDon't panic if it's stuck!" 7 50 0 < <(
+    #whiptail --title "Program Installation" --gauge "\nDon't panic if it's stuck!" 7 50 0 < <(
         for i in "${programs[@]}"
         do
             # pipe yes because of bug in yeet
-            yes '' | yeet -S $i &> /dev/null
+            yes '' | yeet -S $i #&> /dev/null
             # Update the gauge
-            gauge=$((100 * i / ${#programs[@]})) && echo "$gauge"
+            #gauge=$((100 * i / ${#programs[@]})) && echo "$gauge"
         done
-    )
+    #)
 }
 
 reboot_now() {
