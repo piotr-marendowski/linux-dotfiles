@@ -246,19 +246,16 @@ install() {
     clear
 
     # Install packages
-    whiptail --title "Information" --msgbox "If installation will be stuck on one percent for more than 5 minutes, then restart machine." 8 60
-    clear
-
     $sudo_program pacman -S --noconfirm desktop-file-utils &> /dev/null
     $sudo_program update-desktop-database &> /dev/null
     mkdir -p ~/.local/share/applications
     echo export XDG_DATA_DIRS="$HOME/.local/share" >> ~/.bashrc
     echo export XDG_DATA_DIRS="$HOME/.local/share" >> ~/.zshrc
     export XDG_DATA_DIRS="$HOME/.local/share"
-
     export NO_CONFIRM=true
+
+    count=1
     whiptail --title "Program Installation" --gauge "\nInstalling various programs..." 7 50 0 < <(
-        count=1
         for i in "${programs[@]}"
         do
             # pipe yes because of bug in yeet
