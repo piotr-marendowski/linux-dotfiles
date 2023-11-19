@@ -117,7 +117,7 @@ EOF
             # check if pacman -Q name begins with name of ly
             # and enable its service if it is
             echo "Proceeding to check if login manager is installed..." &> /dev/null
-            pacman -Q ly | grep -q "^ly" && $sudo_program systemctl enable ly && echo "Ly installed." &> /dev/null
+            $sudo_program pacman -Q ly | grep -q "^ly" && $sudo_program systemctl enable ly && echo "Ly installed." &> /dev/null
 
             # set default browser to librewolf
             xdg-settings set default-web-browser librewolf.desktop &> /dev/null
@@ -247,13 +247,16 @@ install() {
     mkdir -p ~/.local/share/applications
     export XDG_DATA_DIRS="$HOME/.local/share"
     export NO_CONFIRM=true
+    count=1
     whiptail --title "Program Installation" --gauge "\nDon't panic if it's stuck!" 7 50 0 < <(
         for i in "${programs[@]}"
         do
             # pipe yes because of bug in yeet
             yes '' | yeet -S $i &> /dev/null
             # Update the gauge
-            gauge=$((100 * i / ${#programs[@]})) && echo "$gauge"
+            count=$((count + 1))
+            gauge=$((100 * count / ${#programs[@]}))
+            echo "$gauge"
         done
     )
 }
