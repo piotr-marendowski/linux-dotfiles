@@ -8,21 +8,13 @@ cache=$cachedir/dmenu_run
 hist=$cachedir/dmenu_history
 histsize=30
 
-# make hist file if there isn't
-if [ ! -e "$hist" ]; then
-    touch "$hist"
-fi
-
-# dmenu_path
-[ ! -e "$cachedir" ] && mkdir -p "$cachedir"
-
-if stest -dqr -n "$cache" $PATH; then
-	stest -flx $PATH | sort -u | tee "$cache"
-fi
+# update the list of executables
+IFS=:
+stest -flx $PATH | sort -u | tee "$cache"
 
 # display dmenu with history and then rest of executables
 cmd=$(
-    cat "$hist" "$cache" | dmenu "$@"
+    cat "$hist" "$cache" | awk '!seen[$0]++' | dmenu "$@" 
 )
 
 case $cmd in 

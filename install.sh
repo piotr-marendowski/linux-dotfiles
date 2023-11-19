@@ -117,7 +117,7 @@ EOF
             # check if pacman -Q name begins with name of ly
             # and enable its service if it is
             echo "Proceeding to check if login manager is installed..." &> /dev/null
-            $sudo_program pacman -Q ly | grep -q "^ly" && $sudo_program systemctl enable ly && echo "Ly installed." &> /dev/null
+            $sudo_program pacman -Q ly | grep -q "^ly" && $sudo_program systemctl enable ly &> /dev/null
 
             # set default browser to librewolf
             xdg-settings set default-web-browser librewolf.desktop &> /dev/null
@@ -126,6 +126,10 @@ EOF
             $sudo_program timedatectl &> /dev/null
             $sudo_program timedatectl set-timezone Europe/Sarajevo &> /dev/null
             $sudo_program timedatectl set-ntp true &> /dev/null
+
+            mkdir -p "${XDG_CACHE_HOME:-"$HOME/.cache"}"
+            touch "${XDG_CACHE_HOME:-"$HOME/.cache"}"/dmenu_history 
+            touch "${XDG_CACHE_HOME:-"$HOME/.cache"}"/dmenu_run 
 
             ###################################################3
             gauge=$((100 * 5 / 6)) && echo "$gauge"
@@ -190,7 +194,7 @@ add_programs() {
         programs+=( "steam" "lutris" "wine-staging" "nvidia-dkms" "nvidia-utils-dkms" "vulkan-icd-loader" "dxvk-bin" "opencl-nvidia" "libvdpau" "libxnvctrl" "lib32-nvidia-utils" "lib32-opencl-nvidia" "lib32-vulkan-icd-loader" "proton-ge-custom-bin" "mangohud-git" "goverlay-bin" "gwe" "protonup-qt-bin" "gamemode" )
         
         # start gamemode
-        systemctl --user enable gamemoded && systemctl --user start gamemoded &> /dev/null
+        $sudo_program systemctl --user enable gamemoded && systemctl --user start gamemoded &> /dev/null
         
         # virtualization
         programs+=( "qemu" "libvirt" "virt-manager" "virt-viewer" "dnsmasq" "vde2" "bridge-utils" "openbsd-netcat" "libguestfs" )
@@ -242,20 +246,26 @@ install() {
     clear
 
     # Install packages
+    whiptail --title "Information" --msgbox "If installation will be stuck on one percent for more than 5 minutes, then restart machine." 8 60
+    clear
+
     $sudo_program pacman -S --noconfirm desktop-file-utils &> /dev/null
     $sudo_program update-desktop-database &> /dev/null
     mkdir -p ~/.local/share/applications
+    echo export XDG_DATA_DIRS="$HOME/.local/share" >> ~/.bashrc
+    echo export XDG_DATA_DIRS="$HOME/.local/share" >> ~/.zshrc
     export XDG_DATA_DIRS="$HOME/.local/share"
+
     export NO_CONFIRM=true
-    count=1
-    whiptail --title "Program Installation" --gauge "\nDon't panic if it's stuck!" 7 50 0 < <(
+    whiptail --title "Program Installation" --gauge "\nInstalling various programs..." 7 50 0 < <(
+        count=1
         for i in "${programs[@]}"
         do
             # pipe yes because of bug in yeet
             yes '' | yeet -S $i &> /dev/null
             # Update the gauge
             count=$((count + 1))
-            gauge=$((100 * count / ${#programs[@]}))
+            gauge=$((100 * count / ${#programs[@]} + 1))
             echo "$gauge"
         done
     )
