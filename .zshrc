@@ -26,24 +26,27 @@ export EDITOR=nvim
 
 
 ## ALIASES
+alias sudo='doas'
 alias ll="ls -la --color=auto"
 alias -- -="cd -"
 alias ..="cd .."
 function joinstr { local IFS="$1"; shift; echo "$*"; }
 function fcd { cd $(joinstr \* $(echo "$*" | fold -w1))* }
-# fff file manager:
+# fff file manager
+export EDITOR="nvim"
 export FFF_HIDDEN=1
 export FFF_COL1=4
 export FFF_COL2=9
 export FFF_COL5=6
-export FFF_COL4=9
+export FFF_COL6="48;2;80;80;80"
+export FFF_COLORED_FILENAMES=1
 export FFF_FILE_ICON=1
 export FFF_GIT_CHANGES=1
-export FFF_FILE_DETAILS=0
+export FFF_TRASH=~/.local/share/Trash/files/
 # bookmarks
 export FFF_FAV1=~/Documents
-export FFF_FAV2=~/.config
 export FFF_FAV3=~/Downloads
+export FFF_FAV2=~/.config
 # cd on exit => run `f` and quit with `q`
 f() {
     fff "$@"
