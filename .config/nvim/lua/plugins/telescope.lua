@@ -4,29 +4,22 @@ return {
         "nvim-telescope/telescope.nvim",
         dependencies = {
             "nvim-lua/plenary.nvim",
-            -- Fuzzy Finder Algorithm which requires local dependencies to be built.
-            -- Only load if `make` is available
-            -- {
-            -- 	"nvim-telescope/telescope-fzf-native.nvim",
-            -- 	build = "make",
-            -- 	cond = vim.fn.executable("make") == 1,
-            -- },
             "debugloop/telescope-undo.nvim",
             "nvim-telescope/telescope-ui-select.nvim", -- Override vim.ui.select()
         },
         config = function()
+            local fb_actions = require("telescope._extensions.file_browser.actions")
+            local actions = require("telescope.actions")
+
             require("telescope").setup({
                 defaults = {
                     borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
                     layout_config = {
+                        height = 0.95,
                         anchor = "center",
                         prompt_position = "bottom",
-                        center = {
-                            borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
-                            height = 1,
-                            width = 1,
-                            prompt_position = "top",
-                            preview_width = 0.9,
+                        horizontal = {
+                            preview_width = 0.55,
                         },
                     },
                 },
@@ -39,11 +32,27 @@ return {
                         -- "object", "array", "variable", "number" },
                     },
                     diagnostics = {
-                        line_width = "full",
+                        layout_strategy = "vertical",
+                        layout_config = { preview_cutoff = 0 },
+                        no_sign = true,
+                        buffnr = 0, -- show only for current buffer
                     },
                 },
                 extensions = {
-                    -- configure extensions here
+                    file_browser = {
+                        display_stat = false,
+                        hidden = true,
+                        initial_mode = "normal",
+                        -- Change behaviour to more ranger-like
+                        mappings = {
+                            n = {
+                                h = fb_actions.goto_parent_dir,
+                                k = actions.move_selection_worse,
+                                j = actions.move_selection_better,
+                                l = actions.select_default, -- action for going into directories and opening files
+                            },
+                        },
+                    },
                 },
             })
 
@@ -71,6 +80,15 @@ return {
             map("n", "<leader>sd", require("telescope.builtin").diagnostics, " Diagnostics")
             map("n", "<leader>sb", require("telescope.builtin").buffers, " Buffers")
             map("n", "<leader>su", ':lua require("telescope").extensions.undo.undo()<cr>', " Undo history")
+        end,
+    },
+    -- Telescope file browser
+    {
+        "nvim-telescope/telescope-file-browser.nvim",
+        dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
+        config = function()
+            local map = require("keys").map
+            map("n", "<leader>e", ":Telescope file_browser path=%:p:h select_buffer=true<CR>", " Files")
         end,
     },
 }

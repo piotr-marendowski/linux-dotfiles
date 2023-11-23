@@ -32,9 +32,8 @@ actsellistbox=black,white
 sellistbox=white,black"
 
 is_virtualization=false         # is virtualization enabled? 
-programs=()                     # Array of programs to install
-exclude=()                      # programs to unselect
-dir=~/Downloads/dotfiles        # dotfolders directory
+programs=()                     # array of programs to install
+dir=~/Downloads/dotfiles        # dotfiles directory
 
 # check for sudo program
 if command -v doas &> /dev/null
@@ -64,7 +63,7 @@ configure_installed() {
             # Move dotfiles to home
             cp -rf $dir/. ~ &> /dev/null
 
-            ###################################################3
+            ####################################################
             gauge=$((100 * 2 / 6)) && echo "$gauge"
 
             # install fff file manager
@@ -77,15 +76,21 @@ configure_installed() {
             cp $dir/assets/wallpaper.jpg ~/.config/ &> /dev/null
 
             # delete unnecessary items
-            rm -r ~/assets &> /dev/null
-            rm -r ~/install.sh &> /dev/null
-            rm -r ~/LICENSE &> /dev/null
-            rm -r ~/README.md &> /dev/null
-            rm -r ~/.config/.config/ &> /dev/null
+            $sudo_program rm -r ~/assets &> /dev/null
+            $sudo_program rm -r ~/install.sh &> /dev/null
+            $sudo_program rm -r ~/LICENSE &> /dev/null
+            $sudo_program rm -r ~/README.md &> /dev/null
+            $sudo_program rm -r ~/.config/.config/ &> /dev/null
             $sudo_program rm -r ~/.git/ &> /dev/null
 
-            ###################################################3
+            ####################################################
             gauge=$((100 * 3 / 6)) && echo "$gauge"
+
+            # Dowload Hack Nerd Font and install it
+            curl -fLo "Hack Nerd Font Regular.ttf" \
+            https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Hack/Regular/HackNerdFont-Regular.ttf
+
+            $sudo_program mv Hack\ Nerd\ Font\ Regular.ttf /etc/share/fonts/TTF/
 
             # Configure Suckless' software
             cd ~/.config/st/ &> /dev/null
@@ -111,7 +116,7 @@ Icon=dwm
 Type=XSession
 EOF
 
-            ###################################################3
+            ####################################################
             gauge=$((100 * 4 / 6)) && echo "$gauge"
 
             # check if pacman -Q name begins with name of ly
@@ -130,7 +135,7 @@ EOF
             touch "${XDG_CACHE_HOME:-"$HOME/.cache"}"/dmenu_history 
             touch "${XDG_CACHE_HOME:-"$HOME/.cache"}"/dmenu_run 
 
-            ###################################################3
+            ####################################################
             gauge=$((100 * 5 / 6)) && echo "$gauge"
 
             # virtualization
@@ -206,6 +211,7 @@ add_programs() {
 install() {
     mkdir -p ~/Downloads
     mkdir -p ~/Documents
+    mkdir -p ~/.cache
     add_programs
 
     whiptail --title "Information" --msgbox "This will take a few minutes." 7 34
@@ -219,6 +225,8 @@ install() {
         # echo "$gauge"
 
         mkdir -p ~/.cache/yeet/build/
+        $sudo_program chown -R $(whoami):$(whoami) ~/.cache
+        $sudo_program chmod -R 755 ~/.cache
         cd ~/.cache/yeet/build/
         git clone https://aur.archlinux.org/package-query.git
         # gauge=$((100 * 2 / 6))

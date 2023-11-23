@@ -5,7 +5,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "JetBrainsMono Nerd Font:pixelsize=20:antialias=true:autohint=true";
+static char *font = "Hack Nerd Font:pixelsize=20:antialias=true:autohint=true";
 static int borderpx = 0;
 
 /*
@@ -119,7 +119,7 @@ static const char *colorname[] = {
 
 	/* 8 bright colors */
 	[8]  = "#7f8490", /* black   */
-	[9] = "#fc5d7c", /* red     */
+	[9]  = "#fc5d7c", /* red     */
 	[10] = "#9ed072", /* green   */
 	[11] = "#e7c664", /* yellow  */
 	[12] = "#76cce0", /* blue    */

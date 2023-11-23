@@ -1,4 +1,3 @@
--- Folds
 -- zc => close fold
 -- zo => open fold
 -- za => toggle fold
