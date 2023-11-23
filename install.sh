@@ -162,7 +162,6 @@ Do you want to do it now?" 10 80
     fi
 }
 
-# EDIT FOR YOURSELF! won't describe every program because don't care :)
 add_programs() {
     # Basic
     programs+=( "librewolf-bin" "htop-vim" "xclip" "curl" )
@@ -225,34 +224,34 @@ install() {
         # gauge=$((100 * 1 / 6))
         # echo "$gauge"
 
-        mkdir -p ~/.cache/yeet/build/
-        $sudo_program chown -R $(whoami):$(whoami) ~/.cache
-        $sudo_program chmod -R 755 ~/.cache
-        cd ~/.cache/yeet/build/
-        git clone https://aur.archlinux.org/package-query.git
-        # gauge=$((100 * 2 / 6))
-        # echo "$gauge"
-
-        git clone https://aur.archlinux.org/yeet.git
-        # gauge=$((100 * 3 / 6))
-        # echo "$gauge"
-
-        cd package-query
-        makepkg -sfcCi --noconfirm
-        # gauge=$((100 * 4 / 6))
-        # echo "$gauge"
-
-        cd ../yeet
-        makepkg -sfcCi --noconfirm
-        # gauge=$((100 * 5 / 6))
-        # echo "$gauge"
-
-        cd ~
+        # mkdir -p ~/.cache/yeet/build/
+        # $sudo_program chown -R $(whoami):$(whoami) ~/.cache
+        # $sudo_program chmod -R 755 ~/.cache
+        # cd ~/.cache/yeet/build/
+        # git clone https://aur.archlinux.org/package-query.git
+        # # gauge=$((100 * 2 / 6))
+        # # echo "$gauge"
+        #
+        # git clone https://aur.archlinux.org/yeet.git
+        # # gauge=$((100 * 3 / 6))
+        # # echo "$gauge"
+        #
+        # cd package-query
+        # makepkg -sfcCi --noconfirm
+        # # gauge=$((100 * 4 / 6))
+        # # echo "$gauge"
+        #
+        # cd ../yeet
+        # makepkg -sfcCi --noconfirm
+        # # gauge=$((100 * 5 / 6))
+        # # echo "$gauge"
+        #
+        # cd ~
         # edit config
         sed -i "s/\(SUDO_BIN *= *\).*/\1\/usr\/bin\/doas/" ~/.config/yeet/yeet.conf
         sed -i "s/\(PRINT_LOGO *= *\).*/\1false/" ~/.config/yeet/yeet.conf
     #)
-    # curl https://raw.githubusercontent.com/gamemaker1/yeet/develop/assets/package/install | bash &> /dev/null
+    curl https://raw.githubusercontent.com/gamemaker1/yeet/develop/assets/package/install | bash &> /dev/null
     clear
 
     # Install packages
