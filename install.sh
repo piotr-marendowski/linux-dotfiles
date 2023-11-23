@@ -88,9 +88,10 @@ configure_installed() {
 
             # Dowload Hack Nerd Font and install it
             curl -fLo "Hack Nerd Font Regular.ttf" \
-            https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Hack/Regular/HackNerdFont-Regular.ttf
+            https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Hack/Regular/HackNerdFont-Regular.ttf &> /dev/null
 
-            $sudo_program mv Hack\ Nerd\ Font\ Regular.ttf /etc/share/fonts/TTF/
+            $sudo_program mkdir -p /usr/share/fonts/TTF/ &> /dev/null
+            $sudo_program mv Hack\ Nerd\ Font\ Regular.ttf /usr/share/fonts/TTF/ &> /dev/null
 
             # Configure Suckless' software
             cd ~/.config/st/ &> /dev/null
@@ -170,7 +171,7 @@ add_programs() {
     programs+=( "zsh" "zsh-completions" "zsh-syntax-highlighting" "zsh-autosuggestions" )
 
     # Neovim
-    programs+=( "neovim" "python-pip" "meson" "lazygit" )
+    programs+=( "neovim" "meson" "lazygit" )
 
     # Additional utilities
     programs+=( "atool" "zip" "unzip" "tar" "ncdu" "fzf" "maim" "feh" "ntfs-3g" )
@@ -180,7 +181,7 @@ add_programs() {
     programs+=( "pipewire" "pipewire-audio" )
 
     # gui
-    programs+=( "xorg-server" "xf86-video-fbdev" "ly" "redshift" "ttf-jetbrains-mono-nerd" "lxappearance" )
+    programs+=( "xorg-server" "xf86-video-fbdev" "ly" "redshift" "lxappearance" )
 
 
     # if whiptail --yesno "Do you want to install other things? (gaming, virtualization etc.)" 8 50; then
