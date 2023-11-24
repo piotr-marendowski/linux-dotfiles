@@ -60,6 +60,7 @@ configure_installed() {
             # Update the gauge
             gauge=$((100 * 1 / 6)) && echo "$gauge"
 
+            #### PROBLEM IS HERE ####
             # Move dotfiles to home
             cp -rf $dir/. ~ &> /dev/null
 
@@ -93,6 +94,7 @@ configure_installed() {
             $sudo_program mkdir -p /usr/share/fonts/TTF/ &> /dev/null
             $sudo_program mv Hack\ Nerd\ Font\ Regular.ttf /usr/share/fonts/TTF/ &> /dev/null
 
+            #### PROBLEM IS HERE ####
             # Configure Suckless' software
             cd ~/.config/st/ &> /dev/null
             $sudo_program make install &> /dev/null
