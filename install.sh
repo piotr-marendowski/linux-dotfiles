@@ -132,8 +132,8 @@ EOF
             $sudo_program timedatectl set-timezone Europe/Sarajevo &> /dev/null
             $sudo_program timedatectl set-ntp true &> /dev/null
 
-            touch ~/.cache/dmenu_history 
-            touch ~/.cache/dmenu_run 
+            touch ~/.cache/dmenu_history &> /dev/null
+            touch ~/.cache/dmenu_run &> /dev/null
 
             ####################################################
             gauge=$((100 * 5 / 6)) && echo "$gauge"
@@ -184,8 +184,7 @@ add_programs() {
 
     # Drivers and gaming
     if whiptail --yesno "Do you want to install other things? (gaming, virtualization etc.)" 8 50; then
-
-        # other
+        # Other
         programs+=( "vencord-desktop-git" "gimp" )
         # programs+=( "libreoffice-still" "ttf-ms-fonts" )
 
@@ -235,30 +234,30 @@ install() {
     then
         whiptail --title "Installation" --gauge "\nInstalling yeet (pacman wrapper)..." 7 50 0 < <(
             $sudo_program pacman -S yajl --noconfirm &> /dev/null
-            # gauge=$((100 * 1 / 6))
-            # echo "$gauge"
+            gauge=$((100 * 1 / 6))
+            echo "$gauge"
 
             mkdir -p ~/.cache/yeet/build/
             $sudo_program chown -R $(whoami):$(whoami) ~/.cache &> /dev/null
             $sudo_program chmod -R 755 ~/.cache &> /dev/null
             cd ~/.cache/yeet/build/
             git clone https://aur.archlinux.org/package-query.git &> /dev/null
-            # gauge=$((100 * 2 / 6))
-            # echo "$gauge"
+            gauge=$((100 * 2 / 6))
+            echo "$gauge"
 
             git clone https://aur.archlinux.org/yeet.git &> /dev/null
-            # gauge=$((100 * 3 / 6))
-            # echo "$gauge"
+            gauge=$((100 * 3 / 6))
+            echo "$gauge"
 
             cd package-query
             makepkg -sfcCi --noconfirm &> /dev/null
-            # gauge=$((100 * 4 / 6))
-            # echo "$gauge"
+            gauge=$((100 * 4 / 6))
+            echo "$gauge"
 
             cd ../yeet
             makepkg -sfcCi --noconfirm &> /dev/null
-            # gauge=$((100 * 5 / 6))
-            # echo "$gauge"
+            gauge=$((100 * 5 / 6))
+            echo "$gauge"
 
             cd ~
             # edit config
