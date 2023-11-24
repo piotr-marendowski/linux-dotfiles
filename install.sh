@@ -132,9 +132,8 @@ EOF
             $sudo_program timedatectl set-timezone Europe/Sarajevo &> /dev/null
             $sudo_program timedatectl set-ntp true &> /dev/null
 
-            mkdir -p "${XDG_CACHE_HOME:-"$HOME/.cache"}"
-            touch "${XDG_CACHE_HOME:-"$HOME/.cache"}"/dmenu_history 
-            touch "${XDG_CACHE_HOME:-"$HOME/.cache"}"/dmenu_run 
+            touch ~/.cache/dmenu_history 
+            touch ~/.cache/dmenu_run 
 
             ####################################################
             gauge=$((100 * 5 / 6)) && echo "$gauge"
@@ -173,45 +172,57 @@ add_programs() {
     programs+=( "neovim" "meson" "lazygit" )
 
     # Additional utilities
-    programs+=( "atool" "zip" "unzip" "tar" "ncdu" "fzf" "maim" "feh" "ntfs-3g" )
+    # programs+=( "atool" "zip" "unzip" "tar" "ncdu" "fzf" "maim" "ntfs-3g" )
 
     # sound - pipewire
-    # programs+=( "pipewire" "pipewire-audio" "pipewire-alsa" )
     programs+=( "pipewire" "pipewire-audio" )
 
     # gui
-    programs+=( "xorg-server" "xf86-video-fbdev" "ly" "redshift" "lxappearance" )
+    # "lxappearance" 
+    programs+=( "xorg-server" "xf86-video-fbdev" "ly" "redshift" "feh" )
 
 
-    # if whiptail --yesno "Do you want to install other things? (gaming, virtualization etc.)" 8 50; then
-    #
-    #     # other
-    #     programs+=( "vencord-desktop-git" "gimp" )
-    #     # programs+=( "libreoffice-still" "ttf-ms-fonts" )
-    #
-    #     # make android phones connect and transfer files
-    #     # programs+=( "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" )
-    #
-    #     # gaming
-    #     $sudo_program sed -i '/#[multilib]/{N;s/#\[multilib\]\n#Include = \/etc\/pacman.d\/mirrorlist/\[multilib\]\nInclude = \/etc\/pacman.d\/mirrorlist/}' /etc/pacman.conf
-    #
-    #     programs+=( "steam" "lutris" "wine-staging" "nvidia-dkms" "nvidia-utils-dkms" "vulkan-icd-loader" "dxvk-bin" "opencl-nvidia" "libvdpau" "libxnvctrl" "lib32-nvidia-utils" "lib32-opencl-nvidia" "lib32-vulkan-icd-loader" "proton-ge-custom-bin" "mangohud-git" "goverlay-bin" "gwe" "protonup-qt-bin" "gamemode" )
-    #     
-    #     # start gamemode
-    #     $sudo_program systemctl --user enable gamemoded &> /dev/null
-    #     $sudo_program systemctl --user start gamemoded &> /dev/null
-    #     
-    #     # virtualization
-    #     programs+=( "qemu" "libvirt" "virt-manager" "virt-viewer" "dnsmasq" "vde2" "bridge-utils" "openbsd-netcat" "libguestfs" )
-    #     is_virtualization=true
-    # 
-    # fi
+    # Drivers and gaming
+    if whiptail --yesno "Do you want to install other things? (gaming, virtualization etc.)" 8 50; then
+
+        # other
+        programs+=( "vencord-desktop-git" "gimp" )
+        # programs+=( "libreoffice-still" "ttf-ms-fonts" )
+
+        # make android phones connect and transfer files
+        # programs+=( "mtpfs" "jmtpfs" "gvfs-mtp" "gvfs-gphoto2" )
+
+        # Enable multilib for gaming
+        $sudo_program sed -i '/#[multilib]/{N;s/#\[multilib\]\n#Include = \/etc\/pacman.d\/mirrorlist/\[multilib\]\nInclude = \/etc\/pacman.d\/mirrorlist/}' /etc/pacman.conf
+
+        # Check for GPU and add drivers for it
+        if [[ $(lshw -C display | grep vendor) =~ AMD ]]; then
+            # AMD
+            programs+=( "mesa" "vulkan-radeon" "lib32-mesa vulkan-radeon" "lib32-vulkan-radeon" "libva-mesa-driver" )
+        else
+            # Nvidia
+            programs+=( "nvidia-dkms" "nvidia-utils-dkms" "opencl-nvidia" "libvdpau" "libxnvctrl" "lib32-nvidia-utils" "lib32-opencl-nvidia" "gwe" )
+        fi
+        echo $programs
+
+        # Gaming
+        # "goverlay-bin" "protonup-qt-bin"
+        programs+=( "steam" "lutris" "wine-staging" "vulkan-icd-loader" "lib32-vulkan-icd-loader" "dxvk-bin" "proton-ge-custom-bin" "mangohud" "gamemode" )
+        
+        # start gamemode
+        $sudo_program systemctl --user enable gamemoded &> /dev/null
+        $sudo_program systemctl --user start gamemoded &> /dev/null
+        
+        # virtualization
+        programs+=( "qemu" "libvirt" "virt-manager" "virt-viewer" "dnsmasq" "vde2" "bridge-utils" "openbsd-netcat" "libguestfs" )
+        is_virtualization=true
+    fi
 }
 
 install() {
-    mkdir -p ~/Downloads
     mkdir -p ~/Documents
     mkdir -p ~/.cache
+    mkdir -p ~/.config
     add_programs
 
     whiptail --title "Information" --msgbox "This will take a few minutes." 7 34
@@ -222,39 +233,40 @@ install() {
     # Install yeet pacman wrapper + AUR helper (package-query)
     if ! command -v yeet &> /dev/null
     then
-        # whiptail --title "Installation" --gauge "\nInstalling yeet (pacman wrapper)..." 7 50 0 < <(
-            $sudo_program pacman -S yajl --noconfirm
+        whiptail --title "Installation" --gauge "\nInstalling yeet (pacman wrapper)..." 7 50 0 < <(
+            $sudo_program pacman -S yajl --noconfirm &> /dev/null
             # gauge=$((100 * 1 / 6))
             # echo "$gauge"
 
-            # mkdir -p ~/.cache/yeet/build/
-            # $sudo_program chown -R $(whoami):$(whoami) ~/.cache
-            # $sudo_program chmod -R 755 ~/.cache
-            # cd ~/.cache/yeet/build/
-            # git clone https://aur.archlinux.org/package-query.git
-            # # gauge=$((100 * 2 / 6))
-            # # echo "$gauge"
-            #
-            # git clone https://aur.archlinux.org/yeet.git
-            # # gauge=$((100 * 3 / 6))
-            # # echo "$gauge"
-            #
-            # cd package-query
-            # makepkg -sfcCi --noconfirm
-            # # gauge=$((100 * 4 / 6))
-            # # echo "$gauge"
-            #
-            # cd ../yeet
-            # makepkg -sfcCi --noconfirm
-            # # gauge=$((100 * 5 / 6))
-            # # echo "$gauge"
-            #
-            # cd ~
+            mkdir -p ~/.cache/yeet/build/
+            $sudo_program chown -R $(whoami):$(whoami) ~/.cache &> /dev/null
+            $sudo_program chmod -R 755 ~/.cache &> /dev/null
+            cd ~/.cache/yeet/build/
+            git clone https://aur.archlinux.org/package-query.git &> /dev/null
+            # gauge=$((100 * 2 / 6))
+            # echo "$gauge"
+
+            git clone https://aur.archlinux.org/yeet.git &> /dev/null
+            # gauge=$((100 * 3 / 6))
+            # echo "$gauge"
+
+            cd package-query
+            makepkg -sfcCi --noconfirm &> /dev/null
+            # gauge=$((100 * 4 / 6))
+            # echo "$gauge"
+
+            cd ../yeet
+            makepkg -sfcCi --noconfirm &> /dev/null
+            # gauge=$((100 * 5 / 6))
+            # echo "$gauge"
+
+            cd ~
             # edit config
-            sed -i "s/\(SUDO_BIN *= *\).*/\1\/usr\/bin\/doas/" ~/.config/yeet/yeet.conf
-            sed -i "s/\(PRINT_LOGO *= *\).*/\1false/" ~/.config/yeet/yeet.conf
-        #)
-        curl https://raw.githubusercontent.com/gamemaker1/yeet/develop/assets/package/install | bash &> /dev/null
+            mkdir -p ~/.config/yeet/
+            touch ~/.config/yeet/yeet.conf &> /dev/null
+            sed -i "s/\(SUDO_BIN *= *\).*/\1\/usr\/bin\/doas/" ~/.config/yeet/yeet.conf &> /dev/null
+            sed -i "s/\(PRINT_LOGO *= *\).*/\1false/" ~/.config/yeet/yeet.conf &> /dev/null
+        )
     fi
 
     clear
