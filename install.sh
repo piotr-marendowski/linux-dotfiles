@@ -132,8 +132,8 @@ EOF
             $sudo_program timedatectl set-timezone Europe/Sarajevo &> /dev/null
             $sudo_program timedatectl set-ntp true &> /dev/null
 
-            touch ~/.cache/dmenu_history &> /dev/null
-            touch ~/.cache/dmenu_run &> /dev/null
+            #touch ~/.cache/dmenu_history &> /dev/null
+            #touch ~/.cache/dmenu_run &> /dev/null
 
             ####################################################
             gauge=$((100 * 5 / 6)) && echo "$gauge"
@@ -230,39 +230,39 @@ install() {
     $sudo_program rm /var/lib/pacman/db.lck &> /dev/null
 
     # Install yeet pacman wrapper + AUR helper (package-query)
-    # if ! command -v yeet &> /dev/null
-    # then
-        # whiptail --title "Installation" --gauge "\nInstalling yeet (pacman wrapper)..." 7 50 0 < <(
-            $sudo_program pacman -S yajl --noconfirm
-            # gauge=$((100 * 1 / 6))
-            # echo "$gauge"
+    if ! command -v yeet &> /dev/null
+    then
+        whiptail --title "Installation" --gauge "\nInstalling yeet (pacman wrapper)..." 7 50 0 < <(
+            $sudo_program pacman -S yajl --noconfirm &> /dev/null
+            gauge=$((100 * 1 / 6))
+            echo "$gauge"
 
-            mkdir -p ~/.cache/yeet/build/
+            mkdir -p ~/.cache/yeet/build/ &> /dev/null
             cd ~/.cache/yeet/build/
-            git clone https://aur.archlinux.org/package-query.git
-            # gauge=$((100 * 2 / 6))
-            # echo "$gauge"
+            git clone https://aur.archlinux.org/package-query.git &> /dev/null
+            gauge=$((100 * 2 / 6))
+            echo "$gauge"
 
-            git clone https://aur.archlinux.org/yeet.git
-            # gauge=$((100 * 3 / 6))
-            # echo "$gauge"
+            git clone https://aur.archlinux.org/yeet.git &> /dev/null
+            gauge=$((100 * 3 / 6))
+            echo "$gauge"
 
             cd package-query
-            makepkg -sfcCi --noconfirm
-            # gauge=$((100 * 4 / 6))
-            # echo "$gauge"
+            makepkg -sfcCi --noconfirm &> /dev/null
+            gauge=$((100 * 4 / 6))
+            echo "$gauge"
 
             cd ../yeet
-            makepkg -sfcCi --noconfirm
-            # gauge=$((100 * 5 / 6))
-            # echo "$gauge"
+            makepkg -sfcCi --noconfirm &> /dev/null
+            gauge=$((100 * 5 / 6))
+            echo "$gauge"
 
             cd ~
             # edit config
-            sed -i "s/\(SUDO_BIN *= *\).*/\1\/usr\/bin\/doas/" ~/.config/yeet/yeet.conf
-            sed -i "s/\(PRINT_LOGO *= *\).*/\1false/" ~/.config/yeet/yeet.conf
-        #)
-    # fi
+            sed -i "s/\(SUDO_BIN *= *\).*/\1\/usr\/bin\/doas/" ~/.config/yeet/yeet.conf &> /dev/null
+            sed -i "s/\(PRINT_LOGO *= *\).*/\1false/" ~/.config/yeet/yeet.conf &> /dev/null
+        )
+    fi
 
     clear
 
