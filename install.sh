@@ -31,9 +31,11 @@ disentry=white,white
 actsellistbox=black,white
 sellistbox=white,black"
 
-is_virtualization=false         # is virtualization enabled? 
-programs=()                     # array of programs to install
-dir=~/Downloads/dotfiles        # dotfiles directory
+is_virtualization=false     # is virtualization enabled? 
+programs=()
+dotfiles_dir=~/Downloads/dotfiles
+config_dir=~/.config
+cache_dir=~/.cache
 
 # check for sudo program
 if command -v doas &> /dev/null
@@ -62,7 +64,13 @@ configure_installed() {
 
             #### PROBLEM IS HERE ####
             # Move dotfiles to home
-            cp -rf $dir/. ~ &> /dev/null
+            cp -a $dotfiles_dir/. ~ &> /dev/null
+
+            # edit yeet's config
+            mkdir -p $config_dir/yeet/ &> /dev/null
+            touch $config_dir/yeet/yeet.conf &> /dev/null
+            sed -i "s/\(SUDO_BIN *= *\).*/\1\/usr\/bin\/doas/" $config_dir/yeet/yeet.conf &> /dev/null
+            sed -i "s/\(PRINT_LOGO *= *\).*/\1false/" $config_dir/yeet/yeet.conf &> /dev/null
 
             ####################################################
             gauge=$((100 * 2 / 6)) && echo "$gauge"
@@ -73,15 +81,15 @@ configure_installed() {
             cd fff
             $sudo_program make install &> /dev/null
 
-            # move wallpaper to ~/.config
-            cp $dir/assets/wallpaper.jpg ~/.config/ &> /dev/null
+            # move wallpaper to $config_dir
+            cp $dotfiles_dir/assets/wallpaper.jpg $config_dir &> /dev/null
 
             # delete unnecessary items
             $sudo_program rm -r ~/assets &> /dev/null
             $sudo_program rm -r ~/install.sh &> /dev/null
             $sudo_program rm -r ~/LICENSE &> /dev/null
             $sudo_program rm -r ~/README.md &> /dev/null
-            $sudo_program rm -r ~/.config/.config/ &> /dev/null
+            $sudo_program rm -r $config_dir/.config/ &> /dev/null
             $sudo_program rm -r ~/.git/ &> /dev/null
 
             ####################################################
@@ -94,15 +102,14 @@ configure_installed() {
             $sudo_program mkdir -p /usr/share/fonts/TTF/ &> /dev/null
             $sudo_program mv Hack\ Nerd\ Font\ Regular.ttf /usr/share/fonts/TTF/ &> /dev/null
 
-            #### PROBLEM IS HERE ####
-            # Configure Suckless' software
-            cd ~/.config/st/ &> /dev/null
+            # configure Suckless' software
+            cd $config_dir/st/ &> /dev/null
             $sudo_program make install &> /dev/null
 
-            cd ~/.config/dmenu/ &> /dev/null
+            cd $config_dir/dmenu/ &> /dev/null
             $sudo_program make install &> /dev/null
 
-            cd ~/.config/dwm/ &> /dev/null
+            cd $config_dir/dwm/ &> /dev/null
             $sudo_program make install &> /dev/null
 
             $sudo_program mkdir /usr/share/xsessions/ &> /dev/null
@@ -180,7 +187,6 @@ add_programs() {
     programs+=( "pipewire" "pipewire-audio" )
 
     # gui
-    # "lxappearance" 
     programs+=( "xorg-server" "xf86-video-fbdev" "ly" "redshift" "feh" )
 
 
@@ -215,15 +221,15 @@ add_programs() {
         $sudo_program systemctl --user start gamemoded &> /dev/null
         
         # virtualization
-        programs+=( "qemu" "libvirt" "virt-manager" "virt-viewer" "dnsmasq" "vde2" "bridge-utils" "openbsd-netcat" "libguestfs" )
+        programs+=( "qemu-base" "libvirt" "virt-manager" "virt-viewer" "dnsmasq" "vde2" "bridge-utils" "openbsd-netcat" "libguestfs" )
         is_virtualization=true
     fi
 }
 
 install() {
     mkdir -p ~/Documents
-    mkdir -p ~/.cache
-    mkdir -p ~/.config
+    mkdir -p $cache_dir
+    mkdir -p $config_dir
     add_programs
 
     whiptail --title "Information" --msgbox "This will take a few minutes." 7 34
@@ -239,8 +245,8 @@ install() {
             gauge=$((100 * 1 / 6))
             echo "$gauge"
 
-            mkdir -p ~/.cache/yeet/build/ &> /dev/null
-            cd ~/.cache/yeet/build/
+            mkdir -p $cache_dir/yeet/build/ &> /dev/null
+            cd $cache_dir/yeet/build/
             git clone https://aur.archlinux.org/package-query.git &> /dev/null
             gauge=$((100 * 2 / 6))
             echo "$gauge"
@@ -261,8 +267,8 @@ install() {
 
             cd ~
             # edit config
-            sed -i "s/\(SUDO_BIN *= *\).*/\1\/usr\/bin\/doas/" ~/.config/yeet/yeet.conf &> /dev/null
-            sed -i "s/\(PRINT_LOGO *= *\).*/\1false/" ~/.config/yeet/yeet.conf &> /dev/null
+            sed -i "s/\(SUDO_BIN *= *\).*/\1\/usr\/bin\/doas/" $config_dir/yeet/yeet.conf &> /dev/null
+            sed -i "s/\(PRINT_LOGO *= *\).*/\1false/" $cache_dir/yeet/yeet.conf &> /dev/null
         )
     fi
 
@@ -282,7 +288,7 @@ install() {
         for i in "${programs[@]}"
         do
             # pipe yes because of bug in yeet
-            yes '' | yeet -S $i
+            yeet -S $i
             #&> /dev/null
             # Update the gauge
             # count=$((count + 1))
