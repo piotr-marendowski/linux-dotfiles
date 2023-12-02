@@ -10,10 +10,7 @@ return {
             local alpha = require("alpha")
             local dashboard = require("alpha.themes.dashboard")
 
-            -- on startup choose one of them
-            local header_one = {
-                [[                                                  ]],
-                [[                                                  ]],
+            local header = {
                 [[                                                  ]],
                 [[███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗]],
                 [[████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║]],
@@ -21,33 +18,10 @@ return {
                 [[██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║]],
                 [[██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║]],
                 [[╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝]],
-                [[            The worst editor out there!           ]],
-                [[                                                  ]],
-                [[                                                  ]],
-                [[                                                  ]],
-            }
-            local header_two = {
-                [[                                                  ]],
-                [[                                                  ]],
-                [[                                                  ]],
-                [[███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗]],
-                [[████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║]],
-                [[██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║]],
-                [[██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║]],
-                [[██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║]],
-                [[╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝]],
-                [[            The best editor out there!            ]],
-                [[                                                  ]],
                 [[                                                  ]],
                 [[                                                  ]],
             }
-
-            local headers = { header_one, header_two }
-            local function header_chars()
-                math.randomseed(os.time())
-                return headers[math.random(#headers)]
-            end
-            dashboard.section.header.val = header_chars()
+            dashboard.section.header.val = header
 
             -- buttons
             dashboard.section.buttons.val = {
@@ -58,8 +32,10 @@ return {
                 dashboard.button("s", "  Sessions", ":Telescope possession list<cr>"),
                 dashboard.button("c", "  Configuration", ":e ~/.config/nvim/init.lua <CR>"),
                 dashboard.button("q", "󰗼  Quit", ":qa!<CR>"),
-                -- Sessions (display only last used 4)
+                -- Sessions (display only last used <display_num>)
                 (function()
+                    local display_num = 6   -- max 9?
+                    local all_lines = 8     -- edit this to zoom/have more lines
                     local group = { type = "group", opts = { spacing = 0 } }
                     group.val = {
                         {
@@ -72,6 +48,7 @@ return {
                     }
                     local path = vim.fn.stdpath("data") .. "/possession"
                     local files = vim.fn.systemlist("ls -t " .. path .. "/*.json")
+                    spaces = 0
                     for i, file in pairs(files) do
                         local basename = vim.fs.basename(file):gsub("%.json", "")
                         local button = dashboard.button(
@@ -81,15 +58,24 @@ return {
                         )
                         table.insert(group.val, button)
 
-                        if i == 4 then
+                        spaces = spaces + 1
+
+                        if i == display_num then
                             break
                         end
                     end
+                    spaces = all_lines - spaces
                     return group
                 end)(),
             }
 
-            -- random color for header NEOVIM
+            -- dynamically "scale" ui to the number of listed sessions
+            for i = 1, spaces / 2 do
+                table.insert(header, [[                                                  ]])
+                table.insert(header, 1, [[                                                  ]])
+            end
+
+            -- random color for header
             local colors = { "#76cce0", "#9ed072", "#e7c664", "#b39df3", "#f39660" }
             local function random_color()
                 math.randomseed(os.time())
@@ -103,22 +89,6 @@ return {
             dashboard.opts.opts.noautocmd = true
             -- vim.cmd([[autocmd User AlphaReady echo 'ready']])
             alpha.setup(dashboard.opts)
-
-            -- display number of plugins and their loading time
-            --[[ vim.api.nvim_create_autocmd("User", {
-                pattern = "LazyVimStarted",
-                callback = function()
-                    local stats = require("lazy").stats()
-                    local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
-                    local plugins = "⚡Neovim loaded " .. stats.count .. " plugins in " .. ms .. "ms"
-                    local footer = plugins .. "\n"
-                    dashboard.section.footer.val = footer
-                    pcall(vim.cmd.AlphaRedraw)
-                end,
-            })
-            -- color footer
-            vim.cmd("highlight AlphaFooter ctermfg=15 ctermbg=0")
-            dashboard.section.footer.opts.hl = "AlphaFooter" ]]
 
             -- when closing the last buffer -> go to the alpha
             local alpha_on_empty = vim.api.nvim_create_augroup("alpha_on_empty", { clear = true })
