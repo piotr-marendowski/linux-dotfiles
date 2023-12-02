@@ -98,8 +98,8 @@ configure_installed() {
             # Dowload FiraCode Nerd Font and install it
             $sudo_program mkdir -p /usr/share/fonts/TTF/ &> /dev/null
             cd /usr/share/fonts/TTF/
-            $sudo_program curl -fLo "FiraCode Nerd Font Regular.ttf" "https://github.com/ryanoasis/nerd-fonts/raw
-/master/patched-fonts/FiraCode/Regular/FiraCodeNerdFont-Regular.ttf"
+            $sudo_program curl -fLo "FiraCode Nerd Font Regular.ttf" \
+                "https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraCode/Regular/FiraCodeNerdFont-Regular.ttf"
 
             # configure Suckless' software
             cd $config_dir/st/ &> /dev/null
@@ -192,7 +192,7 @@ add_programs() {
     # Drivers and gaming
     if whiptail --yesno "Do you want to install other things? (gaming, virtualization etc.)" 8 50; then
         # Other
-        programs+=( "vencord-desktop-git" "gimp" )
+        programs+=( "discord" "gimp" )
         # programs+=( "libreoffice-still" "ttf-ms-fonts" )
 
         # make android phones connect and transfer files
@@ -202,14 +202,13 @@ add_programs() {
         $sudo_program sed -i '/#[multilib]/{N;s/#\[multilib\]\n#Include = \/etc\/pacman.d\/mirrorlist/\[multilib\]\nInclude = \/etc\/pacman.d\/mirrorlist/}' /etc/pacman.conf
 
         # Check for GPU and add drivers for it
-        if [[ $(lshw -C display | grep vendor) =~ AMD ]]; then
+        if lspci | grep VGA | grep -q 'AMD'; then
             # AMD
             programs+=( "mesa" "vulkan-radeon" "lib32-mesa vulkan-radeon" "lib32-vulkan-radeon" "libva-mesa-driver" )
         else
             # Nvidia
             programs+=( "nvidia-dkms" "nvidia-utils-dkms" "opencl-nvidia" "libvdpau" "libxnvctrl" "lib32-nvidia-utils" "lib32-opencl-nvidia" "gwe" )
         fi
-        echo $programs
 
         # Gaming
         # "goverlay-bin" "protonup-qt-bin"
@@ -274,12 +273,6 @@ install() {
     clear
 
     # Install packages
-    # $sudo_program pacman -S --noconfirm desktop-file-utils &> /dev/null
-    # $sudo_program update-desktop-database &> /dev/null
-    # mkdir -p ~/.local/share/applications
-    # echo export XDG_DATA_DIRS="$HOME/.local/share" >> ~/.bashrc
-    # echo export XDG_DATA_DIRS="$HOME/.local/share" >> ~/.zshrc
-    # export XDG_DATA_DIRS="$HOME/.local/share"
     export NO_CONFIRM=true
 
     count=1
