@@ -54,7 +54,7 @@ configure_installed() {
         # Make zsh default shell
 	    whiptail --title "Shell" --yesno "Do you want to make zsh default shell?" 7 42
         if [ $? -eq 0 ]; then
-            $sudo_program chsh -s /usr/bin/zsh &> /dev/null
+            chsh -s /usr/bin/zsh &> /dev/null
             $sudo_program chsh -s /bin/zsh &> /dev/null
         fi
         
@@ -95,12 +95,11 @@ configure_installed() {
             ####################################################
             gauge=$((100 * 3 / 6)) && echo "$gauge"
 
-            # Dowload Hack Nerd Font and install it
-            curl -fLo "Hack Nerd Font Regular.ttf" \
-            https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Hack/Regular/HackNerdFont-Regular.ttf &> /dev/null
-
+            # Dowload FiraCode Nerd Font and install it
             $sudo_program mkdir -p /usr/share/fonts/TTF/ &> /dev/null
-            $sudo_program mv Hack\ Nerd\ Font\ Regular.ttf /usr/share/fonts/TTF/ &> /dev/null
+            cd /usr/share/fonts/TTF/
+            $sudo_program curl -fLo "FiraCode Nerd Font Regular.ttf" "https://github.com/ryanoasis/nerd-fonts/raw
+/master/patched-fonts/FiraCode/Regular/FiraCodeNerdFont-Regular.ttf"
 
             # configure Suckless' software
             cd $config_dir/st/ &> /dev/null
@@ -266,11 +265,11 @@ install() {
             echo "$gauge"
 
             cd ~
-            # edit config
-            sed -i "s/\(SUDO_BIN *= *\).*/\1\/usr\/bin\/doas/" $config_dir/yeet/yeet.conf &> /dev/null
-            sed -i "s/\(PRINT_LOGO *= *\).*/\1false/" $cache_dir/yeet/yeet.conf &> /dev/null
         )
     fi
+    # edit config
+    sed -i "s/\(SUDO_BIN *= *\).*/\1\/usr\/bin\/doas/" $config_dir/yeet/yeet.conf &> /dev/null
+    sed -i "s/\(PRINT_LOGO *= *\).*/\1false/" $cache_dir/yeet/yeet.conf &> /dev/null
 
     clear
 

@@ -27,6 +27,7 @@ export EDITOR=nvim
 
 ## ALIASES
 alias sudo='doas'
+alias n='nvim'
 alias ll="ls -la --color=auto"
 alias -- -="cd -"
 alias ..="cd .."
