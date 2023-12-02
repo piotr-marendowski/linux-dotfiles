@@ -6,12 +6,12 @@
 
 ![desktop](assets/screen3.png)
 
-<img src="assets/whiptail1.png"  width="60%">
+![desktop](assets/whiptail1.png)
 
 ## Configuration for preinstalled machines
 
 ```
-git clone -b dwm https://github.com/piotr-marendowski/dotfiles.git
+git clone -b dwm-wayland https://github.com/piotr-marendowski/dotfiles.git
 ./dotfiles/install.sh
 ```
 
@@ -23,46 +23,32 @@ Mainly following the KISS principle my workflow consists of this three main pill
 - IDE - Neovim is my only IDE on this machine, is feature packed and incredibly fast.
 - Terminal - With the help of a few keybindings, is simple and versatile.
 
-Everything is driven by keybindings, I try not to overdose on them and keep their number as low as possible. My use of tags:
-
-- Tag 1: Web browser and IDE
-- Tag 2: Discord and other multimedia
-- Tag 3: Games/more programs
-- Tag 4: Additional space
-
 ### Tree
 <pre>
 ├── .config
-│   ├── dmenu
-│   ├── dwm
-│   ├── MangoHud
+│   ├── foot
+│   ├── dwl
 │   ├── nvim
 │   │   ├── README and init.lua
 │   │   └── lua
 │   │       ├── plugins
 │   │       └── options
-│   ├── scripts
-│   └── st
+│   └── scripts
 ├── .gitconfig
-├── .xprofile - startup apps
 └── .zshrc
 </pre>
 
 ## Used programs/packages
 
-- [xorg](https://wiki.archlinux.org/title/Xorg)
-- [xorg-xinit](https://wiki.archlinux.org/title/Xinit)
-- [dwm](https://dwm.suckless.org/)
+- [wayland](https://wayland.freedesktop.org/)
+- [dwl](https://codeberg.org/dwl/dwl)
 - [zsh](https://zsh.sourceforge.io/)
-- [st](https://st.suckless.org/)
+- [foot](https://codeberg.org/dnkl/foot)
 - [ly](https://github.com/fairyglade/ly)
-- [paru](https://github.com/Morganamilo/paru)
-- [nvidia drivers](https://www.nvidia.com/en-us/drivers/unix/)
-- [dmenu](https://tools.suckless.org/dmenu/)
+- [yeet](https://github.com/gamemaker1/yeet)
 - [pipewire](https://pipewire.org)
 - [neovim](https://neovim.io/)
 - [librewolf](https://librewolf.net/)
-- [nnn](https://github.com/jarun/nnn/tree/master)
-- [maim](https://github.com/naelstrof/maim)
+- [fff](https://github.com/piotr-marendowski/fff)
 
 ### This branch is updated and focused on integration with the [IvoryOS](https://github.com/piotr-marendowski/ivoryos), while the [qtile branch](https://github.com/piotr-marendowski/dotfiles) is more customizable and good-looking version.
