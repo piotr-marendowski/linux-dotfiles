@@ -102,28 +102,9 @@ configure_installed() {
                 "https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraCode/Regular/FiraCodeNerdFont-Regular.ttf"
 
             # configure Suckless' software
-            cd $config_dir/st/ &> /dev/null
+            cd $config_dir/dwl/ &> /dev/null
+            make &> /dev/null
             $sudo_program make install &> /dev/null
-
-            cd $config_dir/dmenu/ &> /dev/null
-            $sudo_program make install &> /dev/null
-
-            cd $config_dir/dwm/ &> /dev/null
-            $sudo_program make install &> /dev/null
-
-            $sudo_program mkdir /usr/share/xsessions/ &> /dev/null
-            $sudo_program touch /usr/share/xsessions/dwm.desktop &> /dev/null
-
-            # create xsession for dwm
-            $sudo_program sh -c "cat >>/usr/share/xsessions/dwm.desktop" <<-EOF
-[Desktop Entry]
-Encoding=UTF-8
-Name=dwm
-Comment=Dynamic window manager
-Exec=/usr/local/bin/dwm
-Icon=dwm
-Type=XSession
-EOF
 
             ####################################################
             gauge=$((100 * 4 / 6)) && echo "$gauge"
@@ -171,7 +152,7 @@ Do you want to do it now?" 10 80
 
 add_programs() {
     # Basic
-    programs+=( "librewolf-bin" "htop-vim" "xclip" "curl" )
+    programs+=( "librewolf-bin" "foot" "htop-vim" "curl" )
 
     # zsh
     programs+=( "zsh" "zsh-completions" "zsh-syntax-highlighting" "zsh-autosuggestions" )
@@ -186,7 +167,7 @@ add_programs() {
     programs+=( "pipewire" "pipewire-audio" )
 
     # gui
-    programs+=( "xorg-server" "xf86-video-fbdev" "ly" "redshift" "feh" )
+    programs+=( "wayland" "libinput" "wlroots" "libxkbcommon" "wayland-protocols" "pkg-config" "libxcb" "xorg-xwayland" "ly" )
 
 
     # Drivers and gaming
