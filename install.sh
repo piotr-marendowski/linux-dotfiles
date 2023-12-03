@@ -54,7 +54,7 @@ configure_installed() {
         # Make zsh default shell
 	    whiptail --title "Shell" --yesno "Do you want to make zsh default shell?" 7 42
         if [ $? -eq 0 ]; then
-            chsh -s /usr/bin/zsh &> /dev/null
+            $sudo_program chsh -s /usr/bin/zsh &> /dev/null
             $sudo_program chsh -s /bin/zsh &> /dev/null
         fi
         
@@ -99,11 +99,10 @@ configure_installed() {
             $sudo_program mkdir -p /usr/share/fonts/TTF/ &> /dev/null
             cd /usr/share/fonts/TTF/
             $sudo_program curl -fLo "FiraCode Nerd Font Regular.ttf" \
-                "https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraCode/Regular/FiraCodeNerdFont-Regular.ttf"
+                "https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraCode/Regular/FiraCodeNerdFont-Regular.ttf" &> /dev/null
 
-            # configure Suckless' software
+            # configure dwl
             cd $config_dir/dwl/ &> /dev/null
-            make &> /dev/null
             $sudo_program make install &> /dev/null
 
             ####################################################
@@ -167,7 +166,7 @@ add_programs() {
     programs+=( "pipewire" "pipewire-audio" )
 
     # gui
-    programs+=( "wayland" "libinput" "wlroots" "libxkbcommon" "wayland-protocols" "pkg-config" "libxcb" "xorg-xwayland" "ly" )
+    programs+=( "wayland" "libinput" "wlroots" "libxkbcommon" "wayland-protocols" "libxcb" "xorg-xwayland" "ly" )
 
 
     # Drivers and gaming
