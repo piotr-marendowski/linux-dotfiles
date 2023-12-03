@@ -214,7 +214,6 @@ install() {
     clear
 
     $sudo_program rm /var/lib/pacman/db.lck &> /dev/null
-
     # Install yeet pacman wrapper + AUR helper (package-query)
     if ! command -v yeet &> /dev/null
     then
