@@ -140,7 +140,7 @@ lwd() {
 # - this isn't the first time the plugin is loaded
 # - it's not in $HOME directory
 [[ -n "$ZSH_LAST_WORKING_DIRECTORY" ]] && return
-[[ "$PWD" != "$HOME" ]] && return
+# [[ "$PWD" != "$HOME" ]] && return
 
 lwd 2>/dev/null && ZSH_LAST_WORKING_DIRECTORY=1 || true
 
