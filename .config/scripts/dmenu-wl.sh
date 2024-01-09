@@ -1,7 +1,8 @@
-#!/bin/sh
-# dmenu with history in cache, option to translate using google translate
-# run any commands in st and kill processes
+#!/usr/bin/env bash
 
+shopt -s expand_aliases
+alias dmenu_program='dmenu-wl -p ">" -fn "FiraCode Nerd Font" -nb "#2c2e34" -nf "#7f8490" -sb "#2c2e34" -sf "#76cce0"'
+alias terminal='footclient'
 # history
 cachedir=${XDG_CACHE_HOME:-"$HOME/.cache"}
 cache=$cachedir/dmenu_run
@@ -12,29 +13,27 @@ histsize=30
 IFS=:
 stest -flx $PATH | sort -u | tee "$cache"
 
-# display dmenu with history and then rest of executables
-cmd=$(
-    cat "$hist" "$cache" | awk '!seen[$0]++' | dmenu "$@" 
-)
+# display dmenu-wl with history and then rest of executables
+cmd=$(cat "$hist" "$cache" | awk '!seen[$0]++' | dmenu_program)
 
 case $cmd in 
     # translate e.g. `en:es hello world` -> translate hello world to spanish
-    *:* ) lang1=$(echo $cmd | cut -d':' -f1)
-          lang2=$(echo $cmd | cut -d':' -f2 | cut -d' ' -f1)
-          query=$(echo $cmd | cut -d':' -f2 | awk '{for(i=2;i<=NF;i++) print $i}') # get query after `es:en `
-          query=$(echo $query | sed -E 's/\s{1,}/\+/g') # substitute spaces for `+`
+    *:* ) lang1=$(echo $cmd | awk '{print $1;}')
+          lang2=$(echo $cmd | awk '{print $2;}')
+          query=${cmd#*$lang2 }                                 # get query after `es:en `
+          query=$(echo "${query}" | sed -E 's/\s{1,}/\+/g')     # substitute spaces for `+`
 
           base_url="https://translate.googleapis.com/translate_a/single?client=gtx&sl=${lang1}&tl=${lang2}&dt=t&q="
           ua='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'
           full_url=${base_url}${query}
-          response=$(curl -sA "${ua}" "${full_url}")    # call api and get response
+          response=$(curl -sA "${ua}" "${full_url}")            # call api and get response
 
           translated=`echo ${response} | sed 's/","/\n/g' | sed -E 's/\[|\]|"//g' | head -1` # clean up the request
-          echo $translated | dmenu
+          echo $translated | dmenu_program
     ;;
     # translate only es -> en e.g. `/ hola mundo`
-    \/* ) query=$(echo $cmd | cut -d':' -f2 | awk '{for(i=2;i<=NF;i++) print $i}') # get query after `/ `
-          query=$(echo $query | sed -E 's/\s{1,}/\+/g') # substitute spaces for `+`
+    \/* ) query=${cmd#*/ }                                      # get query after `/ `
+          query=$(echo $query | sed -E 's/\s{1,}/\+/g')         # substitute spaces for `+`
 
           base_url="https://translate.googleapis.com/translate_a/single?client=gtx&sl=es&tl=en&dt=t&q="
           ua='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'
@@ -42,11 +41,11 @@ case $cmd in
           response=$(curl -sA "${ua}" "${full_url}")
 
           translated=`echo ${response} | sed 's/","/\n/g' | sed -E 's/\[|\]|"//g' | head -1` # clean up the request
-          echo $translated | dmenu
+          echo $translated | dmenu_program
     ;;
     # run command e.g. `date!` -> open terminal with date
     *\! ) cmd=${cmd::-1}
-          st -e sh -c "${cmd};exec $SHELL"
+          terminal -e sh -c "${cmd};exec $SHELL"
 
           # add cmd to history
           sed -i -e "/^${cmd}$/d;${histsize}q" "$hist"
@@ -65,4 +64,3 @@ esac
 
 # delete empty lines if user aborts choosing
 sed -i '/^\s*$/d' "$hist"
-
