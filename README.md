@@ -17,10 +17,10 @@ git clone -b dwm-wayland https://github.com/piotr-marendowski/dotfiles.git
 
 ### Tree
 <pre>
-├── .config
-│   ├── foot
-│   ├── dwl
-│   └── scripts
+└── .config
+    ├── foot
+    ├── dwl
+    └── scripts
 </pre>
 
 ## Used programs/packages

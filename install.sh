@@ -33,7 +33,7 @@ sellistbox=white,black"
 
 is_virtualization=false     # is virtualization enabled? 
 programs=()
-dotfiles_dir=~/Downloads/dotfiles
+dotfiles_dir=~/Downloads/linux-dotfiles
 config_dir=~/.config
 cache_dir=~/.cache
 
@@ -62,7 +62,13 @@ configure_installed() {
             # Update the gauge
             gauge=$((100 * 1 / 6)) && echo "$gauge"
 
-            #### PROBLEM IS HERE ####
+            # Pull environment-agnostic dotfiles (nvim etc.)
+            cd $dotfiles_dir
+            cd ../
+            git clone https://github.com/piotr-marendowski/dotfiles.git 
+            # Move all files from dotfiles to $dotfiles_dir
+            mv -f dotfiles/{.,}* $dotfiles_dir
+
             # Move dotfiles to home
             cp -a $dotfiles_dir/. ~ &> /dev/null
 
