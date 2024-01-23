@@ -15,14 +15,6 @@ git clone -b dwm-wayland https://github.com/piotr-marendowski/dotfiles.git
 ./dotfiles/install.sh
 ```
 
-### Tree
-<pre>
-└── .config
-    ├── foot
-    ├── dwl
-    └── scripts
-</pre>
-
 ## Used programs/packages
 
 - [wayland](https://wayland.freedesktop.org/)
