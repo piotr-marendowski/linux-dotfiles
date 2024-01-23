@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Install script for dotfiles (wayland version)
 # Author: Piotr Marendowski (https://github.com/piotr-marendowski)
 # License: GPL3
 
@@ -18,7 +19,7 @@ fi
 
 yes_no() {
    while true; do
-       read -p "$* [Y/n]: " yn
+       read -n 1 -p "$* [Y/n]: " yn
        case $yn in
            [Yy]*) return 0 ;; 
            [Nn]*) return 1 ;;
@@ -254,31 +255,31 @@ clear
 while true; do
     printf ":: There are 4 options in dotfiles:\n"
     printf ":: Options\n"
-    printf "   1) ivoryOS full installation  2) install programs without configuration  3) configure dotfiles only  q) quit\n\n"
+    printf "   1) ivoryOS setup  2) install only  3) configure only  q) quit\n\n"
 
     read -n 1 -p "Enter a selection (default=quit): " ans
-        case $ans in
-            1*)
-                install
-                clear
-                configure_installed
-                clear
-                printf "Installation complete!\n"
-                $sudo_program rm /etc/profile.d/firstboot.sh
-                yes_no ":: Reboot system?" && echo "reboot"
-                ;;
-            2*)
-                install
-                clear
-                printf "Installation complete!\n"
-                yes_no ":: Reboot system?" && echo "reboot"
-                ;;
-            3*)
-                clear
-                configure_installed
-                clear
-                ;;
-            'q'|'') break;;
-        esac
+    case $ans in
+        1*)
+            install
+            clear
+            configure_installed
+            clear
+            printf "Installation complete!\n"
+            $sudo_program rm /etc/profile.d/firstboot.sh
+            yes_no ":: Reboot system?" && echo "reboot"
+            ;;
+        2*)
+            install
+            clear
+            printf "Installation complete!\n"
+            yes_no ":: Reboot system?" && echo "reboot"
+            ;;
+        3*)
+            clear
+            configure_installed
+            clear
+            ;;
+        'q'|'') break;;
+    esac
 done
 

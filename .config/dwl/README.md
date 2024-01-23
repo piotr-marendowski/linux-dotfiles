@@ -1,5 +1,11 @@
 # dwl - dwm for Wayland
 
+# Applied patches:
+- pertag
+- menu (modified)
+- alwayscenter
+- smartborders
+
 Join us on our IRC channel: [#dwl on Libera Chat]  
 Or on our [Discord server].
 
